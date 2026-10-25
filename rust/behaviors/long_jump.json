@@ -1,0 +1,3027 @@
+{
+  "behavior_name": "Move",
+  "behavior_transitions": [],
+  "on_enter_event": "",
+  "on_exit_event": "",
+  "parameters": [],
+  "sub_machines": [
+    {
+      "default_resp_ceiling": null,
+      "default_resp_floor": null,
+      "default_resp_wall": null,
+      "editor_comments": [],
+      "entry_state_name": "Ground",
+      "machine_name": "Vertical",
+      "states": [
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 0.0,
+          "displacement_source": "author",
+          "duration_frames": 1,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "Ground",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_jump"
+                ],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LongRise"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "Ground"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 2.4,
+          "displacement_source": "author",
+          "duration_frames": 16,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.0625,
+                  0.933333337306976
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.125,
+                  0.866666674613953
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.1875,
+                  0.800000011920929
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.25,
+                  0.733333349227905
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.3125,
+                  0.666666686534882
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.375,
+                  0.600000023841858
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.4375,
+                  0.533333361148834
+                ],
+                "right_tangent": -1.06666696071625
+              },
+              {
+                "left_tangent": -1.06666696071625,
+                "pos": [
+                  0.5,
+                  0.466666668653488
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.5625,
+                  0.400000005960464
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.625,
+                  0.333333343267441
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.6875,
+                  0.266666680574417
+                ],
+                "right_tangent": -1.06666684150696
+              },
+              {
+                "left_tangent": -1.06666684150696,
+                "pos": [
+                  0.75,
+                  0.200000002980232
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.8125,
+                  0.133333340287209
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.875,
+                  0.0666666701436043
+                ],
+                "right_tangent": -1.06666660308838
+              },
+              {
+                "left_tangent": -1.06666660308838,
+                "pos": [
+                  0.9375,
+                  0.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  0.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "LongRise",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LongFall"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 2.4,
+          "displacement_source": "author",
+          "duration_frames": 15,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  0.0666666701436043
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.0666666701436043,
+                  0.133333340287209
+                ],
+                "right_tangent": 0.999999821186066
+              },
+              {
+                "left_tangent": 0.999999821186066,
+                "pos": [
+                  0.133333340287209,
+                  0.200000002980232
+                ],
+                "right_tangent": 1.00000023841858
+              },
+              {
+                "left_tangent": 1.00000023841858,
+                "pos": [
+                  0.200000002980232,
+                  0.266666680574417
+                ],
+                "right_tangent": 0.999999761581421
+              },
+              {
+                "left_tangent": 0.999999761581421,
+                "pos": [
+                  0.266666680574417,
+                  0.333333343267441
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.333333343267441,
+                  0.400000005960464
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.400000005960464,
+                  0.466666668653488
+                ],
+                "right_tangent": 1.00000047683716
+              },
+              {
+                "left_tangent": 1.00000047683716,
+                "pos": [
+                  0.466666668653488,
+                  0.533333361148834
+                ],
+                "right_tangent": 0.999999523162842
+              },
+              {
+                "left_tangent": 0.999999523162842,
+                "pos": [
+                  0.533333361148834,
+                  0.600000023841858
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.600000023841858,
+                  0.666666686534882
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.666666686534882,
+                  0.733333349227905
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.733333349227905,
+                  0.800000011920929
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.800000011920929,
+                  0.866666674613953
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.866666674613953,
+                  0.933333337306976
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.933333337306976,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "LongFall",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "Ground"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "default_resp_ceiling": null,
+      "default_resp_floor": null,
+      "default_resp_wall": null,
+      "editor_comments": [],
+      "entry_state_name": "Idle",
+      "machine_name": "Locomotion",
+      "states": [
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 0.0,
+          "displacement_source": "author",
+          "duration_frames": 1,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "Idle",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_left",
+                  "ff_right",
+                  "ff_fwd",
+                  "ff_back"
+                ],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "WalkAccel"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "input",
+          "displacement": 9.17707854145712,
+          "displacement_source": "author",
+          "duration_frames": 41,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  0.275772094726562
+                ],
+                "right_tangent": 1.13231933116913
+              },
+              {
+                "left_tangent": 1.13231933116913,
+                "pos": [
+                  0.0243902429938316,
+                  0.303389638662338
+                ],
+                "right_tangent": 1.10598635673523
+              },
+              {
+                "left_tangent": 1.10598635673523,
+                "pos": [
+                  0.0487804859876633,
+                  0.330364912748337
+                ],
+                "right_tangent": 1.08026540279388
+              },
+              {
+                "left_tangent": 1.08026540279388,
+                "pos": [
+                  0.0731707289814949,
+                  0.356712847948074
+                ],
+                "right_tangent": 1.05514311790466
+              },
+              {
+                "left_tangent": 1.05514311790466,
+                "pos": [
+                  0.0975609719753265,
+                  0.382448047399521
+                ],
+                "right_tangent": 1.03060364723206
+              },
+              {
+                "left_tangent": 1.03060364723206,
+                "pos": [
+                  0.121951222419739,
+                  0.407584726810455
+                ],
+                "right_tangent": 1.00663793087006
+              },
+              {
+                "left_tangent": 1.00663793087006,
+                "pos": [
+                  0.14634145796299,
+                  0.432136863470078
+                ],
+                "right_tangent": 0.98322582244873
+              },
+              {
+                "left_tangent": 0.98322582244873,
+                "pos": [
+                  0.170731708407402,
+                  0.456117987632751
+                ],
+                "right_tangent": 0.960362315177917
+              },
+              {
+                "left_tangent": 0.960362315177917,
+                "pos": [
+                  0.195121943950653,
+                  0.479541450738907
+                ],
+                "right_tangent": 0.93802797794342
+              },
+              {
+                "left_tangent": 0.93802797794342,
+                "pos": [
+                  0.219512194395065,
+                  0.50242018699646
+                ],
+                "right_tangent": 0.916211009025574
+              },
+              {
+                "left_tangent": 0.916211009025574,
+                "pos": [
+                  0.243902444839478,
+                  0.524766802787781
+                ],
+                "right_tangent": 0.894906044006348
+              },
+              {
+                "left_tangent": 0.894906044006348,
+                "pos": [
+                  0.26829269528389,
+                  0.54659378528595
+                ],
+                "right_tangent": 0.874093413352966
+              },
+              {
+                "left_tangent": 0.874093413352966,
+                "pos": [
+                  0.29268291592598,
+                  0.567913115024567
+                ],
+                "right_tangent": 0.853764772415161
+              },
+              {
+                "left_tangent": 0.853764772415161,
+                "pos": [
+                  0.317073166370392,
+                  0.588736653327942
+                ],
+                "right_tangent": 0.83391147851944
+              },
+              {
+                "left_tangent": 0.83391147851944,
+                "pos": [
+                  0.341463416814804,
+                  0.609075963497162
+                ],
+                "right_tangent": 0.814517617225647
+              },
+              {
+                "left_tangent": 0.814517617225647,
+                "pos": [
+                  0.365853667259216,
+                  0.628942251205444
+                ],
+                "right_tangent": 0.795576751232147
+              },
+              {
+                "left_tangent": 0.795576751232147,
+                "pos": [
+                  0.390243887901306,
+                  0.648346543312073
+                ],
+                "right_tangent": 0.777073860168457
+              },
+              {
+                "left_tangent": 0.777073860168457,
+                "pos": [
+                  0.414634138345718,
+                  0.667299568653107
+                ],
+                "right_tangent": 0.758999586105347
+              },
+              {
+                "left_tangent": 0.758999586105347,
+                "pos": [
+                  0.439024388790131,
+                  0.685811758041382
+                ],
+                "right_tangent": 0.741352915763855
+              },
+              {
+                "left_tangent": 0.741352915763855,
+                "pos": [
+                  0.463414639234543,
+                  0.703893542289734
+                ],
+                "right_tangent": 0.724109590053558
+              },
+              {
+                "left_tangent": 0.724109590053558,
+                "pos": [
+                  0.487804889678955,
+                  0.721554756164551
+                ],
+                "right_tangent": 0.707270264625549
+              },
+              {
+                "left_tangent": 0.707270264625549,
+                "pos": [
+                  0.512195110321045,
+                  0.73880523443222
+                ],
+                "right_tangent": 0.690821886062622
+              },
+              {
+                "left_tangent": 0.690821886062622,
+                "pos": [
+                  0.53658539056778,
+                  0.755654573440552
+                ],
+                "right_tangent": 0.67475563287735
+              },
+              {
+                "left_tangent": 0.67475563287735,
+                "pos": [
+                  0.560975611209869,
+                  0.772112011909485
+                ],
+                "right_tangent": 0.659066557884216
+              },
+              {
+                "left_tangent": 0.659066557884216,
+                "pos": [
+                  0.585365831851959,
+                  0.78818678855896
+                ],
+                "right_tangent": 0.643734991550446
+              },
+              {
+                "left_tangent": 0.643734991550446,
+                "pos": [
+                  0.609756112098694,
+                  0.803887665271759
+                ],
+                "right_tangent": 0.628768384456635
+              },
+              {
+                "left_tangent": 0.628768384456635,
+                "pos": [
+                  0.634146332740784,
+                  0.819223463535309
+                ],
+                "right_tangent": 0.614143192768097
+              },
+              {
+                "left_tangent": 0.614143192768097,
+                "pos": [
+                  0.658536612987518,
+                  0.834202587604523
+                ],
+                "right_tangent": 0.599863171577454
+              },
+              {
+                "left_tangent": 0.599863171577454,
+                "pos": [
+                  0.682926833629608,
+                  0.848833382129669
+                ],
+                "right_tangent": 0.585911512374878
+              },
+              {
+                "left_tangent": 0.585911512374878,
+                "pos": [
+                  0.707317054271698,
+                  0.863123893737793
+                ],
+                "right_tangent": 0.572286009788513
+              },
+              {
+                "left_tangent": 0.572286009788513,
+                "pos": [
+                  0.731707334518433,
+                  0.877082109451294
+                ],
+                "right_tangent": 0.558976054191589
+              },
+              {
+                "left_tangent": 0.558976054191589,
+                "pos": [
+                  0.756097555160522,
+                  0.890715658664703
+                ],
+                "right_tangent": 0.545977532863617
+              },
+              {
+                "left_tangent": 0.545977532863617,
+                "pos": [
+                  0.780487775802612,
+                  0.904032170772552
+                ],
+                "right_tangent": 0.533280730247498
+              },
+              {
+                "left_tangent": 0.533280730247498,
+                "pos": [
+                  0.804878056049347,
+                  0.917039036750793
+                ],
+                "right_tangent": 0.520879745483398
+              },
+              {
+                "left_tangent": 0.520879745483398,
+                "pos": [
+                  0.829268276691437,
+                  0.929743409156799
+                ],
+                "right_tangent": 0.508762180805206
+              },
+              {
+                "left_tangent": 0.508762180805206,
+                "pos": [
+                  0.853658556938171,
+                  0.942152261734009
+                ],
+                "right_tangent": 0.49693551659584
+              },
+              {
+                "left_tangent": 0.49693551659584,
+                "pos": [
+                  0.878048777580261,
+                  0.954272627830505
+                ],
+                "right_tangent": 0.485376328229904
+              },
+              {
+                "left_tangent": 0.485376328229904,
+                "pos": [
+                  0.902438998222351,
+                  0.966111063957214
+                ],
+                "right_tangent": 0.474087327718735
+              },
+              {
+                "left_tangent": 0.474087327718735,
+                "pos": [
+                  0.926829278469086,
+                  0.977674186229706
+                ],
+                "right_tangent": 0.463064521551132
+              },
+              {
+                "left_tangent": 0.463064521551132,
+                "pos": [
+                  0.951219499111176,
+                  0.988968431949615
+                ],
+                "right_tangent": 0.452293634414673
+              },
+              {
+                "left_tangent": 0.452293634414673,
+                "pos": [
+                  0.97560977935791,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "ff_back",
+          "input_deadzone": 0.2,
+          "input_forward": "ff_fwd",
+          "input_left": "ff_left",
+          "input_plane": "xz",
+          "input_right": "ff_right",
+          "input_turn_rate_deg": 11.25,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "WalkAccel",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_jump"
+                ],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LongAir"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_crouch"
+                ],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LongCrouch"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_left",
+                  "ff_right",
+                  "ff_fwd",
+                  "ff_back"
+                ],
+                "input_mode": "all_released",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "WalkBrake"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "WalkCruise"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "input",
+          "displacement": 40.5433277246677,
+          "displacement_source": "author",
+          "duration_frames": 128,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  0.968231022357941
+                ],
+                "right_tangent": 1.47003161907196
+              },
+              {
+                "left_tangent": 1.47003161907196,
+                "pos": [
+                  0.0078125,
+                  0.979715645313263
+                ],
+                "right_tangent": 1.43584442138672
+              },
+              {
+                "left_tangent": 1.43584442138672,
+                "pos": [
+                  0.015625,
+                  0.990933179855347
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.0234375,
+                  0.960022628307343
+                ],
+                "right_tangent": 1.4944611787796
+              },
+              {
+                "left_tangent": 1.4944611787796,
+                "pos": [
+                  0.03125,
+                  0.971698105335236
+                ],
+                "right_tangent": 1.459716796875
+              },
+              {
+                "left_tangent": 1.459716796875,
+                "pos": [
+                  0.0390625,
+                  0.983102142810822
+                ],
+                "right_tangent": 1.42576599121094
+              },
+              {
+                "left_tangent": 1.42576599121094,
+                "pos": [
+                  0.046875,
+                  0.994240939617157
+                ],
+                "right_tangent": -3.95655822753906
+              },
+              {
+                "left_tangent": -3.95655822753906,
+                "pos": [
+                  0.0546875,
+                  0.963330328464508
+                ],
+                "right_tangent": 1.484619140625
+              },
+              {
+                "left_tangent": 1.484619140625,
+                "pos": [
+                  0.0625,
+                  0.974928915500641
+                ],
+                "right_tangent": 1.45009613037109
+              },
+              {
+                "left_tangent": 1.45009613037109,
+                "pos": [
+                  0.0703125,
+                  0.986257791519165
+                ],
+                "right_tangent": 1.41637420654297
+              },
+              {
+                "left_tangent": 1.41637420654297,
+                "pos": [
+                  0.078125,
+                  0.997323215007782
+                ],
+                "right_tangent": -3.95655822753906
+              },
+              {
+                "left_tangent": -3.95655822753906,
+                "pos": [
+                  0.0859375,
+                  0.966412603855133
+                ],
+                "right_tangent": 1.47544860839844
+              },
+              {
+                "left_tangent": 1.47544860839844,
+                "pos": [
+                  0.09375,
+                  0.977939546108246
+                ],
+                "right_tangent": 1.44113147258759
+              },
+              {
+                "left_tangent": 1.44113147258759,
+                "pos": [
+                  0.1015625,
+                  0.989198386669159
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.109375,
+                  0.958287835121155
+                ],
+                "right_tangent": 1.49962615966797
+              },
+              {
+                "left_tangent": 1.49962615966797,
+                "pos": [
+                  0.1171875,
+                  0.970003664493561
+                ],
+                "right_tangent": 1.46475982666016
+              },
+              {
+                "left_tangent": 1.46475982666016,
+                "pos": [
+                  0.125,
+                  0.981447100639343
+                ],
+                "right_tangent": 1.43068695068359
+              },
+              {
+                "left_tangent": 1.43068695068359,
+                "pos": [
+                  0.1328125,
+                  0.992624342441559
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.140625,
+                  0.961713790893555
+                ],
+                "right_tangent": 1.48943340778351
+              },
+              {
+                "left_tangent": 1.48943340778351,
+                "pos": [
+                  0.1484375,
+                  0.973349988460541
+                ],
+                "right_tangent": 1.45479595661163
+              },
+              {
+                "left_tangent": 1.45479595661163,
+                "pos": [
+                  0.15625,
+                  0.984715580940247
+                ],
+                "right_tangent": 1.42095947265625
+              },
+              {
+                "left_tangent": 1.42095947265625,
+                "pos": [
+                  0.1640625,
+                  0.995816826820374
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.171875,
+                  0.964906275272369
+                ],
+                "right_tangent": 1.47992706298828
+              },
+              {
+                "left_tangent": 1.47992706298828,
+                "pos": [
+                  0.1796875,
+                  0.976468205451965
+                ],
+                "right_tangent": 1.44551086425781
+              },
+              {
+                "left_tangent": 1.44551086425781,
+                "pos": [
+                  0.1875,
+                  0.987761259078979
+                ],
+                "right_tangent": 1.41189575195312
+              },
+              {
+                "left_tangent": 1.41189575195312,
+                "pos": [
+                  0.1953125,
+                  0.998791694641113
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.203125,
+                  0.967881143093109
+                ],
+                "right_tangent": 1.47106945514679
+              },
+              {
+                "left_tangent": 1.47106945514679,
+                "pos": [
+                  0.2109375,
+                  0.979373872280121
+                ],
+                "right_tangent": 1.43686676025391
+              },
+              {
+                "left_tangent": 1.43686676025391,
+                "pos": [
+                  0.21875,
+                  0.990599393844604
+                ],
+                "right_tangent": -3.95655822753906
+              },
+              {
+                "left_tangent": -3.95655822753906,
+                "pos": [
+                  0.2265625,
+                  0.959688782691956
+                ],
+                "right_tangent": 1.49546051025391
+              },
+              {
+                "left_tangent": 1.49546051025391,
+                "pos": [
+                  0.234375,
+                  0.971372067928314
+                ],
+                "right_tangent": 1.46068572998047
+              },
+              {
+                "left_tangent": 1.46068572998047,
+                "pos": [
+                  0.2421875,
+                  0.982783675193787
+                ],
+                "right_tangent": 1.42671191692352
+              },
+              {
+                "left_tangent": 1.42671191692352,
+                "pos": [
+                  0.25,
+                  0.993929862976074
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.2578125,
+                  0.96301931142807
+                ],
+                "right_tangent": 1.48554229736328
+              },
+              {
+                "left_tangent": 1.48554229736328,
+                "pos": [
+                  0.265625,
+                  0.974625110626221
+                ],
+                "right_tangent": 1.45099639892578
+              },
+              {
+                "left_tangent": 1.45099639892578,
+                "pos": [
+                  0.2734375,
+                  0.985961019992828
+                ],
+                "right_tangent": 1.41725921630859
+              },
+              {
+                "left_tangent": 1.41725921630859,
+                "pos": [
+                  0.28125,
+                  0.997033357620239
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.2890625,
+                  0.966122806072235
+                ],
+                "right_tangent": 1.47630298137665
+              },
+              {
+                "left_tangent": 1.47630298137665,
+                "pos": [
+                  0.296875,
+                  0.977656424045563
+                ],
+                "right_tangent": 1.44197845458984
+              },
+              {
+                "left_tangent": 1.44197845458984,
+                "pos": [
+                  0.3046875,
+                  0.988921880722046
+                ],
+                "right_tangent": 1.40843951702118
+              },
+              {
+                "left_tangent": 1.40843951702118,
+                "pos": [
+                  0.3125,
+                  0.999925315380096
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.3203125,
+                  0.969014763832092
+                ],
+                "right_tangent": 1.46769714355469
+              },
+              {
+                "left_tangent": 1.46769714355469,
+                "pos": [
+                  0.328125,
+                  0.980481147766113
+                ],
+                "right_tangent": 1.43356311321259
+              },
+              {
+                "left_tangent": 1.43356311321259,
+                "pos": [
+                  0.3359375,
+                  0.991680860519409
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.34375,
+                  0.960770308971405
+                ],
+                "right_tangent": 1.49224090576172
+              },
+              {
+                "left_tangent": 1.49224090576172,
+                "pos": [
+                  0.3515625,
+                  0.972428441047668
+                ],
+                "right_tangent": 1.45753479003906
+              },
+              {
+                "left_tangent": 1.45753479003906,
+                "pos": [
+                  0.359375,
+                  0.983815431594849
+                ],
+                "right_tangent": 1.42364501953125
+              },
+              {
+                "left_tangent": 1.42364501953125,
+                "pos": [
+                  0.3671875,
+                  0.994937658309937
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.375,
+                  0.964027106761932
+                ],
+                "right_tangent": 1.48254406452179
+              },
+              {
+                "left_tangent": 1.48254406452179,
+                "pos": [
+                  0.3828125,
+                  0.975609481334686
+                ],
+                "right_tangent": 1.44806659221649
+              },
+              {
+                "left_tangent": 1.44806659221649,
+                "pos": [
+                  0.390625,
+                  0.9869225025177
+                ],
+                "right_tangent": 1.41439056396484
+              },
+              {
+                "left_tangent": 1.41439056396484,
+                "pos": [
+                  0.3984375,
+                  0.997972428798676
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.40625,
+                  0.967061877250671
+                ],
+                "right_tangent": 1.4735107421875
+              },
+              {
+                "left_tangent": 1.4735107421875,
+                "pos": [
+                  0.4140625,
+                  0.978573679924011
+                ],
+                "right_tangent": 1.43924713134766
+              },
+              {
+                "left_tangent": 1.43924713134766,
+                "pos": [
+                  0.421875,
+                  0.989817798137665
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.4296875,
+                  0.958907246589661
+                ],
+                "right_tangent": 1.4977799654007
+              },
+              {
+                "left_tangent": 1.4977799654007,
+                "pos": [
+                  0.4375,
+                  0.970608651638031
+                ],
+                "right_tangent": 1.46295928955078
+              },
+              {
+                "left_tangent": 1.46295928955078,
+                "pos": [
+                  0.4453125,
+                  0.982038021087646
+                ],
+                "right_tangent": 1.42893218994141
+              },
+              {
+                "left_tangent": 1.42893218994141,
+                "pos": [
+                  0.453125,
+                  0.993201553821564
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.4609375,
+                  0.96229100227356
+                ],
+                "right_tangent": 1.48770904541016
+              },
+              {
+                "left_tangent": 1.48770904541016,
+                "pos": [
+                  0.46875,
+                  0.973913729190826
+                ],
+                "right_tangent": 1.45311737060547
+              },
+              {
+                "left_tangent": 1.45311737060547,
+                "pos": [
+                  0.4765625,
+                  0.985266208648682
+                ],
+                "right_tangent": 1.41931915283203
+              },
+              {
+                "left_tangent": 1.41931915283203,
+                "pos": [
+                  0.484375,
+                  0.996354639530182
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.4921875,
+                  0.965444087982178
+                ],
+                "right_tangent": 1.47833240032196
+              },
+              {
+                "left_tangent": 1.47833240032196,
+                "pos": [
+                  0.5,
+                  0.976993560791016
+                ],
+                "right_tangent": 1.44394683837891
+              },
+              {
+                "left_tangent": 1.44394683837891,
+                "pos": [
+                  0.5078125,
+                  0.988274395465851
+                ],
+                "right_tangent": 1.41036987304688
+              },
+              {
+                "left_tangent": 1.41036987304688,
+                "pos": [
+                  0.515625,
+                  0.99929291009903
+                ],
+                "right_tangent": -3.95655822753906
+              },
+              {
+                "left_tangent": -3.95655822753906,
+                "pos": [
+                  0.5234375,
+                  0.968382298946381
+                ],
+                "right_tangent": 1.46958160400391
+              },
+              {
+                "left_tangent": 1.46958160400391,
+                "pos": [
+                  0.53125,
+                  0.979863405227661
+                ],
+                "right_tangent": 1.43540942668915
+              },
+              {
+                "left_tangent": 1.43540942668915,
+                "pos": [
+                  0.5390625,
+                  0.991077542304993
+                ],
+                "right_tangent": -3.95655822753906
+              },
+              {
+                "left_tangent": -3.95655822753906,
+                "pos": [
+                  0.546875,
+                  0.960166931152344
+                ],
+                "right_tangent": 1.49404156208038
+              },
+              {
+                "left_tangent": 1.49404156208038,
+                "pos": [
+                  0.5546875,
+                  0.971839129924774
+                ],
+                "right_tangent": 1.45928966999054
+              },
+              {
+                "left_tangent": 1.45928966999054,
+                "pos": [
+                  0.5625,
+                  0.983239829540253
+                ],
+                "right_tangent": 1.42535400390625
+              },
+              {
+                "left_tangent": 1.42535400390625,
+                "pos": [
+                  0.5703125,
+                  0.99437540769577
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.578125,
+                  0.963464856147766
+                ],
+                "right_tangent": 1.48422253131866
+              },
+              {
+                "left_tangent": 1.48422253131866,
+                "pos": [
+                  0.5859375,
+                  0.975060343742371
+                ],
+                "right_tangent": 1.44969940185547
+              },
+              {
+                "left_tangent": 1.44969940185547,
+                "pos": [
+                  0.59375,
+                  0.986386120319366
+                ],
+                "right_tangent": 1.41599273681641
+              },
+              {
+                "left_tangent": 1.41599273681641,
+                "pos": [
+                  0.6015625,
+                  0.997448563575745
+                ],
+                "right_tangent": -3.95655822753906
+              },
+              {
+                "left_tangent": -3.95655822753906,
+                "pos": [
+                  0.609375,
+                  0.966537952423096
+                ],
+                "right_tangent": 1.47507476806641
+              },
+              {
+                "left_tangent": 1.47507476806641,
+                "pos": [
+                  0.6171875,
+                  0.978061974048615
+                ],
+                "right_tangent": 1.44076538085938
+              },
+              {
+                "left_tangent": 1.44076538085938,
+                "pos": [
+                  0.625,
+                  0.989317953586578
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.6328125,
+                  0.958407402038574
+                ],
+                "right_tangent": 1.49927520751953
+              },
+              {
+                "left_tangent": 1.49927520751953,
+                "pos": [
+                  0.640625,
+                  0.970120489597321
+                ],
+                "right_tangent": 1.46440887451172
+              },
+              {
+                "left_tangent": 1.46440887451172,
+                "pos": [
+                  0.6484375,
+                  0.981561183929443
+                ],
+                "right_tangent": 1.43035125732422
+              },
+              {
+                "left_tangent": 1.43035125732422,
+                "pos": [
+                  0.65625,
+                  0.992735803127289
+                ],
+                "right_tangent": -3.95655822753906
+              },
+              {
+                "left_tangent": -3.95655822753906,
+                "pos": [
+                  0.6640625,
+                  0.96182519197464
+                ],
+                "right_tangent": 1.48910522460938
+              },
+              {
+                "left_tangent": 1.48910522460938,
+                "pos": [
+                  0.671875,
+                  0.973458826541901
+                ],
+                "right_tangent": 1.4544677734375
+              },
+              {
+                "left_tangent": 1.4544677734375,
+                "pos": [
+                  0.6796875,
+                  0.984821856021881
+                ],
+                "right_tangent": 1.42064666748047
+              },
+              {
+                "left_tangent": 1.42064666748047,
+                "pos": [
+                  0.6875,
+                  0.995920658111572
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.6953125,
+                  0.965010106563568
+                ],
+                "right_tangent": 1.4796142578125
+              },
+              {
+                "left_tangent": 1.4796142578125,
+                "pos": [
+                  0.703125,
+                  0.976569592952728
+                ],
+                "right_tangent": 1.44521331787109
+              },
+              {
+                "left_tangent": 1.44521331787109,
+                "pos": [
+                  0.7109375,
+                  0.987860321998596
+                ],
+                "right_tangent": 1.41159820556641
+              },
+              {
+                "left_tangent": 1.41159820556641,
+                "pos": [
+                  0.71875,
+                  0.998888432979584
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.7265625,
+                  0.96797788143158
+                ],
+                "right_tangent": 1.47078704833984
+              },
+              {
+                "left_tangent": 1.47078704833984,
+                "pos": [
+                  0.734375,
+                  0.979468405246735
+                ],
+                "right_tangent": 1.43657684326172
+              },
+              {
+                "left_tangent": 1.43657684326172,
+                "pos": [
+                  0.7421875,
+                  0.990691661834717
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.75,
+                  0.959781110286713
+                ],
+                "right_tangent": 1.49518573284149
+              },
+              {
+                "left_tangent": 1.49518573284149,
+                "pos": [
+                  0.7578125,
+                  0.971462249755859
+                ],
+                "right_tangent": 1.46041107177734
+              },
+              {
+                "left_tangent": 1.46041107177734,
+                "pos": [
+                  0.765625,
+                  0.98287171125412
+                ],
+                "right_tangent": 1.42645263671875
+              },
+              {
+                "left_tangent": 1.42645263671875,
+                "pos": [
+                  0.7734375,
+                  0.994015872478485
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.78125,
+                  0.963105320930481
+                ],
+                "right_tangent": 1.48529052734375
+              },
+              {
+                "left_tangent": 1.48529052734375,
+                "pos": [
+                  0.7890625,
+                  0.974709153175354
+                ],
+                "right_tangent": 1.45074462890625
+              },
+              {
+                "left_tangent": 1.45074462890625,
+                "pos": [
+                  0.796875,
+                  0.986043095588684
+                ],
+                "right_tangent": 1.4170149564743
+              },
+              {
+                "left_tangent": 1.4170149564743,
+                "pos": [
+                  0.8046875,
+                  0.997113525867462
+                ],
+                "right_tangent": -3.95655822753906
+              },
+              {
+                "left_tangent": -3.95655822753906,
+                "pos": [
+                  0.8125,
+                  0.966202914714813
+                ],
+                "right_tangent": 1.47607421875
+              },
+              {
+                "left_tangent": 1.47607421875,
+                "pos": [
+                  0.8203125,
+                  0.977734744548798
+                ],
+                "right_tangent": 1.44174194335938
+              },
+              {
+                "left_tangent": 1.44174194335938,
+                "pos": [
+                  0.828125,
+                  0.988998353481293
+                ],
+                "right_tangent": 1.40821075439453
+              },
+              {
+                "left_tangent": 1.40821075439453,
+                "pos": [
+                  0.8359375,
+                  1.0
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.84375,
+                  0.969089448451996
+                ],
+                "right_tangent": 1.46747577190399
+              },
+              {
+                "left_tangent": 1.46747577190399,
+                "pos": [
+                  0.8515625,
+                  0.980554103851318
+                ],
+                "right_tangent": 1.433349609375
+              },
+              {
+                "left_tangent": 1.433349609375,
+                "pos": [
+                  0.859375,
+                  0.991752147674561
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.8671875,
+                  0.960841596126556
+                ],
+                "right_tangent": 1.49202740192413
+              },
+              {
+                "left_tangent": 1.49202740192413,
+                "pos": [
+                  0.875,
+                  0.972498059272766
+                ],
+                "right_tangent": 1.45732879638672
+              },
+              {
+                "left_tangent": 1.45732879638672,
+                "pos": [
+                  0.8828125,
+                  0.983883440494537
+                ],
+                "right_tangent": 1.42343902587891
+              },
+              {
+                "left_tangent": 1.42343902587891,
+                "pos": [
+                  0.890625,
+                  0.995004057884216
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.8984375,
+                  0.964093506336212
+                ],
+                "right_tangent": 1.48234558105469
+              },
+              {
+                "left_tangent": 1.48234558105469,
+                "pos": [
+                  0.90625,
+                  0.975674331188202
+                ],
+                "right_tangent": 1.4478759765625
+              },
+              {
+                "left_tangent": 1.4478759765625,
+                "pos": [
+                  0.9140625,
+                  0.986985862255096
+                ],
+                "right_tangent": 1.41419982910156
+              },
+              {
+                "left_tangent": 1.41419982910156,
+                "pos": [
+                  0.921875,
+                  0.998034298419952
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.9296875,
+                  0.967123746871948
+                ],
+                "right_tangent": 1.47332763671875
+              },
+              {
+                "left_tangent": 1.47332763671875,
+                "pos": [
+                  0.9375,
+                  0.978634119033813
+                ],
+                "right_tangent": 1.43906402587891
+              },
+              {
+                "left_tangent": 1.43906402587891,
+                "pos": [
+                  0.9453125,
+                  0.989876806735992
+                ],
+                "right_tangent": -3.95655035972595
+              },
+              {
+                "left_tangent": -3.95655035972595,
+                "pos": [
+                  0.953125,
+                  0.958966255187988
+                ],
+                "right_tangent": 1.49761199951172
+              },
+              {
+                "left_tangent": 1.49761199951172,
+                "pos": [
+                  0.9609375,
+                  0.970666348934174
+                ],
+                "right_tangent": 1.46278381347656
+              },
+              {
+                "left_tangent": 1.46278381347656,
+                "pos": [
+                  0.96875,
+                  0.982094347476959
+                ],
+                "right_tangent": 1.42876422405243
+              },
+              {
+                "left_tangent": 1.42876422405243,
+                "pos": [
+                  0.9765625,
+                  0.993256568908691
+                ],
+                "right_tangent": -3.95655822753906
+              },
+              {
+                "left_tangent": -3.95655822753906,
+                "pos": [
+                  0.984375,
+                  0.962345957756042
+                ],
+                "right_tangent": 1.48755645751953
+              },
+              {
+                "left_tangent": 1.48755645751953,
+                "pos": [
+                  0.9921875,
+                  0.973967492580414
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  0.973967492580414
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "ff_back",
+          "input_deadzone": 0.2,
+          "input_forward": "ff_fwd",
+          "input_left": "ff_left",
+          "input_plane": "xz",
+          "input_right": "ff_right",
+          "input_turn_rate_deg": 11.25,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "WalkCruise",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_jump"
+                ],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LongAir"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_crouch"
+                ],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LongCrouch"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_left",
+                  "ff_right",
+                  "ff_fwd",
+                  "ff_back"
+                ],
+                "input_mode": "all_released",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "WalkBrake"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "WalkCruise"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "entry",
+          "displacement": 1.09403,
+          "displacement_source": "author",
+          "duration_frames": 8,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": -1.158203125
+              },
+              {
+                "left_tangent": -1.158203125,
+                "pos": [
+                  0.125,
+                  0.855224609375
+                ],
+                "right_tangent": -1.15820360183716
+              },
+              {
+                "left_tangent": -1.15820360183716,
+                "pos": [
+                  0.25,
+                  0.710449159145355
+                ],
+                "right_tangent": -1.158203125
+              },
+              {
+                "left_tangent": -1.158203125,
+                "pos": [
+                  0.375,
+                  0.565673768520355
+                ],
+                "right_tangent": -1.15820360183716
+              },
+              {
+                "left_tangent": -1.15820360183716,
+                "pos": [
+                  0.5,
+                  0.42089831829071
+                ],
+                "right_tangent": -1.158203125
+              },
+              {
+                "left_tangent": -1.158203125,
+                "pos": [
+                  0.625,
+                  0.27612292766571
+                ],
+                "right_tangent": -1.15820348262787
+              },
+              {
+                "left_tangent": -1.15820348262787,
+                "pos": [
+                  0.75,
+                  0.131347492337227
+                ],
+                "right_tangent": -1.05077993869781
+              },
+              {
+                "left_tangent": -1.05077993869781,
+                "pos": [
+                  0.875,
+                  0.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  0.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "WalkBrake",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "Idle"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "input",
+          "displacement": 14.777051,
+          "displacement_source": "author",
+          "duration_frames": 30,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  0.876770257949829
+                ],
+                "right_tangent": 0.669425666332245
+              },
+              {
+                "left_tangent": 0.669425666332245,
+                "pos": [
+                  0.0333333350718021,
+                  0.899084448814392
+                ],
+                "right_tangent": 0.669425666332245
+              },
+              {
+                "left_tangent": 0.669425666332245,
+                "pos": [
+                  0.0666666701436043,
+                  0.921398639678955
+                ],
+                "right_tangent": 0.0873828008770943
+              },
+              {
+                "left_tangent": 0.0873828008770943,
+                "pos": [
+                  0.100000001490116,
+                  0.924311399459839
+                ],
+                "right_tangent": 0.0872665569186211
+              },
+              {
+                "left_tangent": 0.0872665569186211,
+                "pos": [
+                  0.133333340287209,
+                  0.927220284938812
+                ],
+                "right_tangent": 0.0873237922787666
+              },
+              {
+                "left_tangent": 0.0873237922787666,
+                "pos": [
+                  0.16666667163372,
+                  0.930131077766418
+                ],
+                "right_tangent": 0.0874990299344063
+              },
+              {
+                "left_tangent": 0.0874990299344063,
+                "pos": [
+                  0.200000002980232,
+                  0.933047711849213
+                ],
+                "right_tangent": 0.0873237922787666
+              },
+              {
+                "left_tangent": 0.0873237922787666,
+                "pos": [
+                  0.233333334326744,
+                  0.935958504676819
+                ],
+                "right_tangent": 0.087207518517971
+              },
+              {
+                "left_tangent": 0.087207518517971,
+                "pos": [
+                  0.266666680574417,
+                  0.938865423202515
+                ],
+                "right_tangent": 0.087264783680439
+              },
+              {
+                "left_tangent": 0.087264783680439,
+                "pos": [
+                  0.300000011920929,
+                  0.941774249076843
+                ],
+                "right_tangent": 0.0873237922787666
+              },
+              {
+                "left_tangent": 0.0873237922787666,
+                "pos": [
+                  0.333333343267441,
+                  0.944685041904449
+                ],
+                "right_tangent": 0.0874990299344063
+              },
+              {
+                "left_tangent": 0.0874990299344063,
+                "pos": [
+                  0.366666674613953,
+                  0.947601675987244
+                ],
+                "right_tangent": 0.0872665718197823
+              },
+              {
+                "left_tangent": 0.0872665718197823,
+                "pos": [
+                  0.400000005960464,
+                  0.950510561466217
+                ],
+                "right_tangent": 0.0873237922787666
+              },
+              {
+                "left_tangent": 0.0873237922787666,
+                "pos": [
+                  0.433333337306976,
+                  0.953421354293823
+                ],
+                "right_tangent": 0.087207555770874
+              },
+              {
+                "left_tangent": 0.087207555770874,
+                "pos": [
+                  0.466666668653488,
+                  0.956328272819519
+                ],
+                "right_tangent": 0.0872665718197823
+              },
+              {
+                "left_tangent": 0.0872665718197823,
+                "pos": [
+                  0.5,
+                  0.959237158298492
+                ],
+                "right_tangent": 0.0876151770353317
+              },
+              {
+                "left_tangent": 0.0876151770353317,
+                "pos": [
+                  0.533333361148834,
+                  0.962157666683197
+                ],
+                "right_tangent": 0.0872076377272606
+              },
+              {
+                "left_tangent": 0.0872076377272606,
+                "pos": [
+                  0.566666662693024,
+                  0.965064585208893
+                ],
+                "right_tangent": 0.0872647017240524
+              },
+              {
+                "left_tangent": 0.0872647017240524,
+                "pos": [
+                  0.600000023841858,
+                  0.967973411083221
+                ],
+                "right_tangent": 0.0873238667845726
+              },
+              {
+                "left_tangent": 0.0873238667845726,
+                "pos": [
+                  0.633333325386047,
+                  0.970884203910828
+                ],
+                "right_tangent": 0.0872074812650681
+              },
+              {
+                "left_tangent": 0.0872074812650681,
+                "pos": [
+                  0.666666686534882,
+                  0.973791122436523
+                ],
+                "right_tangent": 0.0876153334975243
+              },
+              {
+                "left_tangent": 0.0876153334975243,
+                "pos": [
+                  0.699999988079071,
+                  0.976711630821228
+                ],
+                "right_tangent": 0.0872074812650681
+              },
+              {
+                "left_tangent": 0.0872074812650681,
+                "pos": [
+                  0.733333349227905,
+                  0.979618549346924
+                ],
+                "right_tangent": 0.0872666537761688
+              },
+              {
+                "left_tangent": 0.0872666537761688,
+                "pos": [
+                  0.766666650772095,
+                  0.982527434825897
+                ],
+                "right_tangent": 0.0874399393796921
+              },
+              {
+                "left_tangent": 0.0874399393796921,
+                "pos": [
+                  0.800000011920929,
+                  0.985442101955414
+                ],
+                "right_tangent": 0.0871504172682762
+              },
+              {
+                "left_tangent": 0.0871504172682762,
+                "pos": [
+                  0.833333313465118,
+                  0.988347113132477
+                ],
+                "right_tangent": 0.0874971598386765
+              },
+              {
+                "left_tangent": 0.0874971598386765,
+                "pos": [
+                  0.866666674613953,
+                  0.991263687610626
+                ],
+                "right_tangent": 0.0869751796126366
+              },
+              {
+                "left_tangent": 0.0869751796126366,
+                "pos": [
+                  0.899999976158142,
+                  0.994162857532501
+                ],
+                "right_tangent": 0.0876151770353317
+              },
+              {
+                "left_tangent": 0.0876151770353317,
+                "pos": [
+                  0.933333337306976,
+                  0.997083365917206
+                ],
+                "right_tangent": 0.0874991044402122
+              },
+              {
+                "left_tangent": 0.0874991044402122,
+                "pos": [
+                  0.966666638851166,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "ff_back",
+          "input_deadzone": 0.2,
+          "input_forward": "ff_fwd",
+          "input_left": "ff_left",
+          "input_plane": "xz",
+          "input_right": "ff_right",
+          "input_turn_rate_deg": 11.25,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "LongAir",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LongLand"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "input",
+          "displacement": 2.99959,
+          "displacement_source": "author",
+          "duration_frames": 6,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  0.999998092651367
+                ],
+                "right_tangent": 0.000011444091796875
+              },
+              {
+                "left_tangent": 0.000011444091796875,
+                "pos": [
+                  0.16666667163372,
+                  1.0
+                ],
+                "right_tangent": -0.119961261749268
+              },
+              {
+                "left_tangent": -0.119961261749268,
+                "pos": [
+                  0.333333343267441,
+                  0.980006456375122
+                ],
+                "right_tangent": -0.117674231529236
+              },
+              {
+                "left_tangent": -0.117674231529236,
+                "pos": [
+                  0.5,
+                  0.960394084453583
+                ],
+                "right_tangent": -0.115189418196678
+              },
+              {
+                "left_tangent": -0.115189418196678,
+                "pos": [
+                  0.666666686534882,
+                  0.941195845603943
+                ],
+                "right_tangent": -0.112926036119461
+              },
+              {
+                "left_tangent": -0.112926036119461,
+                "pos": [
+                  0.833333313465118,
+                  0.922374844551086
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  0.922374844551086
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "ff_back",
+          "input_deadzone": 0.2,
+          "input_forward": "ff_fwd",
+          "input_left": "ff_left",
+          "input_plane": "xz",
+          "input_right": "ff_right",
+          "input_turn_rate_deg": 11.25,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "LongLand",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LongRollout"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "input",
+          "displacement": 5.807373,
+          "displacement_source": "author",
+          "duration_frames": 15,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": -0.328146785497665
+              },
+              {
+                "left_tangent": -0.328146785497665,
+                "pos": [
+                  0.0666666701436043,
+                  0.978123545646667
+                ],
+                "right_tangent": -0.328015357255936
+              },
+              {
+                "left_tangent": -0.328015357255936,
+                "pos": [
+                  0.133333340287209,
+                  0.956255853176117
+                ],
+                "right_tangent": -0.328179895877838
+              },
+              {
+                "left_tangent": -0.328179895877838,
+                "pos": [
+                  0.200000002980232,
+                  0.934377193450928
+                ],
+                "right_tangent": -0.328114569187164
+              },
+              {
+                "left_tangent": -0.328114569187164,
+                "pos": [
+                  0.266666680574417,
+                  0.912502884864807
+                ],
+                "right_tangent": -0.32811376452446
+              },
+              {
+                "left_tangent": -0.32811376452446,
+                "pos": [
+                  0.333333343267441,
+                  0.890628635883331
+                ],
+                "right_tangent": -0.328114658594131
+              },
+              {
+                "left_tangent": -0.328114658594131,
+                "pos": [
+                  0.400000005960464,
+                  0.868754327297211
+                ],
+                "right_tangent": -0.32811376452446
+              },
+              {
+                "left_tangent": -0.32811376452446,
+                "pos": [
+                  0.466666668653488,
+                  0.846880078315735
+                ],
+                "right_tangent": -0.328081429004669
+              },
+              {
+                "left_tangent": -0.328081429004669,
+                "pos": [
+                  0.533333361148834,
+                  0.825007975101471
+                ],
+                "right_tangent": -0.328146815299988
+              },
+              {
+                "left_tangent": -0.328146815299988,
+                "pos": [
+                  0.600000023841858,
+                  0.803131520748138
+                ],
+                "right_tangent": -0.32811376452446
+              },
+              {
+                "left_tangent": -0.32811376452446,
+                "pos": [
+                  0.666666686534882,
+                  0.781257271766663
+                ],
+                "right_tangent": -0.328114658594131
+              },
+              {
+                "left_tangent": -0.328114658594131,
+                "pos": [
+                  0.733333349227905,
+                  0.759382963180542
+                ],
+                "right_tangent": -0.32811376452446
+              },
+              {
+                "left_tangent": -0.32811376452446,
+                "pos": [
+                  0.800000011920929,
+                  0.737508714199066
+                ],
+                "right_tangent": -0.328081548213959
+              },
+              {
+                "left_tangent": -0.328081548213959,
+                "pos": [
+                  0.866666674613953,
+                  0.715636610984802
+                ],
+                "right_tangent": -0.328146815299988
+              },
+              {
+                "left_tangent": -0.328146815299988,
+                "pos": [
+                  0.933333337306976,
+                  0.69376015663147
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  0.69376015663147
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "ff_back",
+          "input_deadzone": 0.2,
+          "input_forward": "ff_fwd",
+          "input_left": "ff_left",
+          "input_plane": "xz",
+          "input_right": "ff_right",
+          "input_turn_rate_deg": 11.25,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "LongRollout",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "WalkCruise"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "input",
+          "displacement": 0.293545,
+          "displacement_source": "author",
+          "duration_frames": 1,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "ff_back",
+          "input_deadzone": 0.2,
+          "input_forward": "ff_fwd",
+          "input_left": "ff_left",
+          "input_plane": "xz",
+          "input_right": "ff_right",
+          "input_turn_rate_deg": 11.25,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "LongCrouch",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_jump"
+                ],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LongAir"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "WalkCruise"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

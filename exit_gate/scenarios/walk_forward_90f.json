@@ -1,0 +1,1 @@
+{"camera_yaw_deg":0.0,"compare":"GroundDefault","geometry":[{"kind":0,"max":[2000,0,2000],"min":[-2000,-100,-2000]}],"id":"walk_forward_90f","inputs":[{"buttons":0,"frames":90,"stick":[0,80]}],"start":{"action":"Idle","pos":[0,0,0],"yaw_deg":0.0},"tags":["ground","walk","gate"]}

@@ -1,0 +1,1 @@
+{"id": "walk_turn", "tags": ["ground", "walk", "gate"], "geometry": [{"min": [-8000, -100, -8000], "max": [8000, 0, 8000], "kind": 0}], "start": {"pos": [0, 0, 0], "yaw_deg": 0.0, "action": "Idle"}, "camera_yaw_deg": 0.0, "compare": "GroundDefault", "inputs": [{"frames": 60, "stick": [0, 80], "buttons": 0}, {"frames": 60, "stick": [80, 0], "buttons": 0}]}

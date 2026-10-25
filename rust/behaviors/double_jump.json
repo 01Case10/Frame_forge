@@ -1,0 +1,1294 @@
+{
+  "behavior_name": "DoubleJump",
+  "behavior_transitions": [],
+  "on_enter_event": "",
+  "on_exit_event": "",
+  "parameters": [],
+  "sub_machines": [
+    {
+      "default_resp_ceiling": null,
+      "default_resp_floor": null,
+      "default_resp_wall": null,
+      "editor_comments": [],
+      "entry_state_name": "Ground",
+      "machine_name": "Vertical",
+      "states": [
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 0.0,
+          "displacement_source": "author",
+          "duration_frames": 1,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "Ground",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_jump"
+                ],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "JumpRise"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "Ground"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 2.42,
+          "displacement_source": "author",
+          "duration_frames": 11,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": -1.0476188659668
+              },
+              {
+                "left_tangent": -1.0476188659668,
+                "pos": [
+                  0.0909090936183929,
+                  0.904761910438538
+                ],
+                "right_tangent": -1.0476188659668
+              },
+              {
+                "left_tangent": -1.0476188659668,
+                "pos": [
+                  0.181818187236786,
+                  0.809523820877075
+                ],
+                "right_tangent": -1.0476188659668
+              },
+              {
+                "left_tangent": -1.0476188659668,
+                "pos": [
+                  0.272727280855179,
+                  0.714285731315613
+                ],
+                "right_tangent": -1.0476188659668
+              },
+              {
+                "left_tangent": -1.0476188659668,
+                "pos": [
+                  0.363636374473572,
+                  0.61904764175415
+                ],
+                "right_tangent": -1.0476188659668
+              },
+              {
+                "left_tangent": -1.0476188659668,
+                "pos": [
+                  0.454545468091965,
+                  0.523809552192688
+                ],
+                "right_tangent": -1.04761922359467
+              },
+              {
+                "left_tangent": -1.04761922359467,
+                "pos": [
+                  0.545454561710358,
+                  0.428571432828903
+                ],
+                "right_tangent": -1.04761934280396
+              },
+              {
+                "left_tangent": -1.04761934280396,
+                "pos": [
+                  0.636363625526428,
+                  0.333333343267441
+                ],
+                "right_tangent": -1.04761874675751
+              },
+              {
+                "left_tangent": -1.04761874675751,
+                "pos": [
+                  0.727272748947144,
+                  0.238095238804817
+                ],
+                "right_tangent": -1.04761934280396
+              },
+              {
+                "left_tangent": -1.04761934280396,
+                "pos": [
+                  0.818181812763214,
+                  0.142857149243355
+                ],
+                "right_tangent": -1.04761874675751
+              },
+              {
+                "left_tangent": -1.04761874675751,
+                "pos": [
+                  0.909090936183929,
+                  0.0476190485060215
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  0.0476190485060215
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "JumpRise",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "JumpFall"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 2.42,
+          "displacement_source": "author",
+          "duration_frames": 11,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  0.0476190485060215
+                ],
+                "right_tangent": 1.04761922359467
+              },
+              {
+                "left_tangent": 1.04761922359467,
+                "pos": [
+                  0.0909090936183929,
+                  0.142857149243355
+                ],
+                "right_tangent": 1.0476188659668
+              },
+              {
+                "left_tangent": 1.0476188659668,
+                "pos": [
+                  0.181818187236786,
+                  0.238095238804817
+                ],
+                "right_tangent": 1.04761922359467
+              },
+              {
+                "left_tangent": 1.04761922359467,
+                "pos": [
+                  0.272727280855179,
+                  0.333333343267441
+                ],
+                "right_tangent": 1.0476188659668
+              },
+              {
+                "left_tangent": 1.0476188659668,
+                "pos": [
+                  0.363636374473572,
+                  0.428571432828903
+                ],
+                "right_tangent": 1.04761922359467
+              },
+              {
+                "left_tangent": 1.04761922359467,
+                "pos": [
+                  0.454545468091965,
+                  0.523809552192688
+                ],
+                "right_tangent": 1.0476188659668
+              },
+              {
+                "left_tangent": 1.0476188659668,
+                "pos": [
+                  0.545454561710358,
+                  0.61904764175415
+                ],
+                "right_tangent": 1.04761934280396
+              },
+              {
+                "left_tangent": 1.04761934280396,
+                "pos": [
+                  0.636363625526428,
+                  0.714285731315613
+                ],
+                "right_tangent": 1.04761850833893
+              },
+              {
+                "left_tangent": 1.04761850833893,
+                "pos": [
+                  0.727272748947144,
+                  0.809523820877075
+                ],
+                "right_tangent": 1.04761934280396
+              },
+              {
+                "left_tangent": 1.04761934280396,
+                "pos": [
+                  0.818181812763214,
+                  0.904761910438538
+                ],
+                "right_tangent": 1.04761850833893
+              },
+              {
+                "left_tangent": 1.04761850833893,
+                "pos": [
+                  0.909090936183929,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "JumpFall",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LandFromJump"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 0.0,
+          "displacement_source": "author",
+          "duration_frames": 5,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "LandFromJump",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_jump"
+                ],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "DoubleRise"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "Ground"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 3.64,
+          "displacement_source": "author",
+          "duration_frames": 14,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": -1.07692289352417
+              },
+              {
+                "left_tangent": -1.07692289352417,
+                "pos": [
+                  0.0714285746216774,
+                  0.923076927661896
+                ],
+                "right_tangent": -1.07692289352417
+              },
+              {
+                "left_tangent": -1.07692289352417,
+                "pos": [
+                  0.142857149243355,
+                  0.846153855323792
+                ],
+                "right_tangent": -1.07692313194275
+              },
+              {
+                "left_tangent": -1.07692313194275,
+                "pos": [
+                  0.214285716414452,
+                  0.769230782985687
+                ],
+                "right_tangent": -1.07692289352417
+              },
+              {
+                "left_tangent": -1.07692289352417,
+                "pos": [
+                  0.28571429848671,
+                  0.692307710647583
+                ],
+                "right_tangent": -1.07692313194275
+              },
+              {
+                "left_tangent": -1.07692313194275,
+                "pos": [
+                  0.357142865657806,
+                  0.615384638309479
+                ],
+                "right_tangent": -1.07692313194275
+              },
+              {
+                "left_tangent": -1.07692313194275,
+                "pos": [
+                  0.428571432828903,
+                  0.538461565971375
+                ],
+                "right_tangent": -1.07692348957062
+              },
+              {
+                "left_tangent": -1.07692348957062,
+                "pos": [
+                  0.5,
+                  0.461538463830948
+                ],
+                "right_tangent": -1.07692265510559
+              },
+              {
+                "left_tangent": -1.07692265510559,
+                "pos": [
+                  0.571428596973419,
+                  0.384615391492844
+                ],
+                "right_tangent": -1.07692360877991
+              },
+              {
+                "left_tangent": -1.07692360877991,
+                "pos": [
+                  0.642857134342194,
+                  0.307692319154739
+                ],
+                "right_tangent": -1.07692289352417
+              },
+              {
+                "left_tangent": -1.07692289352417,
+                "pos": [
+                  0.714285731315613,
+                  0.230769231915474
+                ],
+                "right_tangent": -1.07692360877991
+              },
+              {
+                "left_tangent": -1.07692360877991,
+                "pos": [
+                  0.785714268684387,
+                  0.15384615957737
+                ],
+                "right_tangent": -1.07692277431488
+              },
+              {
+                "left_tangent": -1.07692277431488,
+                "pos": [
+                  0.857142865657806,
+                  0.0769230797886848
+                ],
+                "right_tangent": -1.07692360877991
+              },
+              {
+                "left_tangent": -1.07692360877991,
+                "pos": [
+                  0.928571403026581,
+                  0.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  0.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "DoubleRise",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "DoubleFall"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 3.64,
+          "displacement_source": "author",
+          "duration_frames": 13,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  0.0769230797886848
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.0769230797886848,
+                  0.15384615957737
+                ],
+                "right_tangent": 0.999999821186066
+              },
+              {
+                "left_tangent": 0.999999821186066,
+                "pos": [
+                  0.15384615957737,
+                  0.230769231915474
+                ],
+                "right_tangent": 1.00000023841858
+              },
+              {
+                "left_tangent": 1.00000023841858,
+                "pos": [
+                  0.230769231915474,
+                  0.307692319154739
+                ],
+                "right_tangent": 0.999999761581421
+              },
+              {
+                "left_tangent": 0.999999761581421,
+                "pos": [
+                  0.307692319154739,
+                  0.384615391492844
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.384615391492844,
+                  0.461538463830948
+                ],
+                "right_tangent": 1.00000035762787
+              },
+              {
+                "left_tangent": 1.00000035762787,
+                "pos": [
+                  0.461538463830948,
+                  0.538461565971375
+                ],
+                "right_tangent": 0.999999642372131
+              },
+              {
+                "left_tangent": 0.999999642372131,
+                "pos": [
+                  0.538461565971375,
+                  0.615384638309479
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.615384638309479,
+                  0.692307710647583
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.692307710647583,
+                  0.769230782985687
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.769230782985687,
+                  0.846153855323792
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.846153855323792,
+                  0.923076927661896
+                ],
+                "right_tangent": 1.0
+              },
+              {
+                "left_tangent": 1.0,
+                "pos": [
+                  0.923076927661896,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "DoubleFall",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "LandFromDouble"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 0.0,
+          "displacement_source": "author",
+          "duration_frames": 5,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "LandFromDouble",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [
+                  "ff_jump"
+                ],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_input"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "TripleRise"
+            },
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "Ground"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 3.38,
+          "displacement_source": "author",
+          "duration_frames": 13,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  1.0
+                ],
+                "right_tangent": -1.03999972343445
+              },
+              {
+                "left_tangent": -1.03999972343445,
+                "pos": [
+                  0.0769230797886848,
+                  0.920000016689301
+                ],
+                "right_tangent": -1.04000043869019
+              },
+              {
+                "left_tangent": -1.04000043869019,
+                "pos": [
+                  0.15384615957737,
+                  0.839999973773956
+                ],
+                "right_tangent": -1.03999984264374
+              },
+              {
+                "left_tangent": -1.03999984264374,
+                "pos": [
+                  0.230769231915474,
+                  0.759999990463257
+                ],
+                "right_tangent": -1.03999960422516
+              },
+              {
+                "left_tangent": -1.03999960422516,
+                "pos": [
+                  0.307692319154739,
+                  0.680000007152557
+                ],
+                "right_tangent": -1.03999984264374
+              },
+              {
+                "left_tangent": -1.03999984264374,
+                "pos": [
+                  0.384615391492844,
+                  0.600000023841858
+                ],
+                "right_tangent": -1.04000055789948
+              },
+              {
+                "left_tangent": -1.04000055789948,
+                "pos": [
+                  0.461538463830948,
+                  0.519999980926514
+                ],
+                "right_tangent": -1.03999948501587
+              },
+              {
+                "left_tangent": -1.03999948501587,
+                "pos": [
+                  0.538461565971375,
+                  0.439999997615814
+                ],
+                "right_tangent": -1.03999984264374
+              },
+              {
+                "left_tangent": -1.03999984264374,
+                "pos": [
+                  0.615384638309479,
+                  0.360000014305115
+                ],
+                "right_tangent": -1.04000020027161
+              },
+              {
+                "left_tangent": -1.04000020027161,
+                "pos": [
+                  0.692307710647583,
+                  0.280000001192093
+                ],
+                "right_tangent": -1.03999996185303
+              },
+              {
+                "left_tangent": -1.03999996185303,
+                "pos": [
+                  0.769230782985687,
+                  0.200000002980232
+                ],
+                "right_tangent": -1.04000020027161
+              },
+              {
+                "left_tangent": -1.04000020027161,
+                "pos": [
+                  0.846153855323792,
+                  0.119999997317791
+                ],
+                "right_tangent": -1.03999996185303
+              },
+              {
+                "left_tangent": -1.03999996185303,
+                "pos": [
+                  0.923076927661896,
+                  0.0399999991059303
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  0.0399999991059303
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "TripleRise",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "TripleFall"
+            }
+          ]
+        },
+        {
+          "camera_relative": false,
+          "direction": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "direction_source": "author",
+          "displacement": 3.38,
+          "displacement_source": "author",
+          "duration_frames": 13,
+          "easing": {
+            "max_value": 1.0,
+            "min_value": 0.0,
+            "points": [
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  0.0,
+                  0.0399999991059303
+                ],
+                "right_tangent": 1.03999996185303
+              },
+              {
+                "left_tangent": 1.03999996185303,
+                "pos": [
+                  0.0769230797886848,
+                  0.119999997317791
+                ],
+                "right_tangent": 1.04000008106232
+              },
+              {
+                "left_tangent": 1.04000008106232,
+                "pos": [
+                  0.15384615957737,
+                  0.200000002980232
+                ],
+                "right_tangent": 1.03999996185303
+              },
+              {
+                "left_tangent": 1.03999996185303,
+                "pos": [
+                  0.230769231915474,
+                  0.280000001192093
+                ],
+                "right_tangent": 1.03999996185303
+              },
+              {
+                "left_tangent": 1.03999996185303,
+                "pos": [
+                  0.307692319154739,
+                  0.360000014305115
+                ],
+                "right_tangent": 1.03999984264374
+              },
+              {
+                "left_tangent": 1.03999984264374,
+                "pos": [
+                  0.384615391492844,
+                  0.439999997615814
+                ],
+                "right_tangent": 1.03999984264374
+              },
+              {
+                "left_tangent": 1.03999984264374,
+                "pos": [
+                  0.461538463830948,
+                  0.519999980926514
+                ],
+                "right_tangent": 1.04000020027161
+              },
+              {
+                "left_tangent": 1.04000020027161,
+                "pos": [
+                  0.538461565971375,
+                  0.600000023841858
+                ],
+                "right_tangent": 1.03999984264374
+              },
+              {
+                "left_tangent": 1.03999984264374,
+                "pos": [
+                  0.615384638309479,
+                  0.680000007152557
+                ],
+                "right_tangent": 1.03999984264374
+              },
+              {
+                "left_tangent": 1.03999984264374,
+                "pos": [
+                  0.692307710647583,
+                  0.759999990463257
+                ],
+                "right_tangent": 1.03999984264374
+              },
+              {
+                "left_tangent": 1.03999984264374,
+                "pos": [
+                  0.769230782985687,
+                  0.839999973773956
+                ],
+                "right_tangent": 1.04000055789948
+              },
+              {
+                "left_tangent": 1.04000055789948,
+                "pos": [
+                  0.846153855323792,
+                  0.920000016689301
+                ],
+                "right_tangent": 1.03999984264374
+              },
+              {
+                "left_tangent": 1.03999984264374,
+                "pos": [
+                  0.923076927661896,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              },
+              {
+                "left_tangent": 0.0,
+                "pos": [
+                  1.0,
+                  1.0
+                ],
+                "right_tangent": 0.0
+              }
+            ]
+          },
+          "editor_position": [
+            0.0,
+            0.0
+          ],
+          "events": [],
+          "input_back": "",
+          "input_deadzone": 0.2,
+          "input_forward": "",
+          "input_left": "",
+          "input_plane": "xz",
+          "input_right": "",
+          "input_turn_rate_deg": 0.0,
+          "resp_ceiling": null,
+          "resp_floor": null,
+          "resp_wall": null,
+          "restitution": 1.0,
+          "state_name": "TripleFall",
+          "transitions": [
+            {
+              "blend_frames": 3,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 0.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "Ground"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
