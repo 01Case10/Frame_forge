@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://ffrustdbg002"]
+[ext_resource type="Script" path="res://dbg2.gd" id="1"]
+[node name="Dbg2" type="Node"]
+script = ExtResource("1")

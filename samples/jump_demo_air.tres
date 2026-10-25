@@ -1,0 +1,110 @@
+[gd_resource type="Resource" script_class="FrameBehavior" format=3]
+
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_transition.gd" id="1_0gwcr"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_parameter.gd" id="2_gjaaj"]
+[ext_resource type="Resource" path="res://samples/jump_demo_ground.tres" id="3_gjaaj"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_behavior.gd" id="3_rxw0g"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/sub_state_machine.gd" id="4_senho"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_comment.gd" id="5_u11r7"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_state_event.gd" id="6_y4uol"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_state.gd" id="7_krtof"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_condition.gd" id="8_cyima"]
+
+[sub_resource type="Resource" id="Resource_rxw0g"]
+script = ExtResource("8_cyima")
+type = 3
+input_actions = PackedStringArray()
+event_name = "floor_gained"
+
+[sub_resource type="Resource" id="Resource_senho"]
+script = ExtResource("1_0gwcr")
+condition = SubResource("Resource_rxw0g")
+target_behavior = ExtResource("3_gjaaj")
+
+[sub_resource type="Curve" id="Curve_k8eej"]
+_data = [Vector2(0, 0), 0.0, 1.6, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_3gb85"]
+script = ExtResource("8_cyima")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_asfh1"]
+script = ExtResource("1_0gwcr")
+condition = SubResource("Resource_3gb85")
+target_state_name = &"Fall"
+
+[sub_resource type="Resource" id="Resource_udmih"]
+script = ExtResource("7_krtof")
+state_name = "Rise"
+displacement = 4.48
+direction = Vector3(0, 1, 0)
+duration_frames = 14
+easing = SubResource("Curve_k8eej")
+transitions = Array[ExtResource("1_0gwcr")]([SubResource("Resource_asfh1")])
+
+[sub_resource type="Curve" id="Curve_a1vrk"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_6he2a"]
+script = ExtResource("8_cyima")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kka6p"]
+script = ExtResource("1_0gwcr")
+condition = SubResource("Resource_6he2a")
+target_state_name = &"Fall"
+
+[sub_resource type="Resource" id="Resource_yas0v"]
+script = ExtResource("7_krtof")
+state_name = "Fall"
+displacement = 0.42
+direction = Vector3(0, -1, 0)
+easing = SubResource("Curve_a1vrk")
+transitions = Array[ExtResource("1_0gwcr")]([SubResource("Resource_kka6p")])
+editor_position = Vector2(300, 0)
+
+[sub_resource type="Resource" id="Resource_dh3n4"]
+script = ExtResource("4_senho")
+machine_name = "Vertical"
+states = Array[ExtResource("7_krtof")]([SubResource("Resource_udmih"), SubResource("Resource_yas0v")])
+entry_state = SubResource("Resource_udmih")
+
+[sub_resource type="Curve" id="Curve_8ts16"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_4wpcm"]
+script = ExtResource("8_cyima")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qjvvf"]
+script = ExtResource("1_0gwcr")
+condition = SubResource("Resource_4wpcm")
+target_state_name = &"AirMove"
+
+[sub_resource type="Resource" id="Resource_ihve3"]
+script = ExtResource("7_krtof")
+state_name = "AirMove"
+displacement = 0.1
+easing = SubResource("Curve_8ts16")
+direction_source = 3
+input_left = "ui_left"
+input_right = "ui_right"
+input_forward = "ui_forward"
+input_back = "ui_back"
+transitions = Array[ExtResource("1_0gwcr")]([SubResource("Resource_qjvvf")])
+editor_position = Vector2(0, 240)
+
+[sub_resource type="Resource" id="Resource_j0nwb"]
+script = ExtResource("4_senho")
+machine_name = "Horizontal"
+states = Array[ExtResource("7_krtof")]([SubResource("Resource_ihve3")])
+entry_state = SubResource("Resource_ihve3")
+
+[resource]
+script = ExtResource("3_rxw0g")
+behavior_name = "Air"
+sub_machines = Array[ExtResource("4_senho")]([SubResource("Resource_dh3n4"), SubResource("Resource_j0nwb")])
+behavior_transitions = Array[ExtResource("1_0gwcr")]([SubResource("Resource_senho")])

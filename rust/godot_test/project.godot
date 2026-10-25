@@ -1,0 +1,8 @@
+config_version=5
+
+[application]
+config/name="FrameForge GDExtension Test"
+run/main_scene="res://test.tscn"
+
+[debug]
+gdscript/warnings/untyped_declaration=0

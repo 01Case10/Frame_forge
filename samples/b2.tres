@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="FrameBehavior" format=3]
+
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_transition.gd" id="1_tr53n"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_parameter.gd" id="2_ri5p6"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_behavior.gd" id="3_5005w"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/sub_state_machine.gd" id="4_500gp"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_comment.gd" id="5_yl247"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_state_event.gd" id="6_e66hu"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_state.gd" id="7_j0taa"]
+
+[sub_resource type="Curve" id="Curve_3gbuj"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_xdaol"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_8kh4o"]
+script = ExtResource("1_tr53n")
+target_state = null
+
+[sub_resource type="Resource" id="Resource_kl7cr"]
+script = ExtResource("7_j0taa")
+state_name = "T"
+duration_frames = 3
+easing = SubResource("Curve_xdaol")
+transitions = Array[ExtResource("1_tr53n")]([SubResource("Resource_8kh4o")])
+
+[sub_resource type="Resource" id="Resource_6kmwr"]
+script = ExtResource("1_tr53n")
+target_state = SubResource("Resource_kl7cr")
+
+[sub_resource type="Resource" id="Resource_71tjo"]
+script = ExtResource("7_j0taa")
+state_name = "S"
+duration_frames = 5
+easing = SubResource("Curve_3gbuj")
+transitions = Array[ExtResource("1_tr53n")]([SubResource("Resource_6kmwr")])
+
+[sub_resource type="Resource" id="Resource_uff2v"]
+script = ExtResource("4_500gp")
+machine_name = "M"
+states = Array[ExtResource("7_j0taa")]([SubResource("Resource_71tjo"), SubResource("Resource_kl7cr")])
+entry_state = SubResource("Resource_71tjo")
+
+[resource]
+script = ExtResource("3_5005w")
+behavior_name = "B"
+sub_machines = Array[ExtResource("4_500gp")]([SubResource("Resource_uff2v")])

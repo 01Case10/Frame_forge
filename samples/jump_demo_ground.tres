@@ -1,0 +1,243 @@
+[gd_resource type="Resource" script_class="FrameBehavior" format=3]
+
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_transition.gd" id="1_mm7o0"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_parameter.gd" id="2_kb2aa"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_behavior.gd" id="3_hblrv"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/sub_state_machine.gd" id="4_y0223"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_comment.gd" id="5_aw1dt"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_state_event.gd" id="6_sxgrk"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_state.gd" id="7_wfwox"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_condition.gd" id="8_xci5v"]
+
+[sub_resource type="Curve" id="Curve_cjbw6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_pc4x5"]
+script = ExtResource("8_xci5v")
+type = 1
+input_actions = PackedStringArray("ui_left", "ui_right", "ui_forward", "ui_back")
+
+[sub_resource type="Resource" id="Resource_q0wok"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_pc4x5")
+target_state_name = &"Run"
+
+[sub_resource type="Resource" id="Resource_xdrqn"]
+script = ExtResource("8_xci5v")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lskho"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_xdrqn")
+target_state_name = &"Idle"
+
+[sub_resource type="Resource" id="Resource_qk1gh"]
+script = ExtResource("8_xci5v")
+type = 1
+input_actions = PackedStringArray("ui_accept")
+
+[sub_resource type="Curve" id="Curve_k8eej"]
+_data = [Vector2(0, 0), 0.0, 1.6, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_3gb85"]
+script = ExtResource("8_xci5v")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_asfh1"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_3gb85")
+target_state_name = &"Fall"
+
+[sub_resource type="Resource" id="Resource_udmih"]
+script = ExtResource("7_wfwox")
+state_name = "Rise"
+displacement = 4.48
+direction = Vector3(0, 1, 0)
+duration_frames = 14
+easing = SubResource("Curve_k8eej")
+transitions = Array[ExtResource("1_mm7o0")]([SubResource("Resource_asfh1")])
+
+[sub_resource type="Curve" id="Curve_a1vrk"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_6he2a"]
+script = ExtResource("8_xci5v")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kka6p"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_6he2a")
+target_state_name = &"Fall"
+
+[sub_resource type="Resource" id="Resource_yas0v"]
+script = ExtResource("7_wfwox")
+state_name = "Fall"
+displacement = 0.42
+direction = Vector3(0, -1, 0)
+easing = SubResource("Curve_a1vrk")
+transitions = Array[ExtResource("1_mm7o0")]([SubResource("Resource_kka6p")])
+editor_position = Vector2(300, 0)
+
+[sub_resource type="Resource" id="Resource_dh3n4"]
+script = ExtResource("4_y0223")
+machine_name = "Vertical"
+states = Array[ExtResource("7_wfwox")]([SubResource("Resource_udmih"), SubResource("Resource_yas0v")])
+entry_state = SubResource("Resource_udmih")
+
+[sub_resource type="Curve" id="Curve_8ts16"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_4wpcm"]
+script = ExtResource("8_xci5v")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qjvvf"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_4wpcm")
+target_state_name = &"AirMove"
+
+[sub_resource type="Resource" id="Resource_ihve3"]
+script = ExtResource("7_wfwox")
+state_name = "AirMove"
+displacement = 0.1
+easing = SubResource("Curve_8ts16")
+direction_source = 3
+input_left = "ui_left"
+input_right = "ui_right"
+input_forward = "ui_forward"
+input_back = "ui_back"
+transitions = Array[ExtResource("1_mm7o0")]([SubResource("Resource_qjvvf")])
+editor_position = Vector2(0, 240)
+
+[sub_resource type="Resource" id="Resource_j0nwb"]
+script = ExtResource("4_y0223")
+machine_name = "Horizontal"
+states = Array[ExtResource("7_wfwox")]([SubResource("Resource_ihve3")])
+entry_state = SubResource("Resource_ihve3")
+
+[sub_resource type="Resource" id="Resource_08k5a"]
+script = ExtResource("3_hblrv")
+behavior_name = "Air"
+sub_machines = Array[ExtResource("4_y0223")]([SubResource("Resource_dh3n4"), SubResource("Resource_j0nwb")])
+
+[sub_resource type="Resource" id="Resource_i8u50"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_qk1gh")
+target_behavior = SubResource("Resource_08k5a")
+
+[sub_resource type="Resource" id="Resource_ksvex"]
+script = ExtResource("7_wfwox")
+state_name = "Idle"
+easing = SubResource("Curve_cjbw6")
+transitions = Array[ExtResource("1_mm7o0")]([SubResource("Resource_q0wok"), SubResource("Resource_lskho"), SubResource("Resource_i8u50")])
+
+[sub_resource type="Curve" id="Curve_61ai2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_gspa5"]
+script = ExtResource("8_xci5v")
+type = 1
+input_actions = PackedStringArray("ui_left", "ui_right", "ui_forward", "ui_back")
+input_mode = 2
+
+[sub_resource type="Resource" id="Resource_nv444"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_gspa5")
+target_state_name = &"Brake"
+
+[sub_resource type="Resource" id="Resource_qd8yn"]
+script = ExtResource("8_xci5v")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dtnin"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_qd8yn")
+target_state_name = &"Run"
+
+[sub_resource type="Resource" id="Resource_l1pn8"]
+script = ExtResource("8_xci5v")
+type = 1
+input_actions = PackedStringArray("ui_accept")
+
+[sub_resource type="Resource" id="Resource_g0pjx"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_l1pn8")
+target_behavior = SubResource("Resource_08k5a")
+
+[sub_resource type="Resource" id="Resource_6uy7c"]
+script = ExtResource("7_wfwox")
+state_name = "Run"
+displacement = 0.14
+easing = SubResource("Curve_61ai2")
+direction_source = 3
+input_left = "ui_left"
+input_right = "ui_right"
+input_forward = "ui_forward"
+input_back = "ui_back"
+transitions = Array[ExtResource("1_mm7o0")]([SubResource("Resource_nv444"), SubResource("Resource_dtnin"), SubResource("Resource_g0pjx")])
+editor_position = Vector2(300, 0)
+
+[sub_resource type="Curve" id="Curve_1lhgo"]
+_data = [Vector2(0, 0), 0.0, 1.6, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_n0hev"]
+script = ExtResource("8_xci5v")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5vdp1"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_n0hev")
+target_state_name = &"Idle"
+
+[sub_resource type="Resource" id="Resource_7gawk"]
+script = ExtResource("7_wfwox")
+state_name = "Brake"
+duration_frames = 6
+easing = SubResource("Curve_1lhgo")
+direction_source = 4
+displacement_source = 2
+transitions = Array[ExtResource("1_mm7o0")]([SubResource("Resource_5vdp1")])
+editor_position = Vector2(600, 0)
+
+[sub_resource type="Resource" id="Resource_d7pek"]
+script = ExtResource("4_y0223")
+machine_name = "Locomotion"
+states = Array[ExtResource("7_wfwox")]([SubResource("Resource_ksvex"), SubResource("Resource_6uy7c"), SubResource("Resource_7gawk")])
+entry_state = SubResource("Resource_ksvex")
+
+[sub_resource type="Curve" id="Curve_xitou"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_57lqk"]
+script = ExtResource("8_xci5v")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ycmj4"]
+script = ExtResource("1_mm7o0")
+condition = SubResource("Resource_57lqk")
+target_state_name = &"Grounded"
+
+[sub_resource type="Resource" id="Resource_heuyq"]
+script = ExtResource("7_wfwox")
+state_name = "Grounded"
+easing = SubResource("Curve_xitou")
+transitions = Array[ExtResource("1_mm7o0")]([SubResource("Resource_ycmj4")])
+editor_position = Vector2(0, 240)
+
+[sub_resource type="Resource" id="Resource_hib77"]
+script = ExtResource("4_y0223")
+machine_name = "Vertical"
+states = Array[ExtResource("7_wfwox")]([SubResource("Resource_heuyq")])
+entry_state = SubResource("Resource_heuyq")
+
+[resource]
+script = ExtResource("3_hblrv")
+behavior_name = "Ground"
+sub_machines = Array[ExtResource("4_y0223")]([SubResource("Resource_d7pek"), SubResource("Resource_hib77")])
