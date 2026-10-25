@@ -1,0 +1,189 @@
+[gd_resource type="Resource" script_class="FrameBehavior" format=3]
+
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_transition.gd" id="1_84ycb"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_parameter.gd" id="2_4mffo"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_behavior.gd" id="3_7gcpm"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/sub_state_machine.gd" id="4_semvm"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_comment.gd" id="5_lji4j"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_state_event.gd" id="6_7jn2q"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_state.gd" id="7_kg4bw"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_condition.gd" id="8_yjbpu"]
+
+[sub_resource type="Curve" id="Curve_klabn"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_ubxgr"]
+script = ExtResource("8_yjbpu")
+type = 1
+input_actions = PackedStringArray("ff_jump")
+
+[sub_resource type="Resource" id="Resource_whcn4"]
+script = ExtResource("1_84ycb")
+condition = SubResource("Resource_ubxgr")
+target_state_name = &"JumpRise"
+
+[sub_resource type="Resource" id="Resource_sv7v5"]
+script = ExtResource("8_yjbpu")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0cybn"]
+script = ExtResource("1_84ycb")
+condition = SubResource("Resource_sv7v5")
+target_state_name = &"Ground"
+
+[sub_resource type="Resource" id="Resource_oomkb"]
+script = ExtResource("7_kg4bw")
+state_name = "Ground"
+easing = SubResource("Curve_klabn")
+transitions = Array[ExtResource("1_84ycb")]([SubResource("Resource_whcn4"), SubResource("Resource_0cybn")])
+
+[sub_resource type="Curve" id="Curve_nskqm"]
+_data = [Vector2(0, 1), 0.0, -1.0476189, 1, 1, Vector2(0.09090909, 0.9047619), -1.0476189, -1.0476189, 1, 1, Vector2(0.18181819, 0.8095238), -1.0476189, -1.0476189, 1, 1, Vector2(0.27272728, 0.71428573), -1.0476189, -1.0476189, 1, 1, Vector2(0.36363637, 0.61904764), -1.0476189, -1.0476189, 1, 1, Vector2(0.45454547, 0.52380955), -1.0476189, -1.0476192, 1, 1, Vector2(0.54545456, 0.42857143), -1.0476192, -1.0476193, 1, 1, Vector2(0.6363636, 0.33333334), -1.0476193, -1.0476187, 1, 1, Vector2(0.72727275, 0.23809524), -1.0476187, -1.0476193, 1, 1, Vector2(0.8181818, 0.14285715), -1.0476193, -1.0476187, 1, 1, Vector2(0.90909094, 0.04761905), -1.0476187, 0.0, 1, 1, Vector2(1, 0.04761905), 0.0, 0.0, 1, 1]
+point_count = 12
+
+[sub_resource type="Resource" id="Resource_sowbp"]
+script = ExtResource("8_yjbpu")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_oporf"]
+script = ExtResource("1_84ycb")
+condition = SubResource("Resource_sowbp")
+target_state_name = &"JumpFall"
+
+[sub_resource type="Resource" id="Resource_jfox1"]
+script = ExtResource("8_yjbpu")
+type = 1
+input_actions = PackedStringArray("ff_crouch")
+
+[sub_resource type="Resource" id="Resource_qa68u"]
+script = ExtResource("1_84ycb")
+condition = SubResource("Resource_jfox1")
+target_state_name = &"PoundRise"
+
+[sub_resource type="Resource" id="Resource_edqxq"]
+script = ExtResource("7_kg4bw")
+state_name = "JumpRise"
+displacement = 2.42
+direction = Vector3(0, 1, 0)
+duration_frames = 11
+easing = SubResource("Curve_nskqm")
+transitions = Array[ExtResource("1_84ycb")]([SubResource("Resource_oporf"), SubResource("Resource_qa68u")])
+
+[sub_resource type="Curve" id="Curve_cc4qr"]
+_data = [Vector2(0, 0.04761905), 0.0, 1.0476192, 1, 1, Vector2(0.09090909, 0.14285715), 1.0476192, 1.0476189, 1, 1, Vector2(0.18181819, 0.23809524), 1.0476189, 1.0476192, 1, 1, Vector2(0.27272728, 0.33333334), 1.0476192, 1.0476189, 1, 1, Vector2(0.36363637, 0.42857143), 1.0476189, 1.0476192, 1, 1, Vector2(0.45454547, 0.52380955), 1.0476192, 1.0476189, 1, 1, Vector2(0.54545456, 0.61904764), 1.0476189, 1.0476193, 1, 1, Vector2(0.6363636, 0.71428573), 1.0476193, 1.0476185, 1, 1, Vector2(0.72727275, 0.8095238), 1.0476185, 1.0476193, 1, 1, Vector2(0.8181818, 0.9047619), 1.0476193, 1.0476185, 1, 1, Vector2(0.90909094, 1), 1.0476185, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 12
+
+[sub_resource type="Resource" id="Resource_s5dif"]
+script = ExtResource("8_yjbpu")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fgdwj"]
+script = ExtResource("1_84ycb")
+condition = SubResource("Resource_s5dif")
+target_state_name = &"Ground"
+
+[sub_resource type="Resource" id="Resource_w13ti"]
+script = ExtResource("7_kg4bw")
+state_name = "JumpFall"
+displacement = 2.42
+direction = Vector3(0, -1, 0)
+duration_frames = 11
+easing = SubResource("Curve_cc4qr")
+transitions = Array[ExtResource("1_84ycb")]([SubResource("Resource_qa68u"), SubResource("Resource_fgdwj")])
+
+[sub_resource type="Curve" id="Curve_r8348"]
+_data = [Vector2(0, 1), 0.0, -1.0000001, 1, 1, Vector2(0.1, 0.9), -1.0000001, -0.99999964, 1, 1, Vector2(0.2, 0.8), -0.99999964, -1.0000001, 1, 1, Vector2(0.3, 0.7), -1.0000001, -0.99999976, 1, 1, Vector2(0.4, 0.6), -0.99999976, -1.0000002, 1, 1, Vector2(0.5, 0.5), -1.0000002, -0.99999976, 1, 1, Vector2(0.6, 0.4), -0.99999976, -1.0000002, 1, 1, Vector2(0.7, 0.3), -1.0000002, -0.9999998, 1, 1, Vector2(0.8, 0.2), -0.9999998, -1.0000004, 1, 1, Vector2(0.9, 0.1), -1.0000004, 0.0, 1, 1, Vector2(1, 0.1), 0.0, 0.0, 1, 1]
+point_count = 11
+
+[sub_resource type="Resource" id="Resource_or0wt"]
+script = ExtResource("8_yjbpu")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vmq6g"]
+script = ExtResource("1_84ycb")
+condition = SubResource("Resource_or0wt")
+target_state_name = &"PoundHover"
+
+[sub_resource type="Resource" id="Resource_m2vp5"]
+script = ExtResource("7_kg4bw")
+state_name = "PoundRise"
+displacement = 1.1
+direction = Vector3(0, 1, 0)
+duration_frames = 10
+easing = SubResource("Curve_r8348")
+transitions = Array[ExtResource("1_84ycb")]([SubResource("Resource_vmq6g")])
+
+[sub_resource type="Curve" id="Curve_um70s"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_qpsf2"]
+script = ExtResource("8_yjbpu")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_f4c3y"]
+script = ExtResource("1_84ycb")
+condition = SubResource("Resource_qpsf2")
+target_state_name = &"PoundSlam"
+
+[sub_resource type="Resource" id="Resource_0et70"]
+script = ExtResource("7_kg4bw")
+state_name = "PoundHover"
+duration_frames = 5
+easing = SubResource("Curve_um70s")
+transitions = Array[ExtResource("1_84ycb")]([SubResource("Resource_f4c3y")])
+
+[sub_resource type="Curve" id="Curve_seo21"]
+_data = [Vector2(0, 0.75757575), 0.0, 0.30303028, 1, 1, Vector2(0.2, 0.8181818), 0.30303028, 0.30303028, 1, 1, Vector2(0.4, 0.8787879), 0.30303028, 0.30303028, 1, 1, Vector2(0.6, 0.93939394), 0.30303028, 0.3030303, 1, 1, Vector2(0.8, 1), 0.3030303, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 6
+
+[sub_resource type="Resource" id="Resource_6yr6g"]
+script = ExtResource("8_yjbpu")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_bu84h"]
+script = ExtResource("1_84ycb")
+condition = SubResource("Resource_6yr6g")
+target_state_name = &"PoundLand"
+
+[sub_resource type="Resource" id="Resource_ahp08"]
+script = ExtResource("7_kg4bw")
+state_name = "PoundSlam"
+displacement = 2.9
+direction = Vector3(0, -1, 0)
+duration_frames = 5
+easing = SubResource("Curve_seo21")
+transitions = Array[ExtResource("1_84ycb")]([SubResource("Resource_bu84h")])
+
+[sub_resource type="Curve" id="Curve_4nnr0"]
+_data = [Vector2(0, 1), 0.0, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_hu08v"]
+script = ExtResource("8_yjbpu")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gjjo7"]
+script = ExtResource("1_84ycb")
+condition = SubResource("Resource_hu08v")
+target_state_name = &"Ground"
+
+[sub_resource type="Resource" id="Resource_rsjqh"]
+script = ExtResource("7_kg4bw")
+state_name = "PoundLand"
+displacement = 0.12
+direction = Vector3(0, -1, 0)
+easing = SubResource("Curve_4nnr0")
+transitions = Array[ExtResource("1_84ycb")]([SubResource("Resource_gjjo7")])
+
+[sub_resource type="Resource" id="Resource_27wtm"]
+script = ExtResource("4_semvm")
+machine_name = "Vertical"
+states = Array[ExtResource("7_kg4bw")]([SubResource("Resource_oomkb"), SubResource("Resource_edqxq"), SubResource("Resource_w13ti"), SubResource("Resource_m2vp5"), SubResource("Resource_0et70"), SubResource("Resource_ahp08"), SubResource("Resource_rsjqh")])
+entry_state = SubResource("Resource_oomkb")
+
+[resource]
+script = ExtResource("3_7gcpm")
+behavior_name = "GroundPound"
+sub_machines = Array[ExtResource("4_semvm")]([SubResource("Resource_27wtm")])

@@ -1,0 +1,242 @@
+[gd_resource type="Resource" script_class="FrameBehavior" format=3]
+
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_transition.gd" id="1_7q8kb"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_parameter.gd" id="2_rhms2"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_behavior.gd" id="3_wgxx0"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/sub_state_machine.gd" id="4_ohtuo"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_comment.gd" id="5_83chu"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_state_event.gd" id="6_hyk4p"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_state.gd" id="7_g327f"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_condition.gd" id="8_xmpxa"]
+
+[sub_resource type="Curve" id="Curve_j1bpp"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_2vq60"]
+script = ExtResource("8_xmpxa")
+type = 1
+input_actions = PackedStringArray("ff_jump")
+
+[sub_resource type="Resource" id="Resource_rvo40"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_2vq60")
+target_state_name = &"JumpRise"
+
+[sub_resource type="Resource" id="Resource_c55wd"]
+script = ExtResource("8_xmpxa")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dj4up"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_c55wd")
+target_state_name = &"Ground"
+
+[sub_resource type="Resource" id="Resource_n2uoj"]
+script = ExtResource("7_g327f")
+state_name = "Ground"
+easing = SubResource("Curve_j1bpp")
+transitions = Array[ExtResource("1_7q8kb")]([SubResource("Resource_rvo40"), SubResource("Resource_dj4up")])
+
+[sub_resource type="Curve" id="Curve_u123l"]
+_data = [Vector2(0, 1), 0.0, -1.0476189, 1, 1, Vector2(0.09090909, 0.9047619), -1.0476189, -1.0476189, 1, 1, Vector2(0.18181819, 0.8095238), -1.0476189, -1.0476189, 1, 1, Vector2(0.27272728, 0.71428573), -1.0476189, -1.0476189, 1, 1, Vector2(0.36363637, 0.61904764), -1.0476189, -1.0476189, 1, 1, Vector2(0.45454547, 0.52380955), -1.0476189, -1.0476192, 1, 1, Vector2(0.54545456, 0.42857143), -1.0476192, -1.0476193, 1, 1, Vector2(0.6363636, 0.33333334), -1.0476193, -1.0476187, 1, 1, Vector2(0.72727275, 0.23809524), -1.0476187, -1.0476193, 1, 1, Vector2(0.8181818, 0.14285715), -1.0476193, -1.0476187, 1, 1, Vector2(0.90909094, 0.04761905), -1.0476187, 0.0, 1, 1, Vector2(1, 0.04761905), 0.0, 0.0, 1, 1]
+point_count = 12
+
+[sub_resource type="Resource" id="Resource_t5qhn"]
+script = ExtResource("8_xmpxa")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gj2co"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_t5qhn")
+target_state_name = &"JumpFall"
+
+[sub_resource type="Resource" id="Resource_0xm2b"]
+script = ExtResource("7_g327f")
+state_name = "JumpRise"
+displacement = 2.42
+direction = Vector3(0, 1, 0)
+duration_frames = 11
+easing = SubResource("Curve_u123l")
+transitions = Array[ExtResource("1_7q8kb")]([SubResource("Resource_gj2co")])
+
+[sub_resource type="Curve" id="Curve_m4dsc"]
+_data = [Vector2(0, 0.04761905), 0.0, 1.0476192, 1, 1, Vector2(0.09090909, 0.14285715), 1.0476192, 1.0476189, 1, 1, Vector2(0.18181819, 0.23809524), 1.0476189, 1.0476192, 1, 1, Vector2(0.27272728, 0.33333334), 1.0476192, 1.0476189, 1, 1, Vector2(0.36363637, 0.42857143), 1.0476189, 1.0476192, 1, 1, Vector2(0.45454547, 0.52380955), 1.0476192, 1.0476189, 1, 1, Vector2(0.54545456, 0.61904764), 1.0476189, 1.0476193, 1, 1, Vector2(0.6363636, 0.71428573), 1.0476193, 1.0476185, 1, 1, Vector2(0.72727275, 0.8095238), 1.0476185, 1.0476193, 1, 1, Vector2(0.8181818, 0.9047619), 1.0476193, 1.0476185, 1, 1, Vector2(0.90909094, 1), 1.0476185, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 12
+
+[sub_resource type="Resource" id="Resource_7gqih"]
+script = ExtResource("8_xmpxa")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0ct6c"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_7gqih")
+target_state_name = &"LandFromJump"
+
+[sub_resource type="Resource" id="Resource_yn271"]
+script = ExtResource("7_g327f")
+state_name = "JumpFall"
+displacement = 2.42
+direction = Vector3(0, -1, 0)
+duration_frames = 11
+easing = SubResource("Curve_m4dsc")
+transitions = Array[ExtResource("1_7q8kb")]([SubResource("Resource_0ct6c")])
+
+[sub_resource type="Curve" id="Curve_kku6d"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_75odc"]
+script = ExtResource("8_xmpxa")
+type = 1
+input_actions = PackedStringArray("ff_jump")
+
+[sub_resource type="Resource" id="Resource_bnwv7"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_75odc")
+target_state_name = &"DoubleRise"
+
+[sub_resource type="Resource" id="Resource_dxhxv"]
+script = ExtResource("8_xmpxa")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ptpe6"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_dxhxv")
+target_state_name = &"Ground"
+
+[sub_resource type="Resource" id="Resource_vgecj"]
+script = ExtResource("7_g327f")
+state_name = "LandFromJump"
+duration_frames = 5
+easing = SubResource("Curve_kku6d")
+transitions = Array[ExtResource("1_7q8kb")]([SubResource("Resource_bnwv7"), SubResource("Resource_ptpe6")])
+
+[sub_resource type="Curve" id="Curve_k6qkx"]
+_data = [Vector2(0, 1), 0.0, -1.0769229, 1, 1, Vector2(0.071428575, 0.9230769), -1.0769229, -1.0769229, 1, 1, Vector2(0.14285715, 0.84615386), -1.0769229, -1.0769231, 1, 1, Vector2(0.21428572, 0.7692308), -1.0769231, -1.0769229, 1, 1, Vector2(0.2857143, 0.6923077), -1.0769229, -1.0769231, 1, 1, Vector2(0.35714287, 0.61538464), -1.0769231, -1.0769231, 1, 1, Vector2(0.42857143, 0.53846157), -1.0769231, -1.0769235, 1, 1, Vector2(0.5, 0.46153846), -1.0769235, -1.0769227, 1, 1, Vector2(0.5714286, 0.3846154), -1.0769227, -1.0769236, 1, 1, Vector2(0.64285713, 0.30769232), -1.0769236, -1.0769229, 1, 1, Vector2(0.71428573, 0.23076923), -1.0769229, -1.0769236, 1, 1, Vector2(0.78571427, 0.15384616), -1.0769236, -1.0769228, 1, 1, Vector2(0.85714287, 0.07692308), -1.0769228, -1.0769236, 1, 1, Vector2(0.9285714, 0), -1.0769236, 0.0, 1, 1, Vector2(1, 0), 0.0, 0.0, 1, 1]
+point_count = 15
+
+[sub_resource type="Resource" id="Resource_6llcl"]
+script = ExtResource("8_xmpxa")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mtu1b"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_6llcl")
+target_state_name = &"DoubleFall"
+
+[sub_resource type="Resource" id="Resource_7g0c0"]
+script = ExtResource("7_g327f")
+state_name = "DoubleRise"
+displacement = 3.64
+direction = Vector3(0, 1, 0)
+duration_frames = 14
+easing = SubResource("Curve_k6qkx")
+transitions = Array[ExtResource("1_7q8kb")]([SubResource("Resource_mtu1b")])
+
+[sub_resource type="Curve" id="Curve_d8i5r"]
+_data = [Vector2(0, 0.07692308), 0.0, 1.0, 1, 1, Vector2(0.07692308, 0.15384616), 1.0, 0.9999998, 1, 1, Vector2(0.15384616, 0.23076923), 0.9999998, 1.0000002, 1, 1, Vector2(0.23076923, 0.30769232), 1.0000002, 0.99999976, 1, 1, Vector2(0.30769232, 0.3846154), 0.99999976, 1.0, 1, 1, Vector2(0.3846154, 0.46153846), 1.0, 1.0000004, 1, 1, Vector2(0.46153846, 0.53846157), 1.0000004, 0.99999964, 1, 1, Vector2(0.53846157, 0.61538464), 0.99999964, 1.0, 1, 1, Vector2(0.61538464, 0.6923077), 1.0, 1.0, 1, 1, Vector2(0.6923077, 0.7692308), 1.0, 1.0, 1, 1, Vector2(0.7692308, 0.84615386), 1.0, 1.0, 1, 1, Vector2(0.84615386, 0.9230769), 1.0, 1.0, 1, 1, Vector2(0.9230769, 1), 1.0, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 14
+
+[sub_resource type="Resource" id="Resource_7m6ea"]
+script = ExtResource("8_xmpxa")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_yabhw"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_7m6ea")
+target_state_name = &"LandFromDouble"
+
+[sub_resource type="Resource" id="Resource_vavfn"]
+script = ExtResource("7_g327f")
+state_name = "DoubleFall"
+displacement = 3.64
+direction = Vector3(0, -1, 0)
+duration_frames = 13
+easing = SubResource("Curve_d8i5r")
+transitions = Array[ExtResource("1_7q8kb")]([SubResource("Resource_yabhw")])
+
+[sub_resource type="Curve" id="Curve_808xt"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_odbhl"]
+script = ExtResource("8_xmpxa")
+type = 1
+input_actions = PackedStringArray("ff_jump")
+
+[sub_resource type="Resource" id="Resource_gpmgo"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_odbhl")
+target_state_name = &"TripleRise"
+
+[sub_resource type="Resource" id="Resource_7engm"]
+script = ExtResource("8_xmpxa")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2euau"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_7engm")
+target_state_name = &"Ground"
+
+[sub_resource type="Resource" id="Resource_vewn5"]
+script = ExtResource("7_g327f")
+state_name = "LandFromDouble"
+duration_frames = 5
+easing = SubResource("Curve_808xt")
+transitions = Array[ExtResource("1_7q8kb")]([SubResource("Resource_gpmgo"), SubResource("Resource_2euau")])
+
+[sub_resource type="Curve" id="Curve_se0ms"]
+_data = [Vector2(0, 1), 0.0, -1.0399997, 1, 1, Vector2(0.07692308, 0.92), -1.0399997, -1.0400004, 1, 1, Vector2(0.15384616, 0.84), -1.0400004, -1.0399998, 1, 1, Vector2(0.23076923, 0.76), -1.0399998, -1.0399996, 1, 1, Vector2(0.30769232, 0.68), -1.0399996, -1.0399998, 1, 1, Vector2(0.3846154, 0.6), -1.0399998, -1.0400006, 1, 1, Vector2(0.46153846, 0.52), -1.0400006, -1.0399995, 1, 1, Vector2(0.53846157, 0.44), -1.0399995, -1.0399998, 1, 1, Vector2(0.61538464, 0.36), -1.0399998, -1.0400002, 1, 1, Vector2(0.6923077, 0.28), -1.0400002, -1.04, 1, 1, Vector2(0.7692308, 0.2), -1.04, -1.0400002, 1, 1, Vector2(0.84615386, 0.12), -1.0400002, -1.04, 1, 1, Vector2(0.9230769, 0.04), -1.04, 0.0, 1, 1, Vector2(1, 0.04), 0.0, 0.0, 1, 1]
+point_count = 14
+
+[sub_resource type="Resource" id="Resource_phhru"]
+script = ExtResource("8_xmpxa")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_f3gsx"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_phhru")
+target_state_name = &"TripleFall"
+
+[sub_resource type="Resource" id="Resource_rxxxf"]
+script = ExtResource("7_g327f")
+state_name = "TripleRise"
+displacement = 3.38
+direction = Vector3(0, 1, 0)
+duration_frames = 13
+easing = SubResource("Curve_se0ms")
+transitions = Array[ExtResource("1_7q8kb")]([SubResource("Resource_f3gsx")])
+
+[sub_resource type="Curve" id="Curve_8bn7h"]
+_data = [Vector2(0, 0.04), 0.0, 1.04, 1, 1, Vector2(0.07692308, 0.12), 1.04, 1.0400001, 1, 1, Vector2(0.15384616, 0.2), 1.0400001, 1.04, 1, 1, Vector2(0.23076923, 0.28), 1.04, 1.04, 1, 1, Vector2(0.30769232, 0.36), 1.04, 1.0399998, 1, 1, Vector2(0.3846154, 0.44), 1.0399998, 1.0399998, 1, 1, Vector2(0.46153846, 0.52), 1.0399998, 1.0400002, 1, 1, Vector2(0.53846157, 0.6), 1.0400002, 1.0399998, 1, 1, Vector2(0.61538464, 0.68), 1.0399998, 1.0399998, 1, 1, Vector2(0.6923077, 0.76), 1.0399998, 1.0399998, 1, 1, Vector2(0.7692308, 0.84), 1.0399998, 1.0400006, 1, 1, Vector2(0.84615386, 0.92), 1.0400006, 1.0399998, 1, 1, Vector2(0.9230769, 1), 1.0399998, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 14
+
+[sub_resource type="Resource" id="Resource_0swuh"]
+script = ExtResource("8_xmpxa")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_3yte2"]
+script = ExtResource("1_7q8kb")
+condition = SubResource("Resource_0swuh")
+target_state_name = &"Ground"
+
+[sub_resource type="Resource" id="Resource_nfahs"]
+script = ExtResource("7_g327f")
+state_name = "TripleFall"
+displacement = 3.38
+direction = Vector3(0, -1, 0)
+duration_frames = 13
+easing = SubResource("Curve_8bn7h")
+transitions = Array[ExtResource("1_7q8kb")]([SubResource("Resource_3yte2")])
+
+[sub_resource type="Resource" id="Resource_2rpth"]
+script = ExtResource("4_ohtuo")
+machine_name = "Vertical"
+states = Array[ExtResource("7_g327f")]([SubResource("Resource_n2uoj"), SubResource("Resource_0xm2b"), SubResource("Resource_yn271"), SubResource("Resource_vgecj"), SubResource("Resource_7g0c0"), SubResource("Resource_vavfn"), SubResource("Resource_vewn5"), SubResource("Resource_rxxxf"), SubResource("Resource_nfahs")])
+entry_state = SubResource("Resource_n2uoj")
+
+[resource]
+script = ExtResource("3_wgxx0")
+behavior_name = "DoubleJump"
+sub_machines = Array[ExtResource("4_ohtuo")]([SubResource("Resource_2rpth")])

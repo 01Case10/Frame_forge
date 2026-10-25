@@ -1,0 +1,2411 @@
+[gd_resource type="Resource" script_class="FrameBehavior" format=3]
+
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_transition.gd" id="1_e4eth"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_parameter.gd" id="2_x1lta"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_behavior.gd" id="3_asygv"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/sub_state_machine.gd" id="4_padhq"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_comment.gd" id="5_qasug"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_state_event.gd" id="6_id8h7"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/frame_state.gd" id="7_5bev5"]
+[ext_resource type="Script" path="res://addons/frameforge/runtime/ff_condition.gd" id="8_6drd0"]
+
+[sub_resource type="Curve" id="Curve_kc5ae"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_oqq1e"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_medgs"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_oqq1e")
+target_state_name = &"f1"
+
+[sub_resource type="Resource" id="Resource_ntxdg"]
+script = ExtResource("7_5bev5")
+state_name = "f0"
+displacement = 0.089139536
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_kc5ae")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_medgs")])
+
+[sub_resource type="Curve" id="Curve_igrnn"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_uk264"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_h3er5"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_uk264")
+target_state_name = &"f2"
+
+[sub_resource type="Resource" id="Resource_051rr"]
+script = ExtResource("7_5bev5")
+state_name = "f1"
+displacement = 0.09806654
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_igrnn")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_h3er5")])
+
+[sub_resource type="Curve" id="Curve_6r8el"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_plgpl"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vy21q"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_plgpl")
+target_state_name = &"f3"
+
+[sub_resource type="Resource" id="Resource_msves"]
+script = ExtResource("7_5bev5")
+state_name = "f2"
+displacement = 0.106785886
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_6r8el")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_vy21q")])
+
+[sub_resource type="Curve" id="Curve_5s60x"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_pfo2b"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_djc5n"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_pfo2b")
+target_state_name = &"f4"
+
+[sub_resource type="Resource" id="Resource_caprg"]
+script = ExtResource("7_5bev5")
+state_name = "f3"
+displacement = 0.11530258
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_5s60x")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_djc5n")])
+
+[sub_resource type="Curve" id="Curve_4rrfg"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_hkxj8"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tmm64"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_hkxj8")
+target_state_name = &"f5"
+
+[sub_resource type="Resource" id="Resource_ddgwv"]
+script = ExtResource("7_5bev5")
+state_name = "f4"
+displacement = 0.123621054
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_4rrfg")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_tmm64")])
+
+[sub_resource type="Curve" id="Curve_oniuc"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_5whvr"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_t0lp4"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_5whvr")
+target_state_name = &"f6"
+
+[sub_resource type="Resource" id="Resource_lem6s"]
+script = ExtResource("7_5bev5")
+state_name = "f5"
+displacement = 0.13174619
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_oniuc")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_t0lp4")])
+
+[sub_resource type="Curve" id="Curve_n7gqs"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_8ty3x"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_42wbu"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_8ty3x")
+target_state_name = &"f7"
+
+[sub_resource type="Resource" id="Resource_p2x6u"]
+script = ExtResource("7_5bev5")
+state_name = "f6"
+displacement = 0.1396823
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_n7gqs")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_42wbu")])
+
+[sub_resource type="Curve" id="Curve_qqnsm"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_2ypb4"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_klu3x"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_2ypb4")
+target_state_name = &"f8"
+
+[sub_resource type="Resource" id="Resource_32610"]
+script = ExtResource("7_5bev5")
+state_name = "f7"
+displacement = 0.14743379
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_qqnsm")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_klu3x")])
+
+[sub_resource type="Curve" id="Curve_02a2c"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_a7s81"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pb4v4"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_a7s81")
+target_state_name = &"f9"
+
+[sub_resource type="Resource" id="Resource_owxei"]
+script = ExtResource("7_5bev5")
+state_name = "f8"
+displacement = 0.15500519
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_02a2c")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_pb4v4")])
+
+[sub_resource type="Curve" id="Curve_dgx0m"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_nb724"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_daoxb"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_nb724")
+target_state_name = &"f10"
+
+[sub_resource type="Resource" id="Resource_tymxi"]
+script = ExtResource("7_5bev5")
+state_name = "f9"
+displacement = 0.16240048
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_dgx0m")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_daoxb")])
+
+[sub_resource type="Curve" id="Curve_mu23o"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_j4ttn"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_c6a07"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_j4ttn")
+target_state_name = &"f11"
+
+[sub_resource type="Resource" id="Resource_ip83b"]
+script = ExtResource("7_5bev5")
+state_name = "f10"
+displacement = 0.16962339
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_mu23o")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_c6a07")])
+
+[sub_resource type="Curve" id="Curve_6j0yv"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_eqclr"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rt4ff"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_eqclr")
+target_state_name = &"f12"
+
+[sub_resource type="Resource" id="Resource_3bg0m"]
+script = ExtResource("7_5bev5")
+state_name = "f11"
+displacement = 0.17667909
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_6j0yv")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_rt4ff")])
+
+[sub_resource type="Curve" id="Curve_rlhj3"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_04wv8"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0d8fr"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_04wv8")
+target_state_name = &"f13"
+
+[sub_resource type="Resource" id="Resource_81ekf"]
+script = ExtResource("7_5bev5")
+state_name = "f12"
+displacement = 0.18357
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_rlhj3")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_0d8fr")])
+
+[sub_resource type="Curve" id="Curve_wqouj"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_yctet"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gsk3v"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_yctet")
+target_state_name = &"f14"
+
+[sub_resource type="Resource" id="Resource_3u76y"]
+script = ExtResource("7_5bev5")
+state_name = "f13"
+displacement = 0.1903009
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_wqouj")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_gsk3v")])
+
+[sub_resource type="Curve" id="Curve_nn2gf"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_8hfle"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4b5de"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_8hfle")
+target_state_name = &"f15"
+
+[sub_resource type="Resource" id="Resource_mpnwk"]
+script = ExtResource("7_5bev5")
+state_name = "f14"
+displacement = 0.19687559
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_nn2gf")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_4b5de")])
+
+[sub_resource type="Curve" id="Curve_7ubnx"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_o6put"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_64bmi"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_o6put")
+target_state_name = &"f16"
+
+[sub_resource type="Resource" id="Resource_sycib"]
+script = ExtResource("7_5bev5")
+state_name = "f15"
+displacement = 0.2032971
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_7ubnx")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_64bmi")])
+
+[sub_resource type="Curve" id="Curve_pg5yf"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_g7jxf"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_i1phy"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_g7jxf")
+target_state_name = &"f17"
+
+[sub_resource type="Resource" id="Resource_4gprf"]
+script = ExtResource("7_5bev5")
+state_name = "f16"
+displacement = 0.20956908
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_pg5yf")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_i1phy")])
+
+[sub_resource type="Curve" id="Curve_s0cuu"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_8m8sg"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_srjlm"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_8m8sg")
+target_state_name = &"f18"
+
+[sub_resource type="Resource" id="Resource_lv7rf"]
+script = ExtResource("7_5bev5")
+state_name = "f17"
+displacement = 0.2156958
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_s0cuu")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_srjlm")])
+
+[sub_resource type="Curve" id="Curve_igv7v"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_hxn06"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4a423"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_hxn06")
+target_state_name = &"f19"
+
+[sub_resource type="Resource" id="Resource_gk44k"]
+script = ExtResource("7_5bev5")
+state_name = "f18"
+displacement = 0.2216797
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_igv7v")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_4a423")])
+
+[sub_resource type="Curve" id="Curve_jt3m8"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_ubb0f"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_po0dl"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_ubb0f")
+target_state_name = &"f20"
+
+[sub_resource type="Resource" id="Resource_4d31o"]
+script = ExtResource("7_5bev5")
+state_name = "f19"
+displacement = 0.22752438
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_jt3m8")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_po0dl")])
+
+[sub_resource type="Curve" id="Curve_iqu0l"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_sp55p"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ti0ok"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_sp55p")
+target_state_name = &"f21"
+
+[sub_resource type="Resource" id="Resource_ighit"]
+script = ExtResource("7_5bev5")
+state_name = "f20"
+displacement = 0.2332323
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_iqu0l")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_ti0ok")])
+
+[sub_resource type="Curve" id="Curve_d0s7q"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_ve0lf"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_eqlt4"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_ve0lf")
+target_state_name = &"f22"
+
+[sub_resource type="Resource" id="Resource_qrct6"]
+script = ExtResource("7_5bev5")
+state_name = "f21"
+displacement = 0.002769
+direction = Vector3(0, 0, 1)
+duration_frames = 2
+easing = SubResource("Curve_d0s7q")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_eqlt4")])
+
+[sub_resource type="Curve" id="Curve_wwdyy"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_h0bw3"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1nn46"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_h0bw3")
+target_state_name = &"f23"
+
+[sub_resource type="Resource" id="Resource_d24x3"]
+script = ExtResource("7_5bev5")
+state_name = "f22"
+duration_frames = 2
+easing = SubResource("Curve_wwdyy")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_1nn46")])
+
+[sub_resource type="Curve" id="Curve_arbjo"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_5xj7m"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xaadr"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_5xj7m")
+target_state_name = &"f24"
+
+[sub_resource type="Resource" id="Resource_55h26"]
+script = ExtResource("7_5bev5")
+state_name = "f23"
+duration_frames = 2
+easing = SubResource("Curve_arbjo")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_xaadr")])
+
+[sub_resource type="Curve" id="Curve_w0mpo"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_fospd"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_37nlf"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_fospd")
+target_state_name = &"f25"
+
+[sub_resource type="Resource" id="Resource_4q8nw"]
+script = ExtResource("7_5bev5")
+state_name = "f24"
+duration_frames = 2
+easing = SubResource("Curve_w0mpo")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_37nlf")])
+
+[sub_resource type="Curve" id="Curve_0xsu5"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_f4v6i"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_g1kqq"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_f4v6i")
+target_state_name = &"f26"
+
+[sub_resource type="Resource" id="Resource_xtbkb"]
+script = ExtResource("7_5bev5")
+state_name = "f25"
+displacement = 0.435
+direction = Vector3(0, 1, 0)
+duration_frames = 2
+easing = SubResource("Curve_0xsu5")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_g1kqq")])
+
+[sub_resource type="Curve" id="Curve_qf4t4"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_hk2kw"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_g31k5"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_hk2kw")
+target_state_name = &"f27"
+
+[sub_resource type="Resource" id="Resource_6ckik"]
+script = ExtResource("7_5bev5")
+state_name = "f26"
+displacement = 0.39499998
+direction = Vector3(0, 1, 0)
+duration_frames = 2
+easing = SubResource("Curve_qf4t4")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_g31k5")])
+
+[sub_resource type="Curve" id="Curve_00efb"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_7krhd"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m2ogf"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_7krhd")
+target_state_name = &"f28"
+
+[sub_resource type="Resource" id="Resource_j5ims"]
+script = ExtResource("7_5bev5")
+state_name = "f27"
+displacement = 0.355
+direction = Vector3(0, 1, 0)
+duration_frames = 2
+easing = SubResource("Curve_00efb")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_m2ogf")])
+
+[sub_resource type="Curve" id="Curve_oovxr"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_1gywe"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8wnsj"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_1gywe")
+target_state_name = &"f29"
+
+[sub_resource type="Resource" id="Resource_wovfm"]
+script = ExtResource("7_5bev5")
+state_name = "f28"
+displacement = 0.31502232
+direction = Vector3(0, 0.99992913, -0.011903918)
+duration_frames = 2
+easing = SubResource("Curve_oovxr")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_8wnsj")])
+
+[sub_resource type="Curve" id="Curve_6omux"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_hxqrm"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hj2jl"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_hxqrm")
+target_state_name = &"f30"
+
+[sub_resource type="Resource" id="Resource_u7mb2"]
+script = ExtResource("7_5bev5")
+state_name = "f29"
+displacement = 0.27502558
+direction = Vector3(0, 0.999907, 0.013635095)
+duration_frames = 2
+easing = SubResource("Curve_6omux")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_hj2jl")])
+
+[sub_resource type="Curve" id="Curve_no3os"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_86y35"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_d4go6"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_86y35")
+target_state_name = &"f31"
+
+[sub_resource type="Resource" id="Resource_45xpp"]
+script = ExtResource("7_5bev5")
+state_name = "f30"
+displacement = 0.235
+direction = Vector3(0, 1, 0)
+duration_frames = 2
+easing = SubResource("Curve_no3os")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_d4go6")])
+
+[sub_resource type="Curve" id="Curve_lydve"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_snov3"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_82drs"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_snov3")
+target_state_name = &"f32"
+
+[sub_resource type="Resource" id="Resource_i1qe8"]
+script = ExtResource("7_5bev5")
+state_name = "f31"
+displacement = 0.195
+direction = Vector3(0, 1, 0)
+duration_frames = 2
+easing = SubResource("Curve_lydve")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_82drs")])
+
+[sub_resource type="Curve" id="Curve_aarrl"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_f4n82"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_iwsp0"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_f4n82")
+target_state_name = &"f33"
+
+[sub_resource type="Resource" id="Resource_7t38v"]
+script = ExtResource("7_5bev5")
+state_name = "f32"
+displacement = 0.155
+direction = Vector3(0, 1, 0)
+duration_frames = 2
+easing = SubResource("Curve_aarrl")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_iwsp0")])
+
+[sub_resource type="Curve" id="Curve_vdl8o"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_t3m3h"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1qoxo"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_t3m3h")
+target_state_name = &"f34"
+
+[sub_resource type="Resource" id="Resource_vlnqm"]
+script = ExtResource("7_5bev5")
+state_name = "f33"
+displacement = 0.114999995
+direction = Vector3(0, 1, 0)
+duration_frames = 2
+easing = SubResource("Curve_vdl8o")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_1qoxo")])
+
+[sub_resource type="Curve" id="Curve_4sami"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_x2u6f"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_uoadk"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_x2u6f")
+target_state_name = &"f35"
+
+[sub_resource type="Resource" id="Resource_61r5o"]
+script = ExtResource("7_5bev5")
+state_name = "f34"
+displacement = 0.074999996
+direction = Vector3(0, 1, 0)
+duration_frames = 2
+easing = SubResource("Curve_4sami")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_uoadk")])
+
+[sub_resource type="Curve" id="Curve_hykf3"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_gsxmh"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_e0c01"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_gsxmh")
+target_state_name = &"f36"
+
+[sub_resource type="Resource" id="Resource_um5i7"]
+script = ExtResource("7_5bev5")
+state_name = "f35"
+displacement = 0.035
+direction = Vector3(0, 1, 0)
+duration_frames = 2
+easing = SubResource("Curve_hykf3")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_e0c01")])
+
+[sub_resource type="Curve" id="Curve_ilykp"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_n63m7"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vya5j"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_n63m7")
+target_state_name = &"f37"
+
+[sub_resource type="Resource" id="Resource_0qrn3"]
+script = ExtResource("7_5bev5")
+state_name = "f36"
+displacement = 0.005
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_ilykp")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_vya5j")])
+
+[sub_resource type="Curve" id="Curve_knqna"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_2uxxu"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_huoig"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_2uxxu")
+target_state_name = &"f38"
+
+[sub_resource type="Resource" id="Resource_o751u"]
+script = ExtResource("7_5bev5")
+state_name = "f37"
+displacement = 0.044999998
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_knqna")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_huoig")])
+
+[sub_resource type="Curve" id="Curve_i1fp5"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_0c1vd"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5dpgb"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_0c1vd")
+target_state_name = &"f39"
+
+[sub_resource type="Resource" id="Resource_4yci8"]
+script = ExtResource("7_5bev5")
+state_name = "f38"
+displacement = 0.085
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_i1fp5")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_5dpgb")])
+
+[sub_resource type="Curve" id="Curve_vnse4"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_rg4d2"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_o2dqh"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_rg4d2")
+target_state_name = &"f40"
+
+[sub_resource type="Resource" id="Resource_oitg2"]
+script = ExtResource("7_5bev5")
+state_name = "f39"
+displacement = 0.125
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_vnse4")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_o2dqh")])
+
+[sub_resource type="Curve" id="Curve_lw4kt"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_oytok"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ta6bq"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_oytok")
+target_state_name = &"f41"
+
+[sub_resource type="Resource" id="Resource_f6iw5"]
+script = ExtResource("7_5bev5")
+state_name = "f40"
+displacement = 0.16499999
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_lw4kt")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_ta6bq")])
+
+[sub_resource type="Curve" id="Curve_knyu8"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_d5oot"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4eplv"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_d5oot")
+target_state_name = &"f42"
+
+[sub_resource type="Resource" id="Resource_3m73r"]
+script = ExtResource("7_5bev5")
+state_name = "f41"
+displacement = 0.205
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_knyu8")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_4eplv")])
+
+[sub_resource type="Curve" id="Curve_mfovh"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_lsdkw"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_jk5sr"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_lsdkw")
+target_state_name = &"f43"
+
+[sub_resource type="Resource" id="Resource_kd80i"]
+script = ExtResource("7_5bev5")
+state_name = "f42"
+displacement = 0.24499999
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_mfovh")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_jk5sr")])
+
+[sub_resource type="Curve" id="Curve_qle6k"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_515cj"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lvq48"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_515cj")
+target_state_name = &"f44"
+
+[sub_resource type="Resource" id="Resource_ob4rj"]
+script = ExtResource("7_5bev5")
+state_name = "f43"
+displacement = 0.285
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_qle6k")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_lvq48")])
+
+[sub_resource type="Curve" id="Curve_xy8q8"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_c52gl"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_j1j33"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_c52gl")
+target_state_name = &"f45"
+
+[sub_resource type="Resource" id="Resource_45owy"]
+script = ExtResource("7_5bev5")
+state_name = "f44"
+displacement = 0.325
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_xy8q8")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_j1j33")])
+
+[sub_resource type="Curve" id="Curve_6wb8v"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_l274a"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pq5sx"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_l274a")
+target_state_name = &"f46"
+
+[sub_resource type="Resource" id="Resource_fb7hy"]
+script = ExtResource("7_5bev5")
+state_name = "f45"
+displacement = 0.36499998
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_6wb8v")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_pq5sx")])
+
+[sub_resource type="Curve" id="Curve_o6evn"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_nif2w"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_sm046"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_nif2w")
+target_state_name = &"f47"
+
+[sub_resource type="Resource" id="Resource_dodti"]
+script = ExtResource("7_5bev5")
+state_name = "f46"
+displacement = 0.405
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_o6evn")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_sm046")])
+
+[sub_resource type="Curve" id="Curve_4l7b4"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_m508s"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dpkpe"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_m508s")
+target_state_name = &"f48"
+
+[sub_resource type="Resource" id="Resource_5vs2r"]
+script = ExtResource("7_5bev5")
+state_name = "f47"
+displacement = 0.32999998
+direction = Vector3(0, -1, 0)
+duration_frames = 2
+easing = SubResource("Curve_4l7b4")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_dpkpe")])
+
+[sub_resource type="Curve" id="Curve_2tk4i"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_sado4"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_56eci"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_sado4")
+target_state_name = &"f49"
+
+[sub_resource type="Resource" id="Resource_tkq7o"]
+script = ExtResource("7_5bev5")
+state_name = "f48"
+duration_frames = 2
+easing = SubResource("Curve_2tk4i")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_56eci")])
+
+[sub_resource type="Curve" id="Curve_bochy"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_wecfa"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tlq8y"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_wecfa")
+target_state_name = &"f50"
+
+[sub_resource type="Resource" id="Resource_1hgn0"]
+script = ExtResource("7_5bev5")
+state_name = "f49"
+duration_frames = 2
+easing = SubResource("Curve_bochy")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_tlq8y")])
+
+[sub_resource type="Curve" id="Curve_0agav"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_dm758"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_r7uth"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_dm758")
+target_state_name = &"f51"
+
+[sub_resource type="Resource" id="Resource_fkpub"]
+script = ExtResource("7_5bev5")
+state_name = "f50"
+duration_frames = 2
+easing = SubResource("Curve_0agav")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_r7uth")])
+
+[sub_resource type="Curve" id="Curve_ds4ej"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_1lft3"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lc2xx"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_1lft3")
+target_state_name = &"f52"
+
+[sub_resource type="Resource" id="Resource_eqrrv"]
+script = ExtResource("7_5bev5")
+state_name = "f51"
+duration_frames = 2
+easing = SubResource("Curve_ds4ej")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_lc2xx")])
+
+[sub_resource type="Curve" id="Curve_aprvo"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_ijnxj"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_t5hbi"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_ijnxj")
+target_state_name = &"f53"
+
+[sub_resource type="Resource" id="Resource_l331e"]
+script = ExtResource("7_5bev5")
+state_name = "f52"
+duration_frames = 2
+easing = SubResource("Curve_aprvo")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_t5hbi")])
+
+[sub_resource type="Curve" id="Curve_o1xnt"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_wsuyf"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_khfqk"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_wsuyf")
+target_state_name = &"f54"
+
+[sub_resource type="Resource" id="Resource_q6r1b"]
+script = ExtResource("7_5bev5")
+state_name = "f53"
+duration_frames = 2
+easing = SubResource("Curve_o1xnt")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_khfqk")])
+
+[sub_resource type="Curve" id="Curve_6lfgj"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_50rdw"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_d8x44"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_50rdw")
+target_state_name = &"f55"
+
+[sub_resource type="Resource" id="Resource_kqsmu"]
+script = ExtResource("7_5bev5")
+state_name = "f54"
+duration_frames = 2
+easing = SubResource("Curve_6lfgj")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_d8x44")])
+
+[sub_resource type="Curve" id="Curve_ap6r6"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_h4yjg"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m2wrv"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_h4yjg")
+target_state_name = &"f56"
+
+[sub_resource type="Resource" id="Resource_8ocxc"]
+script = ExtResource("7_5bev5")
+state_name = "f55"
+duration_frames = 2
+easing = SubResource("Curve_ap6r6")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_m2wrv")])
+
+[sub_resource type="Curve" id="Curve_0udiw"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_m0wp6"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4evbr"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_m0wp6")
+target_state_name = &"f57"
+
+[sub_resource type="Resource" id="Resource_drdiv"]
+script = ExtResource("7_5bev5")
+state_name = "f56"
+duration_frames = 2
+easing = SubResource("Curve_0udiw")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_4evbr")])
+
+[sub_resource type="Curve" id="Curve_2nxn1"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_i2pbw"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_26ryu"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_i2pbw")
+target_state_name = &"f58"
+
+[sub_resource type="Resource" id="Resource_ispwj"]
+script = ExtResource("7_5bev5")
+state_name = "f57"
+duration_frames = 2
+easing = SubResource("Curve_2nxn1")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_26ryu")])
+
+[sub_resource type="Curve" id="Curve_ccywa"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_indgd"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ovujj"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_indgd")
+target_state_name = &"f59"
+
+[sub_resource type="Resource" id="Resource_h32u1"]
+script = ExtResource("7_5bev5")
+state_name = "f58"
+duration_frames = 2
+easing = SubResource("Curve_ccywa")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_ovujj")])
+
+[sub_resource type="Curve" id="Curve_ko655"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_dcavy"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_bdbsl"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_dcavy")
+target_state_name = &"f60"
+
+[sub_resource type="Resource" id="Resource_30mbi"]
+script = ExtResource("7_5bev5")
+state_name = "f59"
+duration_frames = 2
+easing = SubResource("Curve_ko655")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_bdbsl")])
+
+[sub_resource type="Curve" id="Curve_clhh8"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_ugxaf"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qvwhb"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_ugxaf")
+target_state_name = &"f61"
+
+[sub_resource type="Resource" id="Resource_kkxal"]
+script = ExtResource("7_5bev5")
+state_name = "f60"
+duration_frames = 2
+easing = SubResource("Curve_clhh8")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_qvwhb")])
+
+[sub_resource type="Curve" id="Curve_70p4j"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_1w4n7"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gp7iq"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_1w4n7")
+target_state_name = &"f62"
+
+[sub_resource type="Resource" id="Resource_i5i17"]
+script = ExtResource("7_5bev5")
+state_name = "f61"
+duration_frames = 2
+easing = SubResource("Curve_70p4j")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_gp7iq")])
+
+[sub_resource type="Curve" id="Curve_b4i53"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_vse4r"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6ggy4"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_vse4r")
+target_state_name = &"f63"
+
+[sub_resource type="Resource" id="Resource_6ypjb"]
+script = ExtResource("7_5bev5")
+state_name = "f62"
+duration_frames = 2
+easing = SubResource("Curve_b4i53")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_6ggy4")])
+
+[sub_resource type="Curve" id="Curve_h67ke"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_p2gu7"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0tsfs"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_p2gu7")
+target_state_name = &"f64"
+
+[sub_resource type="Resource" id="Resource_6bksf"]
+script = ExtResource("7_5bev5")
+state_name = "f63"
+duration_frames = 2
+easing = SubResource("Curve_h67ke")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_0tsfs")])
+
+[sub_resource type="Curve" id="Curve_megip"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_sqarc"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1xapg"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_sqarc")
+target_state_name = &"f65"
+
+[sub_resource type="Resource" id="Resource_l68cx"]
+script = ExtResource("7_5bev5")
+state_name = "f64"
+duration_frames = 2
+easing = SubResource("Curve_megip")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_1xapg")])
+
+[sub_resource type="Curve" id="Curve_gpbka"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_1k6sg"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lc0ee"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_1k6sg")
+target_state_name = &"f66"
+
+[sub_resource type="Resource" id="Resource_4463f"]
+script = ExtResource("7_5bev5")
+state_name = "f65"
+duration_frames = 2
+easing = SubResource("Curve_gpbka")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_lc0ee")])
+
+[sub_resource type="Curve" id="Curve_mmmpm"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_hscbh"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rkf2g"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_hscbh")
+target_state_name = &"f67"
+
+[sub_resource type="Resource" id="Resource_c888e"]
+script = ExtResource("7_5bev5")
+state_name = "f66"
+duration_frames = 2
+easing = SubResource("Curve_mmmpm")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_rkf2g")])
+
+[sub_resource type="Curve" id="Curve_y6cg3"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_orsio"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tcdfs"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_orsio")
+target_state_name = &"f68"
+
+[sub_resource type="Resource" id="Resource_ux7tv"]
+script = ExtResource("7_5bev5")
+state_name = "f67"
+duration_frames = 2
+easing = SubResource("Curve_y6cg3")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_tcdfs")])
+
+[sub_resource type="Curve" id="Curve_db8mp"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_7i3mu"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4uudi"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_7i3mu")
+target_state_name = &"f69"
+
+[sub_resource type="Resource" id="Resource_f54wd"]
+script = ExtResource("7_5bev5")
+state_name = "f68"
+duration_frames = 2
+easing = SubResource("Curve_db8mp")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_4uudi")])
+
+[sub_resource type="Curve" id="Curve_cpt5a"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_3d2p7"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8j4vn"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_3d2p7")
+target_state_name = &"f70"
+
+[sub_resource type="Resource" id="Resource_j41lt"]
+script = ExtResource("7_5bev5")
+state_name = "f69"
+duration_frames = 2
+easing = SubResource("Curve_cpt5a")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_8j4vn")])
+
+[sub_resource type="Curve" id="Curve_6gyyo"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_dohtk"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0hsov"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_dohtk")
+target_state_name = &"f71"
+
+[sub_resource type="Resource" id="Resource_6g5cd"]
+script = ExtResource("7_5bev5")
+state_name = "f70"
+duration_frames = 2
+easing = SubResource("Curve_6gyyo")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_0hsov")])
+
+[sub_resource type="Curve" id="Curve_d6wo2"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_w8cpw"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_asfig"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_w8cpw")
+target_state_name = &"f72"
+
+[sub_resource type="Resource" id="Resource_lthmx"]
+script = ExtResource("7_5bev5")
+state_name = "f71"
+duration_frames = 2
+easing = SubResource("Curve_d6wo2")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_asfig")])
+
+[sub_resource type="Curve" id="Curve_7ge08"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_nj6om"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ybpic"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_nj6om")
+target_state_name = &"f73"
+
+[sub_resource type="Resource" id="Resource_x7esm"]
+script = ExtResource("7_5bev5")
+state_name = "f72"
+duration_frames = 2
+easing = SubResource("Curve_7ge08")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_ybpic")])
+
+[sub_resource type="Curve" id="Curve_d822w"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_2usno"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_yndqn"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_2usno")
+target_state_name = &"f74"
+
+[sub_resource type="Resource" id="Resource_on8u8"]
+script = ExtResource("7_5bev5")
+state_name = "f73"
+duration_frames = 2
+easing = SubResource("Curve_d822w")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_yndqn")])
+
+[sub_resource type="Curve" id="Curve_ir8sn"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_r25o1"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nhlra"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_r25o1")
+target_state_name = &"f75"
+
+[sub_resource type="Resource" id="Resource_a48m4"]
+script = ExtResource("7_5bev5")
+state_name = "f74"
+duration_frames = 2
+easing = SubResource("Curve_ir8sn")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_nhlra")])
+
+[sub_resource type="Curve" id="Curve_euq7u"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_i6r0r"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_csyyc"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_i6r0r")
+target_state_name = &"f76"
+
+[sub_resource type="Resource" id="Resource_vojsu"]
+script = ExtResource("7_5bev5")
+state_name = "f75"
+duration_frames = 2
+easing = SubResource("Curve_euq7u")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_csyyc")])
+
+[sub_resource type="Curve" id="Curve_dfia5"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_k80cm"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4gis5"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_k80cm")
+target_state_name = &"f77"
+
+[sub_resource type="Resource" id="Resource_x5bjc"]
+script = ExtResource("7_5bev5")
+state_name = "f76"
+duration_frames = 2
+easing = SubResource("Curve_dfia5")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_4gis5")])
+
+[sub_resource type="Curve" id="Curve_a0h74"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_et5oh"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_h42qu"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_et5oh")
+target_state_name = &"f78"
+
+[sub_resource type="Resource" id="Resource_x0ch7"]
+script = ExtResource("7_5bev5")
+state_name = "f77"
+duration_frames = 2
+easing = SubResource("Curve_a0h74")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_h42qu")])
+
+[sub_resource type="Curve" id="Curve_up8oo"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_s7puq"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_3ja48"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_s7puq")
+target_state_name = &"f79"
+
+[sub_resource type="Resource" id="Resource_arew8"]
+script = ExtResource("7_5bev5")
+state_name = "f78"
+duration_frames = 2
+easing = SubResource("Curve_up8oo")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_3ja48")])
+
+[sub_resource type="Curve" id="Curve_m85bp"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_enjpb"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nw1fn"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_enjpb")
+target_state_name = &"f80"
+
+[sub_resource type="Resource" id="Resource_2nsp2"]
+script = ExtResource("7_5bev5")
+state_name = "f79"
+duration_frames = 2
+easing = SubResource("Curve_m85bp")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_nw1fn")])
+
+[sub_resource type="Curve" id="Curve_ymy3c"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_5ttmr"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5xu3a"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_5ttmr")
+target_state_name = &"f81"
+
+[sub_resource type="Resource" id="Resource_jwkjs"]
+script = ExtResource("7_5bev5")
+state_name = "f80"
+duration_frames = 2
+easing = SubResource("Curve_ymy3c")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_5xu3a")])
+
+[sub_resource type="Curve" id="Curve_oj0lx"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_wil48"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_e0eqv"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_wil48")
+target_state_name = &"f82"
+
+[sub_resource type="Resource" id="Resource_ak2oh"]
+script = ExtResource("7_5bev5")
+state_name = "f81"
+duration_frames = 2
+easing = SubResource("Curve_oj0lx")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_e0eqv")])
+
+[sub_resource type="Curve" id="Curve_hkc2w"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_47bnm"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ahnvf"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_47bnm")
+target_state_name = &"f83"
+
+[sub_resource type="Resource" id="Resource_mogq2"]
+script = ExtResource("7_5bev5")
+state_name = "f82"
+duration_frames = 2
+easing = SubResource("Curve_hkc2w")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_ahnvf")])
+
+[sub_resource type="Curve" id="Curve_1tkld"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_5tdym"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6bg86"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_5tdym")
+target_state_name = &"f84"
+
+[sub_resource type="Resource" id="Resource_spcj1"]
+script = ExtResource("7_5bev5")
+state_name = "f83"
+duration_frames = 2
+easing = SubResource("Curve_1tkld")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_6bg86")])
+
+[sub_resource type="Curve" id="Curve_pkucs"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_ky7r8"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ro42j"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_ky7r8")
+target_state_name = &"f85"
+
+[sub_resource type="Resource" id="Resource_o2pek"]
+script = ExtResource("7_5bev5")
+state_name = "f84"
+duration_frames = 2
+easing = SubResource("Curve_pkucs")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_ro42j")])
+
+[sub_resource type="Curve" id="Curve_u18ky"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_or4yv"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vu32c"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_or4yv")
+target_state_name = &"f86"
+
+[sub_resource type="Resource" id="Resource_3i6rj"]
+script = ExtResource("7_5bev5")
+state_name = "f85"
+duration_frames = 2
+easing = SubResource("Curve_u18ky")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_vu32c")])
+
+[sub_resource type="Curve" id="Curve_1tlyl"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_uqbvg"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ruxnj"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_uqbvg")
+target_state_name = &"f87"
+
+[sub_resource type="Resource" id="Resource_ivmns"]
+script = ExtResource("7_5bev5")
+state_name = "f86"
+duration_frames = 2
+easing = SubResource("Curve_1tlyl")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_ruxnj")])
+
+[sub_resource type="Curve" id="Curve_7ax5u"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_ykwl5"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_t6vp4"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_ykwl5")
+target_state_name = &"f88"
+
+[sub_resource type="Resource" id="Resource_mo3fy"]
+script = ExtResource("7_5bev5")
+state_name = "f87"
+duration_frames = 2
+easing = SubResource("Curve_7ax5u")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_t6vp4")])
+
+[sub_resource type="Curve" id="Curve_83ly0"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_6cscy"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xmr6h"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_6cscy")
+target_state_name = &"f89"
+
+[sub_resource type="Resource" id="Resource_svwvn"]
+script = ExtResource("7_5bev5")
+state_name = "f88"
+duration_frames = 2
+easing = SubResource("Curve_83ly0")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_xmr6h")])
+
+[sub_resource type="Curve" id="Curve_fdvxl"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_edtda"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ptwol"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_edtda")
+target_state_name = &"f90"
+
+[sub_resource type="Resource" id="Resource_bn8k7"]
+script = ExtResource("7_5bev5")
+state_name = "f89"
+duration_frames = 2
+easing = SubResource("Curve_fdvxl")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_ptwol")])
+
+[sub_resource type="Curve" id="Curve_mpcoy"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_3umx6"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_bfd54"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_3umx6")
+target_state_name = &"f91"
+
+[sub_resource type="Resource" id="Resource_mpylh"]
+script = ExtResource("7_5bev5")
+state_name = "f90"
+duration_frames = 2
+easing = SubResource("Curve_mpcoy")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_bfd54")])
+
+[sub_resource type="Curve" id="Curve_d78hu"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_1f1q0"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tajfa"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_1f1q0")
+target_state_name = &"f92"
+
+[sub_resource type="Resource" id="Resource_e7dsx"]
+script = ExtResource("7_5bev5")
+state_name = "f91"
+duration_frames = 2
+easing = SubResource("Curve_d78hu")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_tajfa")])
+
+[sub_resource type="Curve" id="Curve_4xh0q"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_a06sl"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_cdx1e"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_a06sl")
+target_state_name = &"f93"
+
+[sub_resource type="Resource" id="Resource_ps2gm"]
+script = ExtResource("7_5bev5")
+state_name = "f92"
+duration_frames = 2
+easing = SubResource("Curve_4xh0q")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_cdx1e")])
+
+[sub_resource type="Curve" id="Curve_f3l8g"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_8xf88"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fibch"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_8xf88")
+target_state_name = &"f94"
+
+[sub_resource type="Resource" id="Resource_ckbi7"]
+script = ExtResource("7_5bev5")
+state_name = "f93"
+duration_frames = 2
+easing = SubResource("Curve_f3l8g")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_fibch")])
+
+[sub_resource type="Curve" id="Curve_rpjpy"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_ut5fa"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2nfd5"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_ut5fa")
+target_state_name = &"f95"
+
+[sub_resource type="Resource" id="Resource_qivrm"]
+script = ExtResource("7_5bev5")
+state_name = "f94"
+duration_frames = 2
+easing = SubResource("Curve_rpjpy")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_2nfd5")])
+
+[sub_resource type="Curve" id="Curve_gxhk5"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_kwfol"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_sthi1"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_kwfol")
+target_state_name = &"f96"
+
+[sub_resource type="Resource" id="Resource_2hfb3"]
+script = ExtResource("7_5bev5")
+state_name = "f95"
+duration_frames = 2
+easing = SubResource("Curve_gxhk5")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_sthi1")])
+
+[sub_resource type="Curve" id="Curve_s65im"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_5xcha"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_enfxl"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_5xcha")
+target_state_name = &"f97"
+
+[sub_resource type="Resource" id="Resource_tynk8"]
+script = ExtResource("7_5bev5")
+state_name = "f96"
+duration_frames = 2
+easing = SubResource("Curve_s65im")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_enfxl")])
+
+[sub_resource type="Curve" id="Curve_odrp5"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_7no57"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nff1y"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_7no57")
+target_state_name = &"f98"
+
+[sub_resource type="Resource" id="Resource_jd7rg"]
+script = ExtResource("7_5bev5")
+state_name = "f97"
+duration_frames = 2
+easing = SubResource("Curve_odrp5")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_nff1y")])
+
+[sub_resource type="Curve" id="Curve_2tunm"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_pvkhp"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7r17p"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_pvkhp")
+target_state_name = &"f99"
+
+[sub_resource type="Resource" id="Resource_jyrxn"]
+script = ExtResource("7_5bev5")
+state_name = "f98"
+duration_frames = 2
+easing = SubResource("Curve_2tunm")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_7r17p")])
+
+[sub_resource type="Curve" id="Curve_c33fv"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_e6c8s"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_x8duw"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_e6c8s")
+target_state_name = &"f100"
+
+[sub_resource type="Resource" id="Resource_qkhhf"]
+script = ExtResource("7_5bev5")
+state_name = "f99"
+duration_frames = 2
+easing = SubResource("Curve_c33fv")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_x8duw")])
+
+[sub_resource type="Curve" id="Curve_vy0ph"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_yhghh"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rp6s1"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_yhghh")
+target_state_name = &"f101"
+
+[sub_resource type="Resource" id="Resource_4j66r"]
+script = ExtResource("7_5bev5")
+state_name = "f100"
+duration_frames = 2
+easing = SubResource("Curve_vy0ph")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_rp6s1")])
+
+[sub_resource type="Curve" id="Curve_db5sv"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_fsr0f"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_l6jwk"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_fsr0f")
+target_state_name = &"f102"
+
+[sub_resource type="Resource" id="Resource_fxwid"]
+script = ExtResource("7_5bev5")
+state_name = "f101"
+duration_frames = 2
+easing = SubResource("Curve_db5sv")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_l6jwk")])
+
+[sub_resource type="Curve" id="Curve_bxfpi"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_xd0ub"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_64mg6"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_xd0ub")
+target_state_name = &"f103"
+
+[sub_resource type="Resource" id="Resource_2pftm"]
+script = ExtResource("7_5bev5")
+state_name = "f102"
+duration_frames = 2
+easing = SubResource("Curve_bxfpi")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_64mg6")])
+
+[sub_resource type="Curve" id="Curve_atvex"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_8a58x"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5ghg8"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_8a58x")
+target_state_name = &"f104"
+
+[sub_resource type="Resource" id="Resource_ruk70"]
+script = ExtResource("7_5bev5")
+state_name = "f103"
+duration_frames = 2
+easing = SubResource("Curve_atvex")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_5ghg8")])
+
+[sub_resource type="Curve" id="Curve_whnlb"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_2vr0g"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_u3a6k"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_2vr0g")
+target_state_name = &"f105"
+
+[sub_resource type="Resource" id="Resource_g8nqm"]
+script = ExtResource("7_5bev5")
+state_name = "f104"
+duration_frames = 2
+easing = SubResource("Curve_whnlb")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_u3a6k")])
+
+[sub_resource type="Curve" id="Curve_hpi50"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_o757n"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gvfnl"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_o757n")
+target_state_name = &"f106"
+
+[sub_resource type="Resource" id="Resource_3pko6"]
+script = ExtResource("7_5bev5")
+state_name = "f105"
+duration_frames = 2
+easing = SubResource("Curve_hpi50")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_gvfnl")])
+
+[sub_resource type="Curve" id="Curve_6kgij"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_1q6ge"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_jhqa5"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_1q6ge")
+target_state_name = &"f107"
+
+[sub_resource type="Resource" id="Resource_8qaxw"]
+script = ExtResource("7_5bev5")
+state_name = "f106"
+duration_frames = 2
+easing = SubResource("Curve_6kgij")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_jhqa5")])
+
+[sub_resource type="Curve" id="Curve_c5ils"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_0p8j4"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_aso4t"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_0p8j4")
+target_state_name = &"f108"
+
+[sub_resource type="Resource" id="Resource_c4ikl"]
+script = ExtResource("7_5bev5")
+state_name = "f107"
+duration_frames = 2
+easing = SubResource("Curve_c5ils")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_aso4t")])
+
+[sub_resource type="Curve" id="Curve_bitcg"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_rlxtk"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_caj6e"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_rlxtk")
+target_state_name = &"f109"
+
+[sub_resource type="Resource" id="Resource_b3mkn"]
+script = ExtResource("7_5bev5")
+state_name = "f108"
+duration_frames = 2
+easing = SubResource("Curve_bitcg")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_caj6e")])
+
+[sub_resource type="Curve" id="Curve_qctsi"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_0xuwg"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_18bvn"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_0xuwg")
+target_state_name = &"f110"
+
+[sub_resource type="Resource" id="Resource_cc4o2"]
+script = ExtResource("7_5bev5")
+state_name = "f109"
+duration_frames = 2
+easing = SubResource("Curve_qctsi")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_18bvn")])
+
+[sub_resource type="Curve" id="Curve_8txdx"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_byb61"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0rd04"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_byb61")
+target_state_name = &"f111"
+
+[sub_resource type="Resource" id="Resource_ub380"]
+script = ExtResource("7_5bev5")
+state_name = "f110"
+duration_frames = 2
+easing = SubResource("Curve_8txdx")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_0rd04")])
+
+[sub_resource type="Curve" id="Curve_lbxlj"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_01b6l"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_udt80"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_01b6l")
+target_state_name = &"f112"
+
+[sub_resource type="Resource" id="Resource_gelp4"]
+script = ExtResource("7_5bev5")
+state_name = "f111"
+duration_frames = 2
+easing = SubResource("Curve_lbxlj")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_udt80")])
+
+[sub_resource type="Curve" id="Curve_aa3yn"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_ysrcy"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4mp4c"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_ysrcy")
+target_state_name = &"f113"
+
+[sub_resource type="Resource" id="Resource_ddhwk"]
+script = ExtResource("7_5bev5")
+state_name = "f112"
+duration_frames = 2
+easing = SubResource("Curve_aa3yn")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_4mp4c")])
+
+[sub_resource type="Curve" id="Curve_40nrt"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_w2sef"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lpndw"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_w2sef")
+target_state_name = &"f114"
+
+[sub_resource type="Resource" id="Resource_3ls22"]
+script = ExtResource("7_5bev5")
+state_name = "f113"
+duration_frames = 2
+easing = SubResource("Curve_40nrt")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_lpndw")])
+
+[sub_resource type="Curve" id="Curve_2bvgb"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_2lkqh"]
+script = ExtResource("8_6drd0")
+input_actions = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1citx"]
+script = ExtResource("1_e4eth")
+condition = SubResource("Resource_2lkqh")
+target_state_name = &"f114"
+
+[sub_resource type="Resource" id="Resource_1tu0q"]
+script = ExtResource("7_5bev5")
+state_name = "f114"
+duration_frames = 2
+easing = SubResource("Curve_2bvgb")
+transitions = Array[ExtResource("1_e4eth")]([SubResource("Resource_1citx")])
+
+[sub_resource type="Resource" id="Resource_fpvp2"]
+script = ExtResource("4_padhq")
+machine_name = "Baked"
+states = Array[ExtResource("7_5bev5")]([SubResource("Resource_ntxdg"), SubResource("Resource_051rr"), SubResource("Resource_msves"), SubResource("Resource_caprg"), SubResource("Resource_ddgwv"), SubResource("Resource_lem6s"), SubResource("Resource_p2x6u"), SubResource("Resource_32610"), SubResource("Resource_owxei"), SubResource("Resource_tymxi"), SubResource("Resource_ip83b"), SubResource("Resource_3bg0m"), SubResource("Resource_81ekf"), SubResource("Resource_3u76y"), SubResource("Resource_mpnwk"), SubResource("Resource_sycib"), SubResource("Resource_4gprf"), SubResource("Resource_lv7rf"), SubResource("Resource_gk44k"), SubResource("Resource_4d31o"), SubResource("Resource_ighit"), SubResource("Resource_qrct6"), SubResource("Resource_d24x3"), SubResource("Resource_55h26"), SubResource("Resource_4q8nw"), SubResource("Resource_xtbkb"), SubResource("Resource_6ckik"), SubResource("Resource_j5ims"), SubResource("Resource_wovfm"), SubResource("Resource_u7mb2"), SubResource("Resource_45xpp"), SubResource("Resource_i1qe8"), SubResource("Resource_7t38v"), SubResource("Resource_vlnqm"), SubResource("Resource_61r5o"), SubResource("Resource_um5i7"), SubResource("Resource_0qrn3"), SubResource("Resource_o751u"), SubResource("Resource_4yci8"), SubResource("Resource_oitg2"), SubResource("Resource_f6iw5"), SubResource("Resource_3m73r"), SubResource("Resource_kd80i"), SubResource("Resource_ob4rj"), SubResource("Resource_45owy"), SubResource("Resource_fb7hy"), SubResource("Resource_dodti"), SubResource("Resource_5vs2r"), SubResource("Resource_tkq7o"), SubResource("Resource_1hgn0"), SubResource("Resource_fkpub"), SubResource("Resource_eqrrv"), SubResource("Resource_l331e"), SubResource("Resource_q6r1b"), SubResource("Resource_kqsmu"), SubResource("Resource_8ocxc"), SubResource("Resource_drdiv"), SubResource("Resource_ispwj"), SubResource("Resource_h32u1"), SubResource("Resource_30mbi"), SubResource("Resource_kkxal"), SubResource("Resource_i5i17"), SubResource("Resource_6ypjb"), SubResource("Resource_6bksf"), SubResource("Resource_l68cx"), SubResource("Resource_4463f"), SubResource("Resource_c888e"), SubResource("Resource_ux7tv"), SubResource("Resource_f54wd"), SubResource("Resource_j41lt"), SubResource("Resource_6g5cd"), SubResource("Resource_lthmx"), SubResource("Resource_x7esm"), SubResource("Resource_on8u8"), SubResource("Resource_a48m4"), SubResource("Resource_vojsu"), SubResource("Resource_x5bjc"), SubResource("Resource_x0ch7"), SubResource("Resource_arew8"), SubResource("Resource_2nsp2"), SubResource("Resource_jwkjs"), SubResource("Resource_ak2oh"), SubResource("Resource_mogq2"), SubResource("Resource_spcj1"), SubResource("Resource_o2pek"), SubResource("Resource_3i6rj"), SubResource("Resource_ivmns"), SubResource("Resource_mo3fy"), SubResource("Resource_svwvn"), SubResource("Resource_bn8k7"), SubResource("Resource_mpylh"), SubResource("Resource_e7dsx"), SubResource("Resource_ps2gm"), SubResource("Resource_ckbi7"), SubResource("Resource_qivrm"), SubResource("Resource_2hfb3"), SubResource("Resource_tynk8"), SubResource("Resource_jd7rg"), SubResource("Resource_jyrxn"), SubResource("Resource_qkhhf"), SubResource("Resource_4j66r"), SubResource("Resource_fxwid"), SubResource("Resource_2pftm"), SubResource("Resource_ruk70"), SubResource("Resource_g8nqm"), SubResource("Resource_3pko6"), SubResource("Resource_8qaxw"), SubResource("Resource_c4ikl"), SubResource("Resource_b3mkn"), SubResource("Resource_cc4o2"), SubResource("Resource_ub380"), SubResource("Resource_gelp4"), SubResource("Resource_ddhwk"), SubResource("Resource_3ls22"), SubResource("Resource_1tu0q")])
+entry_state = SubResource("Resource_ntxdg")
+
+[resource]
+script = ExtResource("3_asygv")
+behavior_name = "Baked"
+sub_machines = Array[ExtResource("4_padhq")]([SubResource("Resource_fpvp2")])

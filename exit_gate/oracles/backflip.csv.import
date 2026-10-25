@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bh0i6iwu624wq"
+
+[deps]
+
+files=["res://exit_gate/oracles/backflip.pos.translation", "res://exit_gate/oracles/backflip.pos.translation", "res://exit_gate/oracles/backflip.stick.translation", "res://exit_gate/oracles/backflip.stick.translation", "res://exit_gate/oracles/backflip.buttons.translation"]
+
+source_file="res://exit_gate/oracles/backflip.csv"
+dest_files=["res://exit_gate/oracles/backflip.pos.translation", "res://exit_gate/oracles/backflip.pos.translation", "res://exit_gate/oracles/backflip.stick.translation", "res://exit_gate/oracles/backflip.stick.translation", "res://exit_gate/oracles/backflip.buttons.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

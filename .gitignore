@@ -1,0 +1,5 @@
+# Godot import cache / editor artifacts — never commit
+.godot/
+# OS noise
+.DS_Store
+Thumbs.db
