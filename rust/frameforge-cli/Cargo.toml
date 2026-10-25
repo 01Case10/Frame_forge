@@ -1,0 +1,15 @@
+[package]
+name = "frameforge-cli"
+version = "0.1.0"
+edition = "2021"
+description = "ff — FrameForge headless toolchain (diff, check, dump, bake)"
+
+[[bin]]
+name = "ff"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+frameforge-core = { path = "../frameforge-core" }
+serde_json = { workspace = true }
+clap = { workspace = true }

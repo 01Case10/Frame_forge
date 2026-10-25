@@ -1,0 +1,12 @@
+[package]
+name = "frameforge-godot"
+version = "0.1.0"
+edition = "2024"
+description = "FrameForge GDExtension: BehaviorPlayer node wrapping frameforge-core"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+frameforge-core = { path = "../frameforge-core" }
+godot = { version = "0.5", features = ["api-4-6"] }
