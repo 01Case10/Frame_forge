@@ -302,6 +302,60 @@ fn land(r: &mut Rig) {
     assert_eq!(r.state(), "land_sel");
 }
 
+/// Regression test 2026-11-03 (Joey): wall_push must exit the tick the
+/// stick vector changes from the entry direction. From his log:
+/// entered with (0,1), rotated to (-0.21, 1.00), stayed stuck in wall_push.
+/// "the second the stick input is not (0,1) we must transition out".
+#[test]
+fn wall_push_exits_on_stick_change() {
+    let mut r = Rig::new();
+    r.tick(&release());
+    // Use the same setup as wall_push_pose: normal (-1,0,0) (west),
+    // stick (1,0) -> 180° vs normal -> entry (170-180°).
+    r.wall = true;
+    r.wall_normal = [-1.0, 0.0, 0.0];
+    r.stick = [1.0, 0.0];
+    r.tick(&release());
+    r.tick(&release());
+    assert_eq!(r.state(), "wall_push", "setup: enter wall_push");
+    // Holding the exact entry vector -> stay in wall_push.
+    r.tick(&release());
+    assert_eq!(r.state(), "wall_push", "holding entry vector must stay");
+    // Rotate slightly to (0.98, 0.21): ~12° vs normal, in the 0-169° exit
+    // range. Must exit to run ON THIS TICK, not stay stuck.
+    r.stick = [0.98, 0.21];
+    r.tick(&release());
+    assert_eq!(
+        r.state(),
+        "run",
+        "wall_push must exit when stick vector changes (was: stuck in wall_push)"
+    );
+}
+
+/// Companion: losing wall contact (rotating away stops pushing into the
+/// wall, so is_on_wall() goes false) must also exit, not get stuck.
+#[test]
+fn wall_push_exits_when_wall_lost() {
+    let mut r = Rig::new();
+    r.tick(&release());
+    r.wall = true;
+    r.wall_normal = [-1.0, 0.0, 0.0];
+    r.stick = [1.0, 0.0];
+    r.tick(&release());
+    r.tick(&release());
+    assert_eq!(r.state(), "wall_push", "setup: enter wall_push");
+    // Wall contact lost (no longer pushing into it) -> exit to run.
+    // Note: last_contact is 1 tick delayed, so we need 2 ticks.
+    r.wall = false;
+    r.tick(&release());
+    r.tick(&release());
+    assert_eq!(
+        r.state(),
+        "run",
+        "wall_push must exit when wall contact is lost (was: stuck)"
+    );
+}
+
 // ---------------------------------------------------------------------------
 // Tier A: rules and timers
 // ---------------------------------------------------------------------------
