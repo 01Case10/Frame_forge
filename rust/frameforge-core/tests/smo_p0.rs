@@ -1037,6 +1037,26 @@ fn wall_slide_ends_without_wall() {
     assert_eq!(r.state(), "fall", "WL-10: no wall -> fall");
 }
 
+/// Regression test 2026-11-03: wall_slide hitting the ground must land,
+/// not fall through. (Was missing; only had WL-10 -> fall on lost wall.)
+#[test]
+fn wall_slide_lands_on_ground() {
+    let mut r = Rig::new();
+    to_fall(&mut r);
+    r.wall = true;
+    r.tick(&release());
+    assert_eq!(r.state(), "wall_slide");
+    // Touch ground while sliding -> land_sel (WL-11).
+    r.ground = true;
+    r.tick(&release());
+    assert_eq!(
+        r.state(),
+        "land_sel",
+        "WL-11: wall_slide + ground -> land_sel (was: stayed or fell)"
+    );
+    r.wall = false;
+}
+
 // ---------------------------------------------------------------------------
 // Phase C: bonk / land_hard / quickturn
 // ---------------------------------------------------------------------------
