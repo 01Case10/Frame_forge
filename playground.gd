@@ -171,9 +171,20 @@ func _build_hud(ms: Dictionary) -> void:
 	hud.add_child(controls)
 
 
+# Debug: log state transitions to console. Toggle with F3.
+var debug_log_states := false
+var _prev_state := ""
+var _f3_held := false
+
 func _on_state(_behavior: String, _machine: String, state: String) -> void:
 	_state_label.text = "%s - %s" % [_ms_label, state]
 	_animator.set_state(state)
+	if debug_log_states and state != _prev_state:
+		var gd: float = _player.get_param("ground.dist")
+		var hs: float = _player.get_param("motion.hspeed")
+		print("[STATE] %s -> %s | pos=%s hspeed=%.1f ground.dist=%.1f" % [
+			_prev_state, state, str(_player.position).replace("\n", ""), hs, gd])
+	_prev_state = state
 
 
 func _key(pos: Key, neg: Key) -> float:
@@ -260,6 +271,10 @@ func _physics_process(delta: float) -> void:
 	if bool(li.get("menu", false)) or Input.is_action_just_pressed("ui_cancel"):
 		get_tree().change_scene_to_file("res://menu.tscn")
 		return
+	if Input.is_physical_key_pressed(KEY_F3) and not _f3_held:
+		debug_log_states = not debug_log_states
+		print("[DEBUG] state transition log: ", "ON" if debug_log_states else "OFF")
+	_f3_held = Input.is_physical_key_pressed(KEY_F3)
 	var cam := float(li.get("cam", 0.0))
 	if absf(cam) > DEADZONE:
 		_phi -= cam * CAM_SENS * delta

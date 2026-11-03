@@ -126,3 +126,10 @@ as complete.
   on X (cap) from crouch states; added run -> roll on B pressed +
   hspeed>=7 (units/tick; max run is 14). Verified: B while running
   -> roll. All 153 Rust tests pass.
+- 2026-11-03: Ground pound feel fix (Joey: executes but too slow, not
+  to spec) + F3 state-transition debug log. gp_stall had null steer
+  (velocity preserved, not hovering); added hover steer (vy=0, no
+  gravity). gp_fall had gravity 1.5 (30 ticks to reach terminal);
+  bumped to 8.0 with terminal 45->60 for a real slam. Playground
+  now has F3-toggleable [STATE] transition log with pos/hspeed/
+  ground.dist for debugging.

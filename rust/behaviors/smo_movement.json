@@ -5624,7 +5624,16 @@
        "source_tag": "AR-10 [pri 45] [Slice: stall length assumed (not printed)]"
       }
      ],
-     "enter_params": []
+     "enter_params": [],
+     "steer": {
+      "gravity": 0.0,
+      "terminal_velocity": 0.0,
+      "enter_vy": {
+       "set": 0.0
+      },
+      "face_mode": "keep",
+      "enter_keep_horizontal": true
+     }
     },
     {
      "state_name": "gp_fall",
@@ -5757,8 +5766,8 @@
       }
      ],
      "steer": {
-      "gravity": 1.5,
-      "terminal_velocity": 45.0,
+      "gravity": 8.0,
+      "terminal_velocity": 60.0,
       "enter_vy": {
        "set": 0.0
       },
