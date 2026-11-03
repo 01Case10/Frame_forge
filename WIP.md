@@ -73,3 +73,28 @@ as complete.
   buried the feet); now pivots at the feet. Also fixed the clearance
   probe itself: AABB is conservative under tilt, so body_min_y() now
   computes the true capsule lowest point.
+- 2026-11-03: Playground control fixes (Joey: left/right inverted,
+  can't steer while moving forward, stuck on walls). Three root
+  causes, all verified headless:
+  1. SMO left/right inverted: the core's stick frame is mirrored vs
+     the Godot camera (right=(cos,-sin) is left-handed in xz), so no
+     camera yaw can align both axes. `playground.gd` now negates the
+     x fed to the core (ui_left/ui_right swapped); sm64's ff_*
+     mapping was already correct and is untouched.
+  2. Can't steer at speed: in `apply_steer`, when hspeed >= speed_cap
+     the accel block (which reorients velocity into the facing frame)
+     was skipped, freezing the velocity direction at max speed while
+     the facing kept turning. The core now rotates vh by the facing
+     turn delta when at the cap, so Mario carves at 14 u/tick.
+     Verified: full-speed run turns 180° -> 163° on slight-right.
+  3. Wall push: Mario spawned at y=1.5U (airborne), so he fell
+     through coyote/fall (whose quickturn mis-oriented him ~17°)
+     instead of grounding into idle->pivot. Spawn is now y=0.1U
+     (grounded); pull-back from wall_push reliably escapes (verified:
+     z -2260 -> -881 on pull-back). The run<->wall_push flicker while
+     pressing into the wall is the transcribed behavior (velocity cut
+     on entry breaks wall contact for a tick); acceptable for the
+     playground.
+  Also verified: sm64 push-right still moves +x (camera-right).
+  All 53 frameforge-core Rust tests pass; all 15 Godot animator/
+  playground tests pass.

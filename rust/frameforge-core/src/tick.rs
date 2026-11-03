@@ -1604,7 +1604,10 @@ impl Runtime {
 
         // --- horizontal accel below the cap, decel at/above it ---
         let cap = steer.speed_cap + steer.speed_cap_per_radius * r;
-        if cap > 0.0 && hspeed >= cap {
+        // Track at-cap so the facing turn can reorient velocity below
+        // (steering at max speed must still change direction).
+        let at_cap = cap > 0.0 && hspeed >= cap;
+        if at_cap {
             if steer.decel_above_cap > 0.0 && hspeed > cap {
                 let ns = (hspeed - steer.decel_above_cap).max(cap);
                 vh = vh * (ns / hspeed);
@@ -1674,6 +1677,23 @@ impl Runtime {
                 None => (yaw, 0.0),
             },
         };
+
+        // At the speed cap the accel block above was skipped, so vh was never
+        // reoriented to the (possibly turned) facing. Rotate vh by the facing
+        // turn delta so steering changes direction at max speed (SMO carves).
+        // Below the cap this happens implicitly via decompose/reconstruct.
+        if at_cap {
+            let turn_delta = ang_diff_deg(new_facing, yaw);
+            if turn_delta.abs() > 1e-6 && hspeed > 1e-6 {
+                let rad = turn_delta * PI / 180.0;
+                let (s, c) = rad.sin_cos();
+                // Yaw convention: facing_dir(yaw) = (sin yaw, cos yaw).
+                // Rotating a vector by +delta yaw: x' = x*c + z*s, z' = -x*s + z*c.
+                let nx = vh.x * c + vh.z * s;
+                let nz = -vh.x * s + vh.z * c;
+                vh = Vec3::new(nx, 0.0, nz);
+            }
+        }
 
         // --- writeback ---
         let t = &mut self.tracks[t_idx];

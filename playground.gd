@@ -34,7 +34,7 @@ const MOVESETS := {
 
 const DEADZONE := 0.18
 const CAM_SENS := 2.4
-const SPAWN := Vector3(0, 1.5, 12)
+const SPAWN := Vector3(0, 0.1, 12)
 
 # [center, size, color] in unit space; walls keep you in, stairs and
 # floaters are 1u hops (both movesets clear them), deck/skydeck reward climbing.
@@ -232,8 +232,11 @@ func _set_btn(action: StringName, held: bool) -> void:
 
 func _apply_actions(mx: float, my: float, jump: bool, crouch: bool, capb: bool) -> void:
 	# Analog stick (ui_*): the SMO moveset steers from these; harmless for sm64.
-	_set_action(&"ui_right", maxf(0.0, mx))
-	_set_action(&"ui_left", maxf(0.0, -mx))
+	# NOTE: the core's stick frame is mirrored vs the Godot camera
+	# (right=(cos,-sin) is left-handed in xz), so the x axis is negated
+	# here to make stick-right move camera-right.
+	_set_action(&"ui_right", maxf(0.0, -mx))
+	_set_action(&"ui_left", maxf(0.0, mx))
 	_set_action(&"ui_up", maxf(0.0, my))
 	_set_action(&"ui_down", maxf(0.0, -my))
 	# sm64 directionals: world-locked actions, so rotate the stick into the
