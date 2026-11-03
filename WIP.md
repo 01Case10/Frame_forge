@@ -38,3 +38,17 @@ as complete.
   longer fails the setup when `rustup default` hits the Windows
   self-update bug (rust-lang/rustup#3709); cargo/rustc are verified
   directly instead.
+- 2026-11-03: free-play `playground.tscn` + `playground.gd` (menu buttons
+  "Playground: Mario 64" / "Playground: Odyssey"): small platforming
+  level (floor, walls, stairs, floaters, pillars), follow camera with
+  right-stick orbit, gamepad + keyboard input. KEY FINDING: the two
+  movesets use different native units — move.json is meters (jump
+  1.45 m), smo_movement.json is SMO decomp centimeters (run cap
+  14 u/tick = 8.4 m/s, jump ~328 u = 3.3 m; the committed
+  smo_showcase plays it unscaled, i.e. 100x wrong). The playground
+  builds level/capsule/camera in the moveset's native units (unit
+  1.0 / 100.0). sm64 gets supplemental gravity (move.json has no fall
+  state); camera-relative controls for both (smo via camera_yaw_deg =
+  rig_yaw + 180; sm64 via rotating which ff_* action is pressed, since
+  its states are not camera_relative). Verified headless: both move
+  camera-away on stick-up, jump/land, menu buttons navigate.

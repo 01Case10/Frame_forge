@@ -5,6 +5,13 @@ extends Control
 
 const SCENARIO_DIR := "res://exit_gate/scenarios/"
 const PLAYER_SCENE := "res://scenario_player.tscn"
+const PLAYGROUND_SCENE := "res://playground.tscn"
+
+## Free-play movesets: label and the SceneTree meta value playground.gd reads.
+const MOVESETS := [
+	{ "label": "Playground: Mario 64", "key": "sm64" },
+	{ "label": "Playground: Odyssey", "key": "smo" },
+]
 
 ## label: button text; scenario: exit_gate/scenarios/<id>.json;
 ## behavior: rust/behaviors/<file>; tpf: scenario sim-frames per player tick.
@@ -36,6 +43,11 @@ func _ready() -> void:
 		b.text = str(d["label"])
 		b.pressed.connect(_play.bind(d))
 		%DemoList.add_child(b)
+	for m in MOVESETS:
+		var fb := Button.new()
+		fb.text = str(m["label"])
+		fb.pressed.connect(_play_free.bind(str(m["key"])))
+		%FreeBox.add_child(fb)
 	%Quit.pressed.connect(_on_quit)
 
 
@@ -46,6 +58,12 @@ func _play(d: Dictionary) -> void:
 	tree.set_meta("ff_tpf", int(d["tpf"]))
 	tree.set_meta("ff_from_menu", true)
 	tree.change_scene_to_file(PLAYER_SCENE)
+
+
+func _play_free(key: String) -> void:
+	var tree := get_tree()
+	tree.set_meta("ff_moveset", key)
+	tree.change_scene_to_file(PLAYGROUND_SCENE)
 
 
 func _on_quit() -> void:

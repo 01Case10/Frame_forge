@@ -237,6 +237,27 @@ godot --headless --path . res://scenario_player.tscn -- \
   --behavior walk.json --tpf 1
 ```
 
+### Free-play playground
+
+The menu also offers a playable level (`playground.tscn`): floor, walls,
+stairs, floating platforms and pillars, with a follow camera. Two movesets:
+
+- **Mario 64** — `rust/behaviors/move.json` (walk + jump; supplemental
+  gravity is added by the demo since the behavior has no fall state)
+- **Odyssey** — `rust/behaviors/smo_movement.json` (full 79-state
+  transcription: run, brake, pivot, double/triple jump, ground pound,
+  dive, roll, cap throw...)
+
+Controls: left stick moves (camera-relative), right stick orbits the
+camera, A = jump, B = crouch, X = cap throw (Odyssey), Start/Esc = menu.
+Keyboard works too: WASD/arrows + Space/C/E.
+
+Unit note: the movesets are authored in different native units (sm64 =
+meters, smo = SMO decomp centimeters — verified: smo run cap 14 u/tick
+= 8.4 m/s, jump peak ~328 u = 3.3 m). The playground builds its level,
+player capsule and camera in the active moveset's native units, so each
+plays at its authored scale.
+
 ### Player scene
 
 1. Add a **BehaviorPlayer** node (a `CharacterBody3D`).
