@@ -1686,9 +1686,11 @@ fn wall_push_pose() {
     assert_eq!(r.state(), "idle");
     // Press into the wall -> wall_push (GR-10 via run/GR-11: idle's GR-06
     // takes the first tick since the stick is moved).
+    // Wall normal is -x (west); pushing +x (east, stick [1,0]) is INTO the wall
+    // (180° vs normal). Updated 2026-11-03: entry now uses wall_normal.
     r.wall = true;
     r.wall_normal = [-1.0, 0.0, 0.0];
-    r.stick = [0.0, 1.0];
+    r.stick = [1.0, 0.0];
     r.tick(&release());
     r.tick(&release());
     assert_eq!(r.state(), "wall_push", "GR-10/11: wall -> push");
@@ -1698,13 +1700,29 @@ fn wall_push_pose() {
     r.tick(&release());
     assert_eq!(r.state(), "idle", "redesign: release -> idle");
     // Press into the wall again, then pull back -> run.
-    r.stick = [0.0, 1.0];
+    // Pull back = stick [-1,0] (west), 0° vs normal (away from wall).
+    r.stick = [1.0, 0.0];
     r.tick(&release());
     r.tick(&release());
     assert_eq!(r.state(), "wall_push");
-    r.stick = [0.0, -1.0];
+    r.stick = [-1.0, 0.0];
     r.tick(&release());
     assert_eq!(r.state(), "run", "redesign: pull back -> run");
+    // Press into the wall, then push left/right (along the wall) -> run.
+    // Stick [0,1] is +z (south), 90° vs normal = along the wall, not into it.
+    // (Joey 2026-11-03: "If we try to move left or right we should transition
+    // away from wall push".)
+    r.stick = [1.0, 0.0];
+    r.tick(&release());
+    r.tick(&release());
+    assert_eq!(r.state(), "wall_push");
+    r.stick = [0.0, 1.0];
+    r.tick(&release());
+    assert_eq!(
+        r.state(),
+        "run",
+        "pushing along the wall (90° vs normal) exits wall_push"
+    );
 }
 #[test]
 fn c2_jump_delayed_on_run_start() {

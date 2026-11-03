@@ -1376,7 +1376,7 @@ impl Runtime {
                 angle_min_deg,
                 angle_max_deg,
             } => {
-                // G-2: stick radius + unsigned angle vs facing / velocity.
+                // G-2: stick radius + unsigned angle vs facing / velocity / wall normal.
                 let ti = match t_idx {
                     Some(ti) => ti,
                     None => return false,
@@ -1400,6 +1400,21 @@ impl Runtime {
                 let ref_dir = match angle_vs {
                     StickAngleVs::Facing => Some(facing_dir(self.tracks[ti].facing_yaw)),
                     StickAngleVs::Velocity => self.track_horizontal_dir(ti),
+                    StickAngleVs::WallNormal => {
+                        let n = self.last_contact.wall_normal;
+                        // Wall normal must be valid (non-zero) and we're touching a wall.
+                        if !self.last_contact.wall || n.length() < 1e-6 {
+                            None
+                        } else {
+                            // Normalize the horizontal component.
+                            let hn = Vec3::new(n.x, 0.0, n.z);
+                            if hn.length() < 1e-6 {
+                                None
+                            } else {
+                                Some(hn.normalized())
+                            }
+                        }
+                    }
                 };
                 let rd = match ref_dir {
                     Some(d) => d,

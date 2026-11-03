@@ -515,9 +515,9 @@
                     "type": "on_stick",
                     "stick_radius_min": 0.1,
                     "stick_radius_max": 1000000000.0,
-                    "stick_angle_vs": "facing",
-                    "stick_angle_min_deg": 0.0,
-                    "stick_angle_max_deg": 90.0
+                    "stick_angle_vs": "wall_normal",
+                    "stick_angle_min_deg": 135.0,
+                    "stick_angle_max_deg": 180.0
                   }
                 ]
               },
@@ -1035,9 +1035,9 @@
                     "type": "on_stick",
                     "stick_radius_min": 0.1,
                     "stick_radius_max": 1000000000.0,
-                    "stick_angle_vs": "facing",
-                    "stick_angle_min_deg": 0.0,
-                    "stick_angle_max_deg": 90.0
+                    "stick_angle_vs": "wall_normal",
+                    "stick_angle_min_deg": 135.0,
+                    "stick_angle_max_deg": 180.0
                   }
                 ]
               },
@@ -24309,9 +24309,9 @@
                 "type": "on_stick",
                 "stick_radius_min": 0.1,
                 "stick_radius_max": 1000000000.0,
-                "stick_angle_vs": "facing",
-                "stick_angle_min_deg": 90.0,
-                "stick_angle_max_deg": 180.0
+                "stick_angle_vs": "wall_normal",
+                "stick_angle_min_deg": 0.0,
+                "stick_angle_max_deg": 135.0
               },
               "target_state_name": "run",
               "target_behavior_name": "",
@@ -24320,7 +24320,7 @@
               "fire_event": "",
               "silent": false,
               "on_fire_params": [],
-              "source_tag": "PLAYGROUND-FIX: exit wall_push when not pressing in (Joey spec)"
+              "source_tag": "PLAYGROUND-FIX: exit wall_push when not pushing into wall (wall_normal 0-135)n (Joey spec)"
             }
           ],
           "enter_params": []

@@ -73,6 +73,10 @@ pub enum StickAngleVs {
     Facing,
     /// Angle between the stick and the track's horizontal velocity.
     Velocity,
+    /// Angle between the stick and the wall normal (from last contact).
+    /// 180° = pushing directly into the wall, 90° = pushing along the wall,
+    /// 0° = pulling directly away from the wall.
+    WallNormal,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
