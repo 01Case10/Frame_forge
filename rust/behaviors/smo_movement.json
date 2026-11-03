@@ -24288,6 +24288,19 @@
             },
             {
               "condition": {
+                "type": "on_variable",
+                "param_name": "contact.wall",
+                "param_op": "eq",
+                "param_value": false
+              },
+              "target_state_name": "run",
+              "target_behavior_name": "",
+              "momentum": "cut",
+              "blend_frames": 0,
+              "source_tag": "PLAYGROUND-FIX: exit wall_push on lost wall contact (2026-11-03)"
+            },
+            {
+              "condition": {
                 "type": "on_stick",
                 "stick_radius_min": 0.0,
                 "stick_radius_max": 0.1,
