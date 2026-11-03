@@ -76,7 +76,7 @@ var _grav_v := 0.0
 
 
 func _ready() -> void:
-	for a in ["jump", "crouch", "cap", "ff_jump", "ff_left", "ff_right", "ff_fwd", "ff_back"]:
+	for a in ["jump", "crouch", "cap", "cap_throw_up", "cap_throw_down", "ff_jump", "ff_left", "ff_right", "ff_fwd", "ff_back"]:
 		if not InputMap.has_action(a):
 			InputMap.add_action(a)
 	var tree := get_tree()

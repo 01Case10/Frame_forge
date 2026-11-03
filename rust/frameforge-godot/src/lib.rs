@@ -5,7 +5,7 @@
 //! sample input → core.tick_delta → velocity → move_and_slide →
 //! core.tick_contact → drain signal logs.
 
-use godot::classes::{CharacterBody3D, FileAccess, ICharacterBody3D, Input};
+use godot::classes::{CharacterBody3D, FileAccess, ICharacterBody3D, Input, InputMap};
 use godot::prelude::*;
 
 use frameforge_core::input::TickInput;
@@ -304,6 +304,11 @@ impl BehaviorPlayer {
         let mut strengths = HashMap::new();
         for a in &self.tracked {
             let an = StringName::from(a.as_str());
+            // Skip actions not in the InputMap (avoids debugger spam for
+            // JSON-declared inputs the project hasn't bound, e.g. cap_throw_up).
+            if !InputMap::singleton().has_action(&an) {
+                continue;
+            }
             if input.is_action_pressed(&an) {
                 held.insert(a.clone());
                 strengths.insert(a.clone(), input.get_action_strength(&an));
