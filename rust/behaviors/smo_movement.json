@@ -12034,6 +12034,24 @@
      "transitions": [
       {
        "condition": {
+        "type": "on_stick",
+        "stick_radius_min": 0.1,
+        "stick_radius_max": 1000000000.0,
+        "stick_angle_vs": "facing",
+        "stick_angle_min_deg": 90.0,
+        "stick_angle_max_deg": 180.0
+       },
+       "target_state_name": "run",
+       "target_behavior_name": "",
+       "momentum": "cut",
+       "blend_frames": 0,
+       "fire_event": "",
+       "silent": false,
+       "on_fire_params": [],
+       "source_tag": "PLAYGROUND-FIX: escape wall_push soft-lock on stick-away"
+      },
+      {
+       "condition": {
         "type": "on_complete",
         "all_of": [
          {

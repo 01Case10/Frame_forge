@@ -98,3 +98,11 @@ as complete.
   Also verified: sm64 push-right still moves +x (camera-right).
   All 53 frameforge-core Rust tests pass; all 15 Godot animator/
   playground tests pass.
+- 2026-11-03: wall_push soft-lock fix (Joey stuck in wall_push at the
+  bottom stair). Root cause: wall_push entries cut velocity to zero
+  and both exits required contact.wall==false — with no rows applying
+  movement, Mario could never break contact (catch-22). Added an
+  escape transition to smo_movement.json: stick pulled >90° away from
+  facing exits wall_push to run even while in contact. Verified
+  headless: Mario escapes the stair on pull-back (distance 1622cm).
+  All 157 Rust core tests pass.
