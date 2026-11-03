@@ -3437,6 +3437,17 @@
           "events": [],
           "transitions": [
             {
+              "target_state_name": "dive",
+              "condition": {
+                "type": "on_input",
+                "input_actions": [
+                  "cap"
+                ],
+                "input_mode": "any_pressed"
+              },
+              "source_tag": "AR-11 [pri 20] [D-rule] (extended 2026-11-03: dive from regular jumps, was only pound-cancel)"
+            },
+            {
               "condition": {
                 "type": "on_variable",
                 "param_name": "life.zero",
@@ -3995,6 +4006,17 @@
           "events": [],
           "transitions": [
             {
+              "target_state_name": "dive",
+              "condition": {
+                "type": "on_input",
+                "input_actions": [
+                  "cap"
+                ],
+                "input_mode": "any_pressed"
+              },
+              "source_tag": "AR-11 [pri 20] [D-rule] (extended 2026-11-03: dive from regular jumps, was only pound-cancel)"
+            },
+            {
               "condition": {
                 "type": "on_variable",
                 "param_name": "life.zero",
@@ -4465,6 +4487,17 @@
           "restitution": 1.0,
           "events": [],
           "transitions": [
+            {
+              "target_state_name": "dive",
+              "condition": {
+                "type": "on_input",
+                "input_actions": [
+                  "cap"
+                ],
+                "input_mode": "any_pressed"
+              },
+              "source_tag": "AR-11 [pri 20] [D-rule] (extended 2026-11-03: dive from regular jumps, was only pound-cancel)"
+            },
             {
               "condition": {
                 "type": "on_variable",
@@ -5029,6 +5062,17 @@
           "events": [],
           "transitions": [
             {
+              "target_state_name": "dive",
+              "condition": {
+                "type": "on_input",
+                "input_actions": [
+                  "cap"
+                ],
+                "input_mode": "any_pressed"
+              },
+              "source_tag": "AR-11 [pri 20] [D-rule] (extended 2026-11-03: dive from regular jumps, was only pound-cancel)"
+            },
+            {
               "condition": {
                 "type": "on_variable",
                 "param_name": "life.zero",
@@ -5499,6 +5543,17 @@
           "restitution": 1.0,
           "events": [],
           "transitions": [
+            {
+              "target_state_name": "dive",
+              "condition": {
+                "type": "on_input",
+                "input_actions": [
+                  "cap"
+                ],
+                "input_mode": "any_pressed"
+              },
+              "source_tag": "AR-11 [pri 20] [D-rule] (extended 2026-11-03: dive from regular jumps, was only pound-cancel)"
+            },
             {
               "condition": {
                 "type": "on_variable",
@@ -6062,6 +6117,17 @@
           "restitution": 1.0,
           "events": [],
           "transitions": [
+            {
+              "target_state_name": "dive",
+              "condition": {
+                "type": "on_input",
+                "input_actions": [
+                  "cap"
+                ],
+                "input_mode": "any_pressed"
+              },
+              "source_tag": "AR-11 [pri 20] [D-rule] (extended 2026-11-03: dive from regular jumps, was only pound-cancel)"
+            },
             {
               "condition": {
                 "type": "on_variable",
@@ -6847,6 +6913,17 @@
           "restitution": 1.0,
           "events": [],
           "transitions": [
+            {
+              "target_state_name": "dive",
+              "condition": {
+                "type": "on_input",
+                "input_actions": [
+                  "cap"
+                ],
+                "input_mode": "any_pressed"
+              },
+              "source_tag": "AR-11 [pri 20] [D-rule] (extended 2026-11-03: dive from regular jumps, was only pound-cancel)"
+            },
             {
               "condition": {
                 "type": "on_variable",

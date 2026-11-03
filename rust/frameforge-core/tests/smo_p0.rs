@@ -2062,3 +2062,17 @@ fn wall_slide_presses_into_wall() {
         "wall_slide must persist while wall held"
     );
 }
+
+/// Regression 2026-11-03 (Joey: can't dive in playground). Dive was only
+/// reachable from ground-pound states (gp_stall/gp_fall); the core Odyssey
+/// dive (Y in midair from a regular jump) had no transition. AR-11 extended
+/// to jump1/2/3, jump1/2/3_cut, fall.
+#[test]
+fn dive_from_regular_jump() {
+    let mut r = Rig::new();
+    to_fall(&mut r);
+    assert_eq!(r.state(), "fall", "setup: reach fall");
+    // Press cap (dive button) in midair -> dive.
+    r.tick(&hold(&["cap"]));
+    assert_eq!(r.state(), "dive", "cap in midair -> dive (AR-11)");
+}
