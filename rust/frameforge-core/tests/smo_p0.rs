@@ -356,6 +356,39 @@ fn wall_push_exits_when_wall_lost() {
     );
 }
 
+/// Regression test 2026-11-03 (Joey): wall_slide must NOT preserve
+/// horizontal velocity. "When you start a wall slide, you must slide down.
+/// You do not slide left or right."
+#[test]
+fn wall_slide_kills_horizontal_velocity() {
+    let mut r = Rig::new();
+    to_fall(&mut r);
+    // Give it horizontal velocity by holding stick sideways in fall.
+    r.stick = [1.0, 0.0];
+    for _ in 0..10 {
+        r.tick(&release());
+    }
+    assert_eq!(r.state(), "fall");
+    // Hit the wall -> wall_slide.
+    r.wall = true;
+    r.wall_normal = [-1.0, 0.0, 0.0];
+    r.tick(&release());
+    assert_eq!(r.state(), "wall_slide", "setup: enter wall_slide");
+    // Tick in wall_slide and measure horizontal displacement.
+    // With enter_keep_horizontal=false, it should be ~0 (slide straight down).
+    let mut horiz: f32 = 0.0;
+    for _ in 0..10 {
+        let d = r.tick(&release());
+        horiz += (d.x * d.x + d.z * d.z).sqrt();
+        assert_eq!(r.state(), "wall_slide");
+    }
+    assert!(
+        horiz < 1.0,
+        "wall_slide must slide down, not sideways: horizontal displacement = {} (was: preserved velocity)",
+        horiz
+    );
+}
+
 // ---------------------------------------------------------------------------
 // Tier A: rules and timers
 // ---------------------------------------------------------------------------

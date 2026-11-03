@@ -12051,7 +12051,8 @@
           "steer": {
             "gravity": 0.5,
             "terminal_velocity": 4.0,
-            "face_mode": "keep"
+            "face_mode": "keep",
+            "enter_keep_horizontal": false
           }
         },
         {
