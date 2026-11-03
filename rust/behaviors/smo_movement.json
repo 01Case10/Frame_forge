@@ -24311,7 +24311,7 @@
                 "stick_radius_max": 1000000000.0,
                 "stick_angle_vs": "wall_normal",
                 "stick_angle_min_deg": 0.0,
-                "stick_angle_max_deg": 135.0
+                "stick_angle_max_deg": 169.0
               },
               "target_state_name": "run",
               "target_behavior_name": "",
