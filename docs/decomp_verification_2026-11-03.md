@@ -36,10 +36,14 @@ the corresponding state(s) in `rust/behaviors/smo_movement.json`.
 
 ## Application status (2026-11-03, Joey: "put the fixes in")
 
-**Applied** (engine + JSON + regression tests, 169/169 tests pass, ff clean):
+**Applied** (engine + JSON + regression tests, 171/171 tests pass, ff clean):
 - D1: dive `enter_horizontal_speed: 20.0` (new engine field; HeadSlidingSpeed
-  from decomp PlayerConst default, consistent with community "Dive (in the
-  air): 48" ≈ 2.4×20). Test: `dive_sets_entry_speed_d1`.
+  from decomp PlayerConst default, confirmed by smo.wiki: dive bounce caps
+  at 16 u/fr, "4 slower than a dive" → 20 u/fr. The "48" was Sunshine data,
+  not Odyssey — corrected 2026-11-03 via speedrun research.)
+- D2: dive pop (new `EnterVy::Pop` variant: zero downward velocity, then add).
+  Wiki measured +182u height gain from shipped game; with our 1.5 gravity
+  that's 23.4 u/tick. Test: `dive_pops_upward_d2`.
 - D3: dive `accel_forward: 0.5 → 0.0`. Test: `dive_no_forward_accel_d3`.
 - D5: jump_wall `input_invalidate_frames: 25` (new engine field;
   WallJumpInvalidateInputFrame from decomp default). No behavioral test —
@@ -64,12 +68,6 @@ the corresponding state(s) in `rust/behaviors/smo_movement.json`.
   SquatBrakeRate).
 
 **Deferred / not applied:**
-- D2 (dive upward pop): the decomp proves the pop exists (zero downward
-  velocity, then `velV -= HeadSlidingJump * gravity`; independently confirmed
-  "propel himself upward and forward" by GameFAQs controls). BUT the default
-  HeadSlidingJump=28.0 computes to a non-physical +84 u/tick (would out-jump
-  the triple jump; contradicts the dive-bounce's existence), so the shipped
-  BYAML must override it. **Need the value from Joey's spec doc.**
 - D4: verified consistent already (enter_impact_speed overwrites) — no change.
 - D7 (gp_fall ramp vs slam): SKIPPED deliberately — conflicts with Joey's
   explicit 2026-11-03 feel call ("too slow", gravity 8.0 for a real slam).
