@@ -31,3 +31,10 @@ as complete.
   Rust toolchain setup (winget or rustup-init, MSVC linker check).
   Verified headless under Godot 4.6: menu runs clean, walk_straight
   playback completes through the menu path.
+- 2026-11-03: `tools/build_extension.ps1` — one-command Windows build:
+  `cargo build -p frameforge-godot`, copies the DLL to
+  `addons/frameforge/bin/`, registers the `windows.x86_64` entries in
+  `frameforge.gdextension` (idempotent). `tools/install_rust.ps1` no
+  longer fails the setup when `rustup default` hits the Windows
+  self-update bug (rust-lang/rustup#3709); cargo/rustc are verified
+  directly instead.

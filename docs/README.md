@@ -218,6 +218,11 @@ windows.x86_64.debug = "res://addons/frameforge/bin/frameforge_godot.dll"
 windows.x86_64.release = "res://addons/frameforge/bin/frameforge_godot.dll"
 ```
 
+Or run `tools/build_extension.ps1` (add `-Release` for a release build):
+it runs `cargo build -p frameforge-godot`, copies the DLL to
+`addons/frameforge/bin/`, and registers the `windows.x86_64` entries
+above — idempotent, safe to re-run.
+
 ### Demos
 
 Press F5: `menu.tscn` is the main scene. It lists the 13 exit-gate
