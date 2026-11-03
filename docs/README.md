@@ -199,6 +199,39 @@ editor so the native class registers. (The addon also ships a legacy
 GDScript `BehaviorPlayer` for `.tres` behaviors — no G-6 support. In the
 Create Node dialog, pick the extension's native class.)
 
+### Rust toolchain (Windows)
+
+Run `tools/install_rust.ps1` (idempotent — verifies and exits if cargo is
+already present):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools\install_rust.ps1
+```
+
+It installs rustup + the stable toolchain (via winget when available,
+otherwise the official rustup-init download) and warns if no MSVC linker
+is found. After `cargo build` on Windows, register the DLL in
+`addons/frameforge/frameforge.gdextension`:
+
+```ini
+windows.x86_64.debug = "res://addons/frameforge/bin/frameforge_godot.dll"
+windows.x86_64.release = "res://addons/frameforge/bin/frameforge_godot.dll"
+```
+
+### Demos
+
+Press F5: `menu.tscn` is the main scene. It lists the 13 exit-gate
+scenario playbacks (walk / jump / chains; behavior and tpf pairings match
+`rust/release-gate.sh`). Picking one plays it through
+`scenario_player.tscn`; when the scenario ends it returns to the menu
+(Esc backs out early). The CLI form still works headless for captures:
+
+```bash
+godot --headless --path . res://scenario_player.tscn -- \
+  --scenario res://exit_gate/scenarios/walk_straight.json \
+  --behavior walk.json --tpf 1
+```
+
 ### Player scene
 
 1. Add a **BehaviorPlayer** node (a `CharacterBody3D`).

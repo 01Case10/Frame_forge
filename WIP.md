@@ -21,3 +21,13 @@ as complete.
   the source CSV oracles they were generated from are included.
 - The remote `LICENSE` file from the repository's initial commit is
   untouched by this snapshot.
+
+## Changelog
+
+- 2026-11-03: demo menu — `menu.tscn`/`menu.gd` is now the main scene
+  (F5), listing the 13 exit-gate scenario playbacks; `scenario_player.gd`
+  accepts the menu's SceneTree metas and returns to the menu when done
+  (Esc backs out early). New `tools/install_rust.ps1`: idempotent Windows
+  Rust toolchain setup (winget or rustup-init, MSVC linker check).
+  Verified headless under Godot 4.6: menu runs clean, walk_straight
+  playback completes through the menu path.

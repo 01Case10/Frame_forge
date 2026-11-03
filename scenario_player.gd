@@ -14,6 +14,7 @@ var _total_frames := 0
 var _frame := 0
 
 var _player: BehaviorPlayer
+var _from_menu := false
 
 
 func _parse_args() -> Dictionary:
@@ -44,6 +45,13 @@ func _ready() -> void:
 	var sc_path: String = args.get("scenario", "")
 	var bh_name: String = args.get("behavior", "")
 	_tpf = int(args.get("tpf", 1))
+	var tree := get_tree()
+	if sc_path.is_empty() and tree.has_meta("ff_scenario"):
+		# Launched from the demo menu (menu.gd sets these SceneTree metas).
+		sc_path = str(tree.get_meta("ff_scenario"))
+		bh_name = str(tree.get_meta("ff_behavior", ""))
+		_tpf = int(tree.get_meta("ff_tpf", 1))
+		_from_menu = bool(tree.get_meta("ff_from_menu", false))
 	if sc_path.is_empty() or bh_name.is_empty():
 		push_error("scenario_player: --scenario and --behavior required")
 		get_tree().quit(1)
@@ -70,6 +78,8 @@ func _ready() -> void:
 	var start: Array = _scenario["start"]["pos"]
 	_player.position = Vector3(float(start[0]), float(start[1]), float(start[2])) * 0.01
 	$HUD/MoveLabel.text = _scenario["id"] + " (FrameForge)"
+	if _from_menu:
+		$HUD/MoveLabel.text += "   [Esc: back to menu]"
 	print("scenario_player: ", _scenario["id"], " frames=", _total_frames, " tpf=", _tpf)
 
 
@@ -119,7 +129,10 @@ func _set_axis(neg_action: String, pos_action: String, value: float) -> void:
 func _physics_process(_delta: float) -> void:
 	if _frame >= _total_frames:
 		print("scenario_player: done")
-		get_tree().quit(0)
+		if _from_menu:
+			get_tree().change_scene_to_file("res://menu.tscn")
+		else:
+			get_tree().quit(0)
 		return
 	# Advance to the current input segment.
 	while _seg_idx < _segments.size() and _seg_frame >= int(_segments[_seg_idx]["frames"]):
@@ -154,3 +167,8 @@ func _physics_process(_delta: float) -> void:
 	var rig: Node3D = $CameraRig
 	var target := _player.global_position + Vector3(0, 1.2, 0)
 	rig.global_position = rig.global_position.lerp(target, 0.2)
+
+
+func _input(event: InputEvent) -> void:
+	if _from_menu and event.is_action_pressed("ui_cancel"):
+		get_tree().change_scene_to_file("res://menu.tscn")
