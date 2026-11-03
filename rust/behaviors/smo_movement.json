@@ -516,7 +516,7 @@
                     "stick_radius_min": 0.1,
                     "stick_radius_max": 1000000000.0,
                     "stick_angle_vs": "wall_normal",
-                    "stick_angle_min_deg": 135.0,
+                    "stick_angle_min_deg": 170.0,
                     "stick_angle_max_deg": 180.0
                   }
                 ]
@@ -1036,7 +1036,7 @@
                     "stick_radius_min": 0.1,
                     "stick_radius_max": 1000000000.0,
                     "stick_angle_vs": "wall_normal",
-                    "stick_angle_min_deg": 135.0,
+                    "stick_angle_min_deg": 170.0,
                     "stick_angle_max_deg": 180.0
                   }
                 ]
@@ -24288,19 +24288,6 @@
             },
             {
               "condition": {
-                "type": "on_variable",
-                "param_name": "contact.wall",
-                "param_op": "eq",
-                "param_value": false
-              },
-              "target_state_name": "run",
-              "target_behavior_name": "",
-              "momentum": "cut",
-              "blend_frames": 0,
-              "source_tag": "PLAYGROUND-FIX: exit wall_push on lost wall contact (2026-11-03)"
-            },
-            {
-              "condition": {
                 "type": "on_stick",
                 "stick_radius_min": 0.0,
                 "stick_radius_max": 0.1,
@@ -24324,7 +24311,7 @@
                 "stick_radius_max": 1000000000.0,
                 "stick_angle_vs": "wall_normal",
                 "stick_angle_min_deg": 0.0,
-                "stick_angle_max_deg": 135.0
+                "stick_angle_max_deg": 170.0
               },
               "target_state_name": "run",
               "target_behavior_name": "",
