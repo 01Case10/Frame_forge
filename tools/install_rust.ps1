@@ -88,10 +88,20 @@ else {
     Write-Step "Ensuring stable toolchain..."
     & rustup toolchain install stable
     if ($LASTEXITCODE -ne 0) { throw "rustup toolchain install failed" }
+    # Best-effort only: rustup-init already sets the default toolchain, and
+    # a known rustup-on-Windows self-update bug can make this exact call
+    # fail with a bogus "+toolchain" error even though the toolchain is
+    # fine (https://github.com/rust-lang/rustup/issues/3709). Never fail
+    # the whole setup over it.
     & rustup default stable
-    if ($LASTEXITCODE -ne 0) { throw "rustup default failed" }
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[rust-setup] WARNING: 'rustup default stable' hit a rustup bug; ignoring." -ForegroundColor Yellow
+        $LASTEXITCODE = 0
+    }
     Write-Step "cargo: $(& cargo --version)"
+    if ($LASTEXITCODE -ne 0) { throw "cargo --version failed after install" }
     Write-Step "rustc: $(& rustc --version)"
+    if ($LASTEXITCODE -ne 0) { throw "rustc --version failed after install" }
 }
 
 # 2. MSVC linker check (needed to build the GDExtension crate on Windows).
