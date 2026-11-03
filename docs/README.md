@@ -258,6 +258,13 @@ meters, smo = SMO decomp centimeters — verified: smo run cap 14 u/tick
 player capsule and camera in the active moveset's native units, so each
 plays at its authored scale.
 
+`playground_animator.gd` gives the player a procedural placeholder
+character (blob body, eyes, cap) with exaggerated squash-and-stretch:
+every one of the 76 SMO states and 9 SM64 states maps to a pose
+(squash targets, lean/tilt, spins, bob, wobble), transitions run through
+an underdamped spring so landings overshoot, and the cap physically
+leaves the character's head on cap throws and flies back.
+
 ### Player scene
 
 1. Add a **BehaviorPlayer** node (a `CharacterBody3D`).

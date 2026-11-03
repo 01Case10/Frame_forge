@@ -52,3 +52,12 @@ as complete.
   rig_yaw + 180; sm64 via rotating which ff_* action is pressed, since
   its states are not camera_relative). Verified headless: both move
   camera-away on stick-up, jump/land, menu buttons navigate.
+- 2026-11-03: `playground_animator.gd` — procedural placeholder
+  character (blob body, eyes, wearable cap) with exaggerated
+  squash-and-stretch for the playground. All 76 SMO states (both
+  machines) + 9 SM64 states map to poses (scale targets, lean/tilt,
+  yaw/pitch spins, bob, wobble); transitions spring through an
+  underdamped squash spring so landings overshoot; cap leaves the head
+  and flies a canned arc on throws, returns on recall. Verified
+  headless: 85/85 states mapped, run/jump/land squash values hit their
+  pose targets, cap throw/recall cycle works.

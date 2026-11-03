@@ -69,6 +69,7 @@ var _unit := 1.0
 var _ms_label := "Mario 64"
 var _phi := 0.0
 var _pad := -1
+var _animator: PlaygroundAnimator
 # Supplemental gravity for movesets without authored falling (sm64):
 # applied only while airborne and the behavior commanded ~no vertical.
 var _grav_v := 0.0
@@ -128,19 +129,12 @@ func _build_player(ms: Dictionary) -> void:
 	col.shape = cap
 	col.position = Vector3(0, 0.9 * _unit, 0)
 	_player.add_child(col)
-	var mi := MeshInstance3D.new()
-	var cm := CapsuleMesh.new()
-	cm.radius = 0.4 * _unit
-	cm.height = 1.8 * _unit
-	mi.mesh = cm
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = ms["color"]
-	mi.material_override = mat
-	mi.position = Vector3(0, 0.9 * _unit, 0)
-	_player.add_child(mi)
 	_player.floor_snap_length = 0.4 * _unit
 	_player.position = SPAWN * _unit
 	add_child(_player)
+	_animator = PlaygroundAnimator.new()
+	_animator.setup(_unit, ms["color"])
+	_player.add_child(_animator)
 	_player.state_entered.connect(_on_state)
 
 
@@ -179,6 +173,7 @@ func _build_hud(ms: Dictionary) -> void:
 
 func _on_state(_behavior: String, _machine: String, state: String) -> void:
 	_state_label.text = "%s - %s" % [_ms_label, state]
+	_animator.set_state(state)
 
 
 func _key(pos: Key, neg: Key) -> float:
@@ -279,6 +274,7 @@ func _physics_process(delta: float) -> void:
 		_player.move_and_slide()
 	else:
 		_grav_v = 0.0
+	_animator.advance(delta)
 	_rig.rotation.y = _phi
 	_rig.position = _rig.position.lerp(_player.position + Vector3(0, 1.4 * _unit, 0), 0.12)
 	if _player.position.y < -20.0 * _unit:
