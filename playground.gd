@@ -284,6 +284,13 @@ func _physics_process(delta: float) -> void:
 		_phi -= cam * CAM_SENS * delta
 	_apply_actions(float(li.get("mx", 0.0)), float(li.get("my", 0.0)),
 		bool(li.get("jump", false)), bool(li.get("crouch", false)), bool(li.get("cap", false)))
+	# Per-tick input log (for debugging stick dropouts).
+	if debug_log_states:
+		var _sx: float = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+		var _sy: float = Input.get_action_strength("ui_up") - Input.get_action_strength("ui_down")
+		var _raw_mx: float = float(li.get("mx", 0.0))
+		var _raw_my: float = float(li.get("my", 0.0))
+		print("[TICK] stick=(%.2f, %.2f) raw=(%.2f, %.2f)" % [_sx, _sy, _raw_mx, _raw_my])
 	# Stick-up = away from camera: core maps set_stick(0,1) to
 	# (sin(yaw), cos(yaw)); camera forward is (-sin(phi), -cos(phi)).
 	_player.camera_yaw_deg = rad_to_deg(_phi) + 180.0
