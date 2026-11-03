@@ -24295,14 +24295,14 @@
                 "stick_angle_min_deg": 0.0,
                 "stick_angle_max_deg": 180.0
               },
-              "target_state_name": "idle",
+              "target_state_name": "run",
               "target_behavior_name": "",
               "momentum": "cut",
               "blend_frames": 0,
               "fire_event": "",
               "silent": false,
               "on_fire_params": [],
-              "source_tag": "PLAYGROUND-FIX: exit wall_push on stick release (Joey spec)"
+              "source_tag": "PLAYGROUND-FIX: exit wall_push on stick release (Joey spec) [2026-11-03: release->run not idle, keyboard rotation fix]"
             },
             {
               "condition": {

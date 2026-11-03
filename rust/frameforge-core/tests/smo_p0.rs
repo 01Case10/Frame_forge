@@ -1694,11 +1694,24 @@ fn wall_push_pose() {
     r.tick(&release());
     r.tick(&release());
     assert_eq!(r.state(), "wall_push", "GR-10/11: wall -> push");
-    // Release the stick -> idle (PLAYGROUND-FIX: Joey's wall_push redesign,
-    // 2026-11-03: only in wall_push while pressing into the wall).
+    // Release the stick -> run (2026-11-03: changed from idle to run so
+    // keyboard rotation doesn't get stuck). May go to brake_stop first
+    // if there was momentum; the key is it EXITS wall_push (not stuck).
     r.stick = [0.0, 0.0];
     r.tick(&release());
-    assert_eq!(r.state(), "idle", "redesign: release -> idle");
+    assert!(
+        r.state() == "run" || r.state() == "brake_stop",
+        "release exits wall_push, got {}",
+        r.state()
+    );
+    // Settle to idle.
+    for _ in 0..60 {
+        r.tick(&release());
+        if r.state() == "idle" {
+            break;
+        }
+    }
+    assert_eq!(r.state(), "idle");
     // Press into the wall again, then pull back -> run.
     // Pull back = stick [-1,0] (west), 0° vs normal (away from wall).
     r.stick = [1.0, 0.0];
