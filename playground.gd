@@ -28,7 +28,7 @@ const MOVESETS := {
 		"behavior": "res://rust/behaviors/smo_movement.json",
 		"color": Color(0.3, 0.5, 0.95),
 		"unit": 100.0,
-		"hint": "A: jump   B: crouch   X: cap throw",
+		"hint": "A: jump   B: crouch   X/Y: cap throw   Y in air: dive",
 	},
 }
 
@@ -216,7 +216,7 @@ func _read_devices() -> Dictionary:
 		rcx = Input.get_joy_axis(_pad, JOY_AXIS_RIGHT_X)
 		jump = Input.is_joy_button_pressed(_pad, JOY_BUTTON_A)
 		crouch = Input.is_joy_button_pressed(_pad, JOY_BUTTON_B)
-		capb = Input.is_joy_button_pressed(_pad, JOY_BUTTON_X)
+		capb = Input.is_joy_button_pressed(_pad, JOY_BUTTON_X) or Input.is_joy_button_pressed(_pad, JOY_BUTTON_Y)
 		start = Input.is_joy_button_pressed(_pad, JOY_BUTTON_START)
 	var kx := _key(KEY_D, KEY_A) + _key(KEY_RIGHT, KEY_LEFT)
 	var ky := _key(KEY_W, KEY_S) + _key(KEY_UP, KEY_DOWN)
