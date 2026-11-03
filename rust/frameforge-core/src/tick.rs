@@ -1402,14 +1402,17 @@ impl Runtime {
                     StickAngleVs::Velocity => self.track_horizontal_dir(ti),
                     StickAngleVs::WallNormal => {
                         let n = self.last_contact.wall_normal;
-                        // Wall normal must be valid (non-zero) and we're touching a wall.
+                        // If not touching a wall, use the stick direction itself as the
+                        // reference: angle = 0°, which is in the 0-169° exit range
+                        // (not pushing into a wall) but outside the 170-180° entry
+                        // range. This lets wall_push exit when contact is lost.
                         if !self.last_contact.wall || n.length() < 1e-6 {
-                            None
+                            Some(stick_dir)
                         } else {
                             // Normalize the horizontal component.
                             let hn = Vec3::new(n.x, 0.0, n.z);
                             if hn.length() < 1e-6 {
-                                None
+                                Some(stick_dir)
                             } else {
                                 Some(hn.normalized())
                             }
