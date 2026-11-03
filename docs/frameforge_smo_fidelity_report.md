@@ -46,6 +46,8 @@
 
 **Guards (simplified):** GR-17 15° assumed; CR-04/CR-05 headroom via new `ceiling.low` probe (defaults false = no ceilings); JP-08/10 triple/double are opaque engine predicates (`smo.triple_ok`, `smo.double_ok`); AR-27 15° assumed; "forward speed" proxied by `motion.hspeed`; contact tests A/B collapsed to bridge bool `cap.touch`; shake inputs declared but unfed by the playground driver; 2D-section guards absent everywhere.
 
+**2026-11-03 wall-slide fix:** `resp_wall -> wall_slide` was missing on all cut states (`jump1/2/3_cut`) and jump variants (`long/back/side/spin/spin_drill/cap_return`), so releasing jump early then hitting a wall never slid (Joey's "wall jump works half the time" — the failures were all `jump1 -> jump1_cut -> land_sel` at the wall). Added to 16 airborne states per spec G-air-all (every airborne state); `dive` keeps `bonk` (spec: "Not for a roll or a dive").
+
 ## Bridge-Fed Probes (43 params)
 
 The embedder (Godot) must provide these per tick (new since 2026-10-19 marked ★):
