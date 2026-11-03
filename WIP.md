@@ -61,3 +61,15 @@ as complete.
   and flies a canned arc on throws, returns on recall. Verified
   headless: 85/85 states mapped, run/jump/land squash values hit their
   pose targets, cap throw/recall cycle works.
+- 2026-11-03: `tests/playground_anim_test.tscn` — 15 headless tests,
+  all passing. Unit: 85/85 state coverage, pre-setup guards, slam
+  spring settles, yaw/pitch spins decay after their state ends, cap
+  throw/recall always completes, exact capsule-lowest-point clearance
+  >= 0 across every pose (worst exactly 0.0000), facing follows
+  velocity. Integration: scripted gameplay per moveset, per-frame
+  ground clearance + >=6 states exercised + no unmapped states (skips
+  gracefully without the built extension). Testing caught a real bug:
+  the squash pivot was at the body center (stretch poses would have
+  buried the feet); now pivots at the feet. Also fixed the clearance
+  probe itself: AABB is conservative under tilt, so body_min_y() now
+  computes the true capsule lowest point.

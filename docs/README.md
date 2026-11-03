@@ -263,7 +263,15 @@ character (blob body, eyes, cap) with exaggerated squash-and-stretch:
 every one of the 76 SMO states and 9 SM64 states maps to a pose
 (squash targets, lean/tilt, spins, bob, wobble), transitions run through
 an underdamped spring so landings overshoot, and the cap physically
-leaves the character's head on cap throws and flies back.
+leaves the character's head on cap throws and flies back. The squash
+pivots at the feet and downward bob is lifted out, so the body can never
+clip the ground.
+
+`tests/playground_anim_test.tscn` covers it headless: full state
+coverage, spring settle, spin decay after state end, cap throw/recall
+completion, exact body-lowest-point ground clearance across all poses,
+facing, plus a scripted gameplay run per moveset asserting no clip and
+no unmapped states (the gameplay half needs the built extension).
 
 ### Player scene
 

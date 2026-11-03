@@ -59,10 +59,12 @@ const STATE_POSE := {
 # States that throw / recall the cap prop (exact names, not prefixes).
 const CAP_OUT := ["cap_throw", "cap_throw_air", "cap_flying", "cap_hover"]
 const CAP_BACK := ["cap_homing", "cap_returning", "jump_cap_return",
-	"jump_cap_return_cut", "cap_return_spin"]
+	"jump_cap_return_cut", "cap_return_spin", "dead"]
 
 ## Test hook: set_state sets this false when a state has no mapping.
 var last_mapped := true
+## Test hook: every state name that had no pose mapping.
+var unmapped_states: Array = []
 
 var _unit := 1.0
 var _poses := {}
@@ -79,6 +81,7 @@ var _cap_t := 0.0
 
 var _squash_n: Node3D
 var _actor: Node3D
+var _body: MeshInstance3D
 var _eye_l: MeshInstance3D
 var _eye_r: MeshInstance3D
 var _head_cap: Node3D
@@ -189,18 +192,21 @@ func _make_cap(color: Color) -> Node3D:
 
 
 func _build(color: Color) -> void:
+	# Squash pivots at the feet (player origin): scaling never pushes the
+	# body through the floor, and stretch grows upward.
 	_squash_n = Node3D.new()
-	_squash_n.position = Vector3(0, 0.9 * _unit, 0)
 	add_child(_squash_n)
 	_actor = Node3D.new()
+	_actor.position = Vector3(0, 0.9 * _unit, 0)
 	_squash_n.add_child(_actor)
 	var body := MeshInstance3D.new()
 	var capm := CapsuleMesh.new()
-	capm.radius = 0.42 * _unit
-	capm.height = 1.8 * _unit
+	capm.radius = BODY_R * _unit
+	capm.height = BODY_H * _unit
 	body.mesh = capm
 	body.material_override = _mat(color)
 	_actor.add_child(body)
+	_body = body
 	# Eyes on the front (-z, Godot forward).
 	for sx in [-1.0, 1.0]:
 		var eye := MeshInstance3D.new()
@@ -251,6 +257,7 @@ func set_state(state_name: String) -> void:
 	else:
 		_pose = _poses["idle"]
 		last_mapped = false
+		unmapped_states.append(state_name)
 		push_warning("PlaygroundAnimator: unmapped state '%s'" % state_name)
 
 
@@ -283,6 +290,26 @@ func _advance_cap(delta: float) -> void:
 		_cap_mode = "head"
 		_fly_cap.visible = false
 		_head_cap.visible = true
+
+
+# Body capsule dimensions (unit space) shared by _build and body_min_y.
+const BODY_R := 0.42
+const BODY_H := 1.8
+const BODY_SPINE := 0.9 - 0.42  # half of the cylinder mid-section
+
+
+## Lowest point of the body capsule in global space. Exact (not the AABB,
+## which is conservative under tilt). The squash pivots at the feet and
+## downward bob is compensated, so this must never go below the surface
+## the player stands on.
+func body_min_y() -> float:
+	if _body == null:
+		return 0.0
+	var gt: Transform3D = _body.global_transform
+	var rot: Basis = gt.basis.orthonormalized()
+	var p: Vector3 = rot * Vector3(0, -BODY_SPINE * _unit, 0) \
+		- Vector3(0, BODY_R * _unit, 0)
+	return (gt * p).y
 
 
 func advance(delta: float) -> void:
@@ -322,8 +349,11 @@ func advance(delta: float) -> void:
 	var wob: float = _pose["wobble"]
 	_actor.rotation.z = lerpf(_actor.rotation.z, float(_pose["tilt"]),
 		minf(1.0, 12.0 * delta)) + sin(_time * 13.0) * wob
-	# Bob.
-	_actor.position.y = sin(_time * float(_pose["bob_speed"])) * float(_pose["bob"])
+	# Bob. Downward bob is lifted back out so the feet never dip below
+	# the squash pivot (rotation alone can't clip: the capsule's vertical
+	# half-extent only shrinks when rotated).
+	var bob_y := sin(_time * float(_pose["bob_speed"])) * float(_pose["bob"])
+	_actor.position.y = 0.9 * _unit - minf(0.0, bob_y)
 	# Blink.
 	_next_blink -= delta
 	if _next_blink <= 0.0:
