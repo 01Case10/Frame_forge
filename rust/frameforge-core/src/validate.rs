@@ -530,6 +530,23 @@ fn validate_condition_inner(
                 );
             }
         }
+        ConditionType::OnFacingWall => {
+            if c.facing_wall_angle_min_deg < 0.0
+                || c.facing_wall_angle_max_deg < c.facing_wall_angle_min_deg
+                || c.facing_wall_angle_max_deg > 180.0
+            {
+                issue(
+                    issues,
+                    Severity::Warning,
+                    format!(
+                        "State \"{}\": On Facing Wall row has an inconsistent angle range.",
+                        sn
+                    ),
+                    Some(mn),
+                    Some(sn),
+                );
+            }
+        }
         ConditionType::OnVariable => {
             // G-3: state_step is a reserved engine param, always valid.
             let known = c.param_name == STATE_STEP_PARAM

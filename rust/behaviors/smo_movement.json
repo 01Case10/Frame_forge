@@ -512,12 +512,17 @@
                     "param_value": true
                   },
                   {
+                    "type": "on_facing_wall",
+                    "facing_wall_angle_min_deg": 135.0,
+                    "facing_wall_angle_max_deg": 180.0
+                  },
+                  {
                     "type": "on_stick",
                     "stick_radius_min": 0.1,
                     "stick_radius_max": 1000000000.0,
-                    "stick_angle_vs": "wall_normal",
-                    "stick_angle_min_deg": 170.0,
-                    "stick_angle_max_deg": 180.0
+                    "stick_angle_vs": "facing",
+                    "stick_angle_min_deg": 0.0,
+                    "stick_angle_max_deg": 45.0
                   }
                 ]
               },
@@ -528,7 +533,7 @@
               "fire_event": "",
               "silent": false,
               "on_fire_params": [],
-              "source_tag": "GR-10 [pri 49] [D-rule]"
+              "source_tag": "GR-10 [pri 49] [D-rule] [2026-11-03 decomp D8: 45\u00b0 judge]"
             }
           ],
           "enter_params": []
@@ -1032,12 +1037,17 @@
                     "param_value": true
                   },
                   {
+                    "type": "on_facing_wall",
+                    "facing_wall_angle_min_deg": 135.0,
+                    "facing_wall_angle_max_deg": 180.0
+                  },
+                  {
                     "type": "on_stick",
                     "stick_radius_min": 0.1,
                     "stick_radius_max": 1000000000.0,
-                    "stick_angle_vs": "wall_normal",
-                    "stick_angle_min_deg": 170.0,
-                    "stick_angle_max_deg": 180.0
+                    "stick_angle_vs": "facing",
+                    "stick_angle_min_deg": 0.0,
+                    "stick_angle_max_deg": 45.0
                   }
                 ]
               },
@@ -1048,7 +1058,7 @@
               "fire_event": "",
               "silent": false,
               "on_fire_params": [],
-              "source_tag": "GR-11 [pri 44] [D-rule]"
+              "source_tag": "GR-11 [pri 44] [D-rule] [2026-11-03 decomp D8: 45\u00b0 judge]"
             },
             {
               "condition": {
@@ -9133,7 +9143,9 @@
             "decay": 0.05,
             "gravity": 1.5,
             "face_mode": "keep",
-            "enter_keep_horizontal": true
+            "enter_keep_horizontal": true,
+            "enter_kill_backward": true,
+            "brake_end_speed": 3.5
           }
         },
         {
@@ -10168,7 +10180,7 @@
             }
           ],
           "steer": {
-            "accel_forward": 0.5,
+            "accel_forward": 0.0,
             "accel_side": 0.3,
             "accel_backward": 1.0,
             "backward_until_zero": true,
@@ -10189,7 +10201,8 @@
                 }
               ]
             },
-            "enter_keep_horizontal": true
+            "enter_keep_horizontal": false,
+            "enter_horizontal_speed": 20.0
           }
         },
         {
@@ -10441,7 +10454,7 @@
               "set": 0.0
             },
             "face_mode": "keep",
-            "enter_keep_horizontal": true
+            "enter_keep_horizontal": false
           }
         },
         {
@@ -12597,7 +12610,8 @@
             },
             "enter_impact_speed": 8.6,
             "face_mode": "keep",
-            "enter_keep_horizontal": true
+            "enter_keep_horizontal": true,
+            "input_invalidate_frames": 25
           }
         },
         {
@@ -24319,14 +24333,6 @@
               "source_tag": "PLAYGROUND-FIX: exit wall_push on stick release (Joey spec) [2026-11-03: release->run not idle, keyboard rotation fix]"
             },
             {
-              "condition": {
-                "type": "on_stick",
-                "stick_radius_min": 0.1,
-                "stick_radius_max": 1000000000.0,
-                "stick_angle_vs": "wall_normal",
-                "stick_angle_min_deg": 0.0,
-                "stick_angle_max_deg": 169.0
-              },
               "target_state_name": "run",
               "target_behavior_name": "",
               "momentum": "cut",
@@ -24334,7 +24340,41 @@
               "fire_event": "",
               "silent": false,
               "on_fire_params": [],
-              "source_tag": "PLAYGROUND-FIX: exit wall_push when not pushing into wall (wall_normal 0-135)n (Joey spec)"
+              "condition": {
+                "type": "on_stick",
+                "stick_radius_min": 0.1,
+                "stick_radius_max": 1000000000.0,
+                "stick_angle_vs": "facing",
+                "stick_angle_min_deg": 45.0,
+                "stick_angle_max_deg": 180.0
+              },
+              "source_tag": "PLAYGROUND-FIX [2026-11-03 decomp D8]: exit wall_push when stick >45\u00b0 from facing (decomp: moveDirection\u00b7front < cos45\u00b0)"
+            },
+            {
+              "target_state_name": "run",
+              "target_behavior_name": "",
+              "momentum": "cut",
+              "blend_frames": 0,
+              "fire_event": "",
+              "silent": false,
+              "on_fire_params": [],
+              "condition": {
+                "type": "on_complete",
+                "all_of": [
+                  {
+                    "type": "on_variable",
+                    "param_name": "contact.wall",
+                    "param_op": "eq",
+                    "param_value": true
+                  },
+                  {
+                    "type": "on_facing_wall",
+                    "facing_wall_angle_min_deg": 0.0,
+                    "facing_wall_angle_max_deg": 135.0
+                  }
+                ]
+              },
+              "source_tag": "PLAYGROUND-FIX [2026-11-03 decomp D8]: exit wall_push when facing rotates >45\u00b0 from into-wall while touching (decomp: front\u00b7-wallNormal < cos45\u00b0; contact.wall guard avoids is_on_wall flicker exits)"
             }
           ],
           "enter_params": []
@@ -24598,7 +24638,10 @@
               "source_tag": "SP-19 [pri 45] [D-rule S-052: slope ends + neutral -> idle]"
             }
           ],
-          "enter_params": []
+          "enter_params": [],
+          "steer": {
+            "enter_min_horizontal_speed": 5.0
+          }
         },
         {
           "state_name": "sand_sink",

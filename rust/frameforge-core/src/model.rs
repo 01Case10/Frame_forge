@@ -62,6 +62,11 @@ pub enum ConditionType {
     OnState,
     OnCustom,
     OnStick,
+    /// Unsigned angle between facing and the wall normal (degrees).
+    /// 180 = facing directly into the wall. Uses the last wall contact;
+    /// false when not touching a wall. (Decomp D8: wall-push judge needs
+    /// facing into the wall within 45°, i.e. 135-180° here.)
+    OnFacingWall,
 }
 
 /// Reference direction for an OnStick angle check.
@@ -445,6 +450,30 @@ pub struct SteerConfig {
     /// On entry, how to set vertical velocity.
     #[serde(default)]
     pub enter_vy: EnterVy,
+    /// On entry, set horizontal speed to this (u/tick) along the current
+    /// horizontal velocity direction (or facing if ~zero). 0 = disabled.
+    /// Takes precedence over `enter_keep_horizontal`. (Decomp D1: dive sets
+    /// horizontal to HeadSlidingSpeed instead of keeping entry momentum.)
+    #[serde(default)]
+    pub enter_horizontal_speed: f32,
+    /// On entry, if horizontal speed is below this, scale it up to this
+    /// (along the current direction, or facing if ~zero). 0 = disabled.
+    /// (Decomp D9: slope slide guarantees a 5.0 minimum on entry.)
+    #[serde(default)]
+    pub enter_min_horizontal_speed: f32,
+    /// On entry, remove the horizontal velocity component that opposes
+    /// facing. (Decomp D12: crouch brake kills backward motion on entry.)
+    #[serde(default)]
+    pub enter_kill_backward: bool,
+    /// After decay, snap horizontal speed to 0 when at/below this.
+    /// 0 = disabled. (Decomp D12: crouch brake zeroes at SquatBrakeEndSpeed.)
+    #[serde(default)]
+    pub brake_end_speed: f32,
+    /// Ignore stick input for steering/turning for the first N ticks of the
+    /// state. 0 = disabled. (Decomp D5: wall jump invalidates input for
+    /// WallJumpInvalidateInputFrame ticks.)
+    #[serde(default)]
+    pub input_invalidate_frames: u32,
 }
 
 fn default_true() -> bool {
@@ -474,6 +503,11 @@ impl Default for SteerConfig {
             quickturn_rate_deg: 0.0,
             enter_keep_horizontal: true,
             enter_vy: EnterVy::Keep,
+            enter_horizontal_speed: 0.0,
+            enter_min_horizontal_speed: 0.0,
+            enter_kill_backward: false,
+            brake_end_speed: 0.0,
+            input_invalidate_frames: 0,
         }
     }
 }
@@ -616,6 +650,14 @@ pub struct Condition {
     /// Maximum unsigned angle (degrees) between stick and reference.
     #[serde(default = "deg_180")]
     pub stick_angle_max_deg: f32,
+    /// Minimum unsigned angle (degrees) between facing and the wall normal,
+    /// for OnFacingWall. 180° = facing directly into the wall.
+    #[serde(default)]
+    pub facing_wall_angle_min_deg: f32,
+    /// Maximum unsigned angle (degrees) between facing and the wall normal,
+    /// for OnFacingWall.
+    #[serde(default = "deg_180")]
+    pub facing_wall_angle_max_deg: f32,
     // ---- Composite conditions (Phase C) ----
     /// All of these must be true. When non-empty, the composite defines the
     /// condition and `cond_type` is ignored.

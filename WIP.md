@@ -133,3 +133,19 @@ as complete.
   bumped to 8.0 with terminal 45->60 for a real slam. Playground
   now has F3-toggleable [STATE] transition log with pos/hspeed/
   ground.dist for debugging.
+- 2026-11-03: Decomp fixes applied (Joey: "put the fixes in"). Verified the
+  SMO example against matched OdysseyDecomp sources; applied D1/D3/D5/D6/D8/
+  D9/D12. Engine: 5 new SteerConfig fields (enter_horizontal_speed,
+  enter_min_horizontal_speed, enter_kill_backward, brake_end_speed,
+  input_invalidate_frames) + new on_facing_wall condition type. JSON: dive
+  sets 20.0 horizontal + 0 forward accel; jump_wall 25-tick input blackout;
+  gp_stall zeroes horizontal; wall_push entry/exit now the 45° decomp judge
+  (facing 135-180° vs normal, stick 0-45° vs facing) — the 10° cone was
+  stricter than the real game; slope_slide 5.0 entry kick; crouch_slide
+  backward-kill + 3.5 snap. Deferred: dive upward pop (need HeadSlidingJump
+  from spec — decomp default 28.0 is non-physical), gp_fall ramp (kept Joey's
+  slam feel), gp_land weak threshold + knockback flavors (need new features).
+  Deliberate deviation: wall_push persists through wall-contact loss
+  (anti-flicker; the decomp's stateless judge would oscillate on Godot's
+  is_on_wall flicker). 8 new/rewritten regression tests; 169/169 pass;
+  ff check clean. Rust change requires Joey to rebuild the extension on his PC.

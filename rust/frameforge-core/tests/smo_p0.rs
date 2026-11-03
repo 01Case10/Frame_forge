@@ -302,57 +302,75 @@ fn land(r: &mut Rig) {
     assert_eq!(r.state(), "land_sel");
 }
 
-/// Regression test 2026-11-03 (Joey): wall_push must exit the tick the
-/// stick vector changes from the entry direction. From his log:
-/// entered with (0,1), rotated to (-0.21, 1.00), stayed stuck in wall_push.
-/// "the second the stick input is not (0,1) we must transition out".
+/// Decomp D8 (2026-11-03): wall_push uses the real game's 45° judge, not the
+/// old 10° cone. Entry/stay needs facing into the wall (135-180° vs normal)
+/// AND stick within 45° of facing. Small stick rotations (<45°) must STAY;
+/// large ones (>45°) must exit to run on that tick.
 #[test]
 fn wall_push_exits_on_stick_change() {
     let mut r = Rig::new();
     r.tick(&release());
-    // Use the same setup as wall_push_pose: normal (-1,0,0) (west),
-    // stick (1,0) -> 180° vs normal -> entry (170-180°).
+    // Realistic setup: run toward the wall first so facing settles into it,
+    // then make wall contact. Normal (-1,0,0) (west), running +x (east).
+    r.stick = [1.0, 0.0];
+    for _ in 0..20 {
+        r.tick(&release());
+    }
     r.wall = true;
     r.wall_normal = [-1.0, 0.0, 0.0];
-    r.stick = [1.0, 0.0];
     r.tick(&release());
     r.tick(&release());
-    assert_eq!(r.state(), "wall_push", "setup: enter wall_push");
-    // Holding the exact entry vector -> stay in wall_push.
+    assert_eq!(r.state(), "wall_push", "setup: enter wall_push (45° judge)");
+    // Holding the entry vector -> stay.
     r.tick(&release());
     assert_eq!(r.state(), "wall_push", "holding entry vector must stay");
-    // Rotate slightly to (0.98, 0.21): ~12° vs normal, in the 0-169° exit
-    // range. Must exit to run ON THIS TICK, not stay stuck.
+    // Rotate 12° (0.98, 0.21): within 45° of facing -> MUST STAY.
+    // (Decomp: the old 10°-cone exit was stricter than the real game.)
     r.stick = [0.98, 0.21];
     r.tick(&release());
     assert_eq!(
         r.state(),
-        "run",
-        "wall_push must exit when stick vector changes (was: stuck in wall_push)"
+        "wall_push",
+        "12° stick rotation is within the 45° judge: must stay"
     );
-}
-
-/// Companion: losing wall contact (rotating away stops pushing into the
-/// wall, so is_on_wall() goes false) must also exit, not get stuck.
-#[test]
-fn wall_push_exits_when_wall_lost() {
-    let mut r = Rig::new();
-    r.tick(&release());
-    r.wall = true;
-    r.wall_normal = [-1.0, 0.0, 0.0];
-    r.stick = [1.0, 0.0];
-    r.tick(&release());
-    r.tick(&release());
-    assert_eq!(r.state(), "wall_push", "setup: enter wall_push");
-    // Wall contact lost (no longer pushing into it) -> exit to run.
-    // Note: last_contact is 1 tick delayed, so we need 2 ticks.
-    r.wall = false;
-    r.tick(&release());
+    // Rotate 60° (0.5, 0.87): beyond 45° of facing -> exit to run THIS tick.
+    r.stick = [0.5, 0.87];
     r.tick(&release());
     assert_eq!(
         r.state(),
         "run",
-        "wall_push must exit when wall contact is lost (was: stuck)"
+        "60° stick rotation exceeds the 45° judge: must exit"
+    );
+}
+
+/// Decomp D8 note (2026-11-03): the real game's judge is stateless and would
+/// exit on wall loss, but Godot's is_on_wall() flickers false when stationary,
+/// which caused run<->wall_push oscillation (Joey's 2026-11-03 saga). We
+/// DELIBERATELY deviate: wall_push persists through wall-contact loss; exits
+/// are stick/facing-driven only. This test locks that decision in.
+#[test]
+fn wall_push_persists_when_wall_lost() {
+    let mut r = Rig::new();
+    r.tick(&release());
+    r.stick = [1.0, 0.0];
+    for _ in 0..20 {
+        r.tick(&release());
+    }
+    r.wall = true;
+    r.wall_normal = [-1.0, 0.0, 0.0];
+    r.tick(&release());
+    r.tick(&release());
+    assert_eq!(r.state(), "wall_push", "setup: enter wall_push");
+    // Wall contact lost (flicker or real) with stick still held into the
+    // wall -> must STAY, not oscillate to run.
+    r.wall = false;
+    r.tick(&release());
+    r.tick(&release());
+    r.tick(&release());
+    assert_eq!(
+        r.state(),
+        "wall_push",
+        "wall_push persists through wall-contact loss (anti-flicker; was: exit)"
     );
 }
 
@@ -1791,16 +1809,26 @@ fn wall_push_pose() {
     let mut r = Rig::new();
     r.tick(&release());
     assert_eq!(r.state(), "idle");
-    // Press into the wall -> wall_push (GR-10 via run/GR-11: idle's GR-06
-    // takes the first tick since the stick is moved).
-    // Wall normal is -x (west); pushing +x (east, stick [1,0]) is INTO the wall
-    // (180° vs normal). Updated 2026-11-03: entry now uses wall_normal.
+    // Press toward the wall and run a few ticks so facing settles into it
+    // (real gameplay: you run into the wall facing it), then contact.
+    // Wall normal is -x (west); facing +x (east) = 180° vs normal.
+    // Updated 2026-11-03 (decomp D8): entry is the 45° judge — facing into
+    // the wall (135-180° vs normal) AND stick within 45° of facing.
+    let mut entered = false;
+    r.stick = [1.0, 0.0];
+    for _ in 0..12 {
+        r.tick(&release());
+    }
     r.wall = true;
     r.wall_normal = [-1.0, 0.0, 0.0];
-    r.stick = [1.0, 0.0];
-    r.tick(&release());
-    r.tick(&release());
-    assert_eq!(r.state(), "wall_push", "GR-10/11: wall -> push");
+    for _ in 0..4 {
+        r.tick(&release());
+        if r.state() == "wall_push" {
+            entered = true;
+            break;
+        }
+    }
+    assert!(entered, "GR-10/11: wall -> push (45° judge)");
     // Release the stick -> run (2026-11-03: changed from idle to run so
     // keyboard rotation doesn't get stuck). May go to brake_stop first
     // if there was momentum; the key is it EXITS wall_push (not stuck).
@@ -1820,28 +1848,36 @@ fn wall_push_pose() {
     }
     assert_eq!(r.state(), "idle");
     // Press into the wall again, then pull back -> run.
-    // Pull back = stick [-1,0] (west), 0° vs normal (away from wall).
+    // Pull back = stick [-1,0] (west): 180° vs facing (+x) -> exits.
     r.stick = [1.0, 0.0];
-    r.tick(&release());
-    r.tick(&release());
+    for _ in 0..4 {
+        r.tick(&release());
+        if r.state() == "wall_push" {
+            break;
+        }
+    }
     assert_eq!(r.state(), "wall_push");
     r.stick = [-1.0, 0.0];
     r.tick(&release());
     assert_eq!(r.state(), "run", "redesign: pull back -> run");
     // Press into the wall, then push left/right (along the wall) -> run.
-    // Stick [0,1] is +z (south), 90° vs normal = along the wall, not into it.
+    // Stick [0,1] is +z: 90° vs facing (+x) -> outside the 45° judge.
     // (Joey 2026-11-03: "If we try to move left or right we should transition
     // away from wall push".)
     r.stick = [1.0, 0.0];
-    r.tick(&release());
-    r.tick(&release());
+    for _ in 0..4 {
+        r.tick(&release());
+        if r.state() == "wall_push" {
+            break;
+        }
+    }
     assert_eq!(r.state(), "wall_push");
     r.stick = [0.0, 1.0];
     r.tick(&release());
     assert_eq!(
         r.state(),
         "run",
-        "pushing along the wall (90° vs normal) exits wall_push"
+        "pushing along the wall (90° vs facing) exits wall_push"
     );
 }
 #[test]
@@ -1856,4 +1892,137 @@ fn c2_jump_delayed_on_run_start() {
     // Next tick: buffered jump fires (5-tick buffer).
     r.tick(&hold(&["jump"]));
     assert_eq!(r.state(), "jump_select", "C2: jump fires on tick 2");
+}
+
+
+/// Decomp D1 (2026-11-03): dive SETS horizontal to HeadSlidingSpeed (20.0),
+/// it does not keep entry momentum. From gp_fall (which now zeroes horizontal
+/// per D6), the dive must still launch at 20.0 — proving "set", not "keep".
+#[test]
+fn dive_sets_entry_speed_d1() {
+    let mut r = Rig::new();
+    to_fall(&mut r);
+    r.ground_dist = 1000.0;
+    r.tick(&hold(&["crouch"]));
+    for _ in 0..12 {
+        r.tick(&release());
+    }
+    assert_eq!(r.state(), "gp_fall");
+    let v0 = r.rt.track_velocity("Nerves");
+    let hs0 = (v0.x * v0.x + v0.z * v0.z).sqrt();
+    assert!(hs0 < 1.0, "setup: gp_fall has ~zero horizontal, got {}", hs0);
+    // Cap press -> dive (AR-11). Must SET 20.0, not keep ~0.
+    r.tick(&hold(&["cap"]));
+    assert_eq!(r.state(), "dive", "AR-11: cap press -> dive");
+    let v = r.rt.track_velocity("Nerves");
+    let hs = (v.x * v.x + v.z * v.z).sqrt();
+    assert!(
+        (hs - 20.0).abs() < 0.6,
+        "dive must SET horizontal to 20.0 (HeadSlidingSpeed), got {} (entry was {})",
+        hs,
+        hs0
+    );
+}
+
+/// Decomp D3 (2026-11-03): dive has zero forward accel — only brake and side
+/// accel (the decomp passes 0.0f as accel to moveDivingJump). Holding full
+/// forward in a dive must not grow speed past the 20.0 entry.
+#[test]
+fn dive_no_forward_accel_d3() {
+    let mut r = Rig::new();
+    to_fall(&mut r);
+    r.ground_dist = 1000.0;
+    r.tick(&hold(&["crouch"]));
+    for _ in 0..12 {
+        r.tick(&release());
+    }
+    r.tick(&hold(&["cap"]));
+    assert_eq!(r.state(), "dive");
+    // Push the stick along facing (forward) for 20 ticks.
+    let yaw = r.rt.track_facing_yaw("Nerves").to_radians();
+    r.stick = [yaw.sin(), yaw.cos()];
+    for _ in 0..20 {
+        r.tick(&release());
+        if r.state() != "dive" {
+            break;
+        }
+    }
+    let v = r.rt.track_velocity("Nerves");
+    let hs = (v.x * v.x + v.z * v.z).sqrt();
+    assert!(
+        hs <= 21.0,
+        "dive must not accelerate forward (accel=0); speed grew to {}",
+        hs
+    );
+}
+
+/// Decomp D6 (2026-11-03): ground-pound start zeroes ALL velocity
+/// (al::setVelocityZero), including horizontal. Was: kept horizontal.
+#[test]
+fn gp_stall_zeroes_horizontal_d6() {
+    let mut r = Rig::new();
+    to_fall(&mut r); // 5 run ticks build horizontal speed
+    let v0 = r.rt.track_velocity("Nerves");
+    let hs0 = (v0.x * v0.x + v0.z * v0.z).sqrt();
+    assert!(hs0 > 2.0, "setup: airborne with speed, got {}", hs0);
+    r.tick(&hold(&["crouch"]));
+    assert_eq!(r.state(), "gp_stall", "crouch in air -> gp_stall");
+    let v = r.rt.track_velocity("Nerves");
+    let hs = (v.x * v.x + v.z * v.z).sqrt();
+    assert!(
+        hs < 0.5,
+        "gp_stall must ZERO horizontal (decomp setVelocityZero), got {} (entry was {})",
+        hs,
+        hs0
+    );
+}
+
+/// Decomp D9 (2026-11-03): slope slide guarantees a 5.0 minimum directed
+/// speed on entry (hardcoded in PlayerStateSlope::appear).
+#[test]
+fn slope_slide_entry_kick_d9() {
+    let mut r = Rig::new();
+    r.tick(&release());
+    assert_eq!(r.state(), "idle");
+    // Standing still (hspeed ~0) on steep ground + crouch -> slope_slide.
+    r.rt
+        .set_param("surface.steep", ParamValue::Bool(true));
+    r.tick(&hold(&["crouch"]));
+    assert_eq!(r.state(), "slope_slide", "crouch on steep -> slope_slide");
+    let v = r.rt.track_velocity("Nerves");
+    let hs = (v.x * v.x + v.z * v.z).sqrt();
+    assert!(
+        (hs - 5.0).abs() < 0.6,
+        "slope_slide must kick entry speed to 5.0, got {}",
+        hs
+    );
+}
+
+/// Decomp D12 (2026-11-03): crouch brake snaps horizontal to 0 at/below
+/// SquatBrakeEndSpeed (3.5) instead of merely decaying past it.
+#[test]
+fn crouch_slide_brake_snap_d12() {
+    let mut r = Rig::new();
+    r.stick = [0.0, 1.0];
+    for _ in 0..20 {
+        r.tick(&release());
+    }
+    r.stick = [0.0, 0.0];
+    r.tick(&release());
+    assert_eq!(r.state(), "brake_stop");
+    r.tick(&hold(&["crouch"]));
+    assert_eq!(r.state(), "crouch_slide");
+    let mut ticks = 0;
+    while r.state() == "crouch_slide" && ticks < 100 {
+        r.tick(&hold(&["crouch"]));
+        ticks += 1;
+    }
+    assert_eq!(r.state(), "crouch_idle", "CR-01: slide decayed to idle");
+    let v = r.rt.track_velocity("Nerves");
+    let hs = (v.x * v.x + v.z * v.z).sqrt();
+    assert!(
+        hs < 0.1,
+        "brake must SNAP to 0 at <=3.5 (not just decay), got {}",
+        hs
+    );
 }

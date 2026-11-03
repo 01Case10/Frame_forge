@@ -114,6 +114,12 @@ enum ResolvedCond {
         angle_min_deg: f32,
         angle_max_deg: f32,
     },
+    /// Unsigned angle between facing and the wall normal (degrees).
+    /// 180 = facing directly into the wall.
+    OnFacingWall {
+        angle_min_deg: f32,
+        angle_max_deg: f32,
+    },
     /// Phase C: all sub-conditions must be true.
     AllOf(Vec<ResolvedCond>),
     /// Phase C: at least one sub-condition must be true.
@@ -351,6 +357,10 @@ fn resolve_cond(
             angle_vs: c.stick_angle_vs,
             angle_min_deg: c.stick_angle_min_deg,
             angle_max_deg: c.stick_angle_max_deg,
+        },
+        ConditionType::OnFacingWall => ResolvedCond::OnFacingWall {
+            angle_min_deg: c.facing_wall_angle_min_deg,
+            angle_max_deg: c.facing_wall_angle_max_deg,
         },
     }
 }
@@ -912,6 +922,46 @@ impl Runtime {
             t.velocity.x = 0.0;
             t.velocity.z = 0.0;
         }
+        // Decomp D12b: kill the horizontal component opposing facing
+        // (crouch brake entry).
+        if steer.enter_kill_backward {
+            let f = facing_dir(t.facing_yaw);
+            let dot = t.velocity.x * f.x + t.velocity.z * f.z;
+            if dot < 0.0 {
+                t.velocity.x -= f.x * dot;
+                t.velocity.z -= f.z * dot;
+            }
+        }
+        // Decomp D1: set horizontal speed along the current horizontal
+        // direction (or facing when ~zero). Takes precedence over keep/zero.
+        if steer.enter_horizontal_speed > 0.0 {
+            let mut dx = t.velocity.x;
+            let mut dz = t.velocity.z;
+            if dx * dx + dz * dz < 1e-12 {
+                let f = facing_dir(t.facing_yaw);
+                dx = f.x;
+                dz = f.z;
+            }
+            let l = (dx * dx + dz * dz).sqrt();
+            t.velocity.x = dx / l * steer.enter_horizontal_speed;
+            t.velocity.z = dz / l * steer.enter_horizontal_speed;
+        }
+        // Decomp D9: guarantee a minimum entry speed (slope slide).
+        if steer.enter_min_horizontal_speed > 0.0 {
+            let hspeed = (t.velocity.x * t.velocity.x + t.velocity.z * t.velocity.z).sqrt();
+            if hspeed < steer.enter_min_horizontal_speed {
+                let mut dx = t.velocity.x;
+                let mut dz = t.velocity.z;
+                if dx * dx + dz * dz < 1e-12 {
+                    let f = facing_dir(t.facing_yaw);
+                    dx = f.x;
+                    dz = f.z;
+                }
+                let l = (dx * dx + dz * dz).sqrt();
+                t.velocity.x = dx / l * steer.enter_min_horizontal_speed;
+                t.velocity.z = dz / l * steer.enter_min_horizontal_speed;
+            }
+        }
         // Launch along the last impact normal (e.g. away from the wall).
         if steer.enter_impact_speed > 0.0 && t.has_impact {
             let n = t.impact_normal;
@@ -1426,6 +1476,29 @@ impl Runtime {
                 let ang_deg = stick_dir.angle_to(rd) * 180.0 / PI;
                 ang_deg >= *angle_min_deg && ang_deg <= *angle_max_deg
             }
+            ResolvedCond::OnFacingWall {
+                angle_min_deg,
+                angle_max_deg,
+            } => {
+                // Decomp D8: wall-push judge needs facing into the wall.
+                // 180° = facing directly into the wall normal.
+                let ti = match t_idx {
+                    Some(ti) => ti,
+                    None => return false,
+                };
+                let n = self.last_contact.wall_normal;
+                if !self.last_contact.wall || n.length() < 1e-6 {
+                    return false;
+                }
+                let hn = Vec3::new(n.x, 0.0, n.z);
+                if hn.length() < 1e-6 {
+                    return false;
+                }
+                let hn = hn.normalized();
+                let f = facing_dir(self.tracks[ti].facing_yaw);
+                let ang_deg = f.angle_to(hn) * 180.0 / PI;
+                ang_deg >= *angle_min_deg && ang_deg <= *angle_max_deg
+            }
             ResolvedCond::AllOf(subs) => {
                 subs.iter().all(|s| self.condition_true(t_idx, s))
             }
@@ -1595,7 +1668,15 @@ impl Runtime {
     /// `SteerConfig` for the per-tick update order.
     fn apply_steer(&mut self, t_idx: usize, steer: &SteerConfig) -> Vec3 {
         // Snapshot (read-only borrows end before the writeback below).
-        let (sx, sy) = (self.stick[0], self.stick[1]);
+        let (mut sx, mut sy) = (self.stick[0], self.stick[1]);
+        // Decomp D5: ignore stick input for the first N ticks of the state
+        // (e.g. wall jump commits to its arc for WallJumpInvalidateInputFrame).
+        if steer.input_invalidate_frames > 0
+            && self.tracks[t_idx].frame < steer.input_invalidate_frames
+        {
+            sx = 0.0;
+            sy = 0.0;
+        }
         let r = (sx * sx + sy * sy).sqrt().min(1.0);
         let yaw = self.tracks[t_idx].facing_yaw;
         let turn_vel = self.tracks[t_idx].turn_vel;
@@ -1656,6 +1737,12 @@ impl Runtime {
         if steer.decay > 0.0 && steer.decay < 1.0 {
             vh = vh * (1.0 - steer.decay);
             hspeed = vh.length();
+        }
+        // Decomp D12a: snap to a stop at/below the brake end speed
+        // (crouch brake zeroes horizontal at SquatBrakeEndSpeed).
+        if steer.brake_end_speed > 0.0 && hspeed <= steer.brake_end_speed {
+            vh = Vec3::new(0.0, 0.0, 0.0);
+            hspeed = 0.0;
         }
         if steer.max_speed > 0.0 && hspeed > steer.max_speed {
             vh = vh * (steer.max_speed / hspeed);
