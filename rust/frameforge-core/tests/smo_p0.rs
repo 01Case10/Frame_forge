@@ -998,6 +998,32 @@ fn wall_slide_and_jump() {
     assert_eq!(r.state(), "land_sel");
 }
 
+/// Regression test for 2026-11-03 wall-jump bug: releasing jump early
+/// (jump1 -> jump1_cut) then hitting a wall must still wall-slide.
+/// Before the fix, cut states had no resp_wall, so the wall was ignored.
+#[test]
+fn wall_slide_from_cut_jump() {
+    let mut r = Rig::new();
+    r.ground = true;
+    r.tick(&hold(&["jump"])); // -> jump_select
+    assert_eq!(r.state(), "jump_select");
+    r.tick(&hold(&["jump"])); // -> jump1 (still holding)
+    assert_eq!(r.state(), "jump1");
+    r.ground = false; // airborne
+    r.tick(&release()); // release -> jump1_cut (SLICE-CUT)
+    assert_eq!(r.state(), "jump1_cut", "release during ascent -> jump1_cut");
+    // Hit a wall while in the cut state -> must wall_slide.
+    r.wall = true;
+    r.wall_normal = [-1.0, 0.0, 0.0];
+    r.tick(&release());
+    assert_eq!(
+        r.state(),
+        "wall_slide",
+        "cut jump + wall contact -> wall_slide (was: fell through)"
+    );
+    r.wall = false;
+}
+
 #[test]
 fn wall_slide_ends_without_wall() {
     let mut r = Rig::new();
