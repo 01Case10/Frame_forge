@@ -2076,3 +2076,45 @@ fn dive_from_regular_jump() {
     r.tick(&hold(&["cap"]));
     assert_eq!(r.state(), "dive", "cap in midair -> dive (AR-11)");
 }
+
+/// D2 (decomp verification 2026-11-03): dive must pop upward on entry.
+/// Decomp PlayerStateHeadSliding::appear() zeroes downward velocity then
+/// adds HeadSlidingJump * gravity. Wiki measured +182u height gain from the
+/// shipped game; with our 1.5 gravity that's 23.4 u/tick (EnterVy::Pop).
+#[test]
+fn dive_pops_upward_d2() {
+    let mut r = Rig::new();
+    to_fall(&mut r);
+    // Fall for a bit to build downward velocity.
+    for _ in 0..10 {
+        r.tick(&release());
+    }
+    let vy_before = r.rt.track_velocity("Nerves").y;
+    assert!(vy_before < -5.0, "setup: falling, vy={}", vy_before);
+    // Dive -> upward pop (fall cancelled, +23.4, minus 1.5 gravity in same tick).
+    r.tick(&hold(&["cap"]));
+    assert_eq!(r.state(), "dive", "cap -> dive");
+    let vy_after = r.rt.track_velocity("Nerves").y;
+    assert!(
+        (vy_after - 21.9).abs() < 1.0,
+        "dive pop: vy should be ~21.9 (23.4 pop - 1.5 gravity), got {}",
+        vy_after
+    );
+    // And it should gain significant height (wiki measured +182u from shipped
+    // game; exact apex depends on integration order, but the pop must be real).
+    let y0 = r.pos.y;
+    let mut apex = y0;
+    for _ in 0..60 {
+        r.tick(&release());
+        apex = apex.max(r.pos.y);
+        if r.state() != "dive" {
+            break;
+        }
+    }
+    let gain = apex - y0;
+    assert!(
+        gain > 100.0,
+        "dive should gain significant height from the pop, got {}",
+        gain
+    );
+}

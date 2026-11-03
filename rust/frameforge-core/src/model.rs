@@ -375,6 +375,9 @@ pub enum EnterVy {
     Set(f32),
     /// Add to the current vertical velocity.
     Add(f32),
+    /// Dive pop (decomp D2): zero downward velocity, then add the pop.
+    /// Matches PlayerStateHeadSliding::appear().
+    Pop(f32),
 }
 
 /// Per-tick steering for one state (G-5). All rates are per 60 Hz tick;

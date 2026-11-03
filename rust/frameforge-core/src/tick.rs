@@ -1000,6 +1000,13 @@ impl Runtime {
             EnterVy::Keep => {}
             EnterVy::Set(v) => t.velocity.y = v,
             EnterVy::Add(v) => t.velocity.y += v,
+            EnterVy::Pop(v) => {
+                // Decomp D2: zero downward velocity, then add the pop.
+                if t.velocity.y < 0.0 {
+                    t.velocity.y = 0.0;
+                }
+                t.velocity.y += v;
+            }
         }
         t.turn_vel = 0.0;
     }

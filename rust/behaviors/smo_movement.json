@@ -10279,7 +10279,10 @@
               ]
             },
             "enter_keep_horizontal": false,
-            "enter_horizontal_speed": 20.0
+            "enter_horizontal_speed": 20.0,
+            "enter_vy": {
+              "pop": 23.4
+            }
           }
         },
         {
