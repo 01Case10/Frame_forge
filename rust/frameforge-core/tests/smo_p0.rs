@@ -655,7 +655,9 @@ fn landing_neutral_idle() {
 fn crouch_slide_and_uncrouch() {
     let mut r = Rig::new();
     r.stick = [0.0, 1.0];
-    for _ in 0..20 {
+    // Short run: stay below the PLAYGROUND-FIX direct-roll threshold (hspeed>=7),
+    // so crouch takes the spec GR-03 path instead of the at-speed roll override.
+    for _ in 0..3 {
         r.tick(&release());
     }
     assert_eq!(r.state(), "run");
@@ -682,6 +684,11 @@ fn crouch_slide_decay_to_idle() {
     for _ in 0..20 {
         r.tick(&release());
     }
+    // Brake to a stop first: the PLAYGROUND-FIX direct-roll override only lives
+    // on `run`, so entering the slide from brake_stop takes the spec GR-03 path.
+    r.stick = [0.0, 0.0];
+    r.tick(&release());
+    assert_eq!(r.state(), "brake_stop");
     r.tick(&hold(&["crouch"]));
     assert_eq!(r.state(), "crouch_slide");
     // Slide decays 5%/tick; at <=3.5 -> crouch_idle (CR-01).
@@ -736,11 +743,9 @@ fn roll_chain() {
     for _ in 0..20 {
         r.tick(&release());
     }
+    // PLAYGROUND-FIX (Gap G17): crouch pressed at speed -> roll directly.
     r.tick(&hold(&["crouch"]));
-    assert_eq!(r.state(), "crouch_slide");
-    // Cap button (roll button in Phase C) -> roll (CR-08).
-    r.tick(&hold(&["crouch", "cap"]));
-    assert_eq!(r.state(), "roll", "CR-08: cap press -> roll");
+    assert_eq!(r.state(), "roll", "direct roll at speed");
     // Release crouch; after 33 ticks -> roll_standup (RL-03).
     let mut ticks = 0;
     while r.state() == "roll" && ticks < 60 {
@@ -757,6 +762,17 @@ fn roll_chain() {
     }
     r.tick(&release());
     assert_eq!(r.state(), "run", "RL-09: step 10 + stick -> run");
+}
+
+#[test]
+fn roll_from_crouch_cap() {
+    // CR-08: cap press from a crouch state -> roll (spec path, below the
+    // at-speed direct-roll override).
+    let mut r = Rig::new();
+    r.tick(&hold(&["crouch"]));
+    assert_eq!(r.state(), "crouch_slide", "GR-03 from idle");
+    r.tick(&hold(&["crouch", "cap"]));
+    assert_eq!(r.state(), "roll", "CR-08: cap press -> roll");
 }
 
 #[test]
@@ -982,6 +998,32 @@ fn wall_slide_and_jump() {
     assert_eq!(r.state(), "land_sel");
 }
 
+/// Regression test for 2026-11-03 wall-jump bug: releasing jump early
+/// (jump1 -> jump1_cut) then hitting a wall must still wall-slide.
+/// Before the fix, cut states had no resp_wall, so the wall was ignored.
+#[test]
+fn wall_slide_from_cut_jump() {
+    let mut r = Rig::new();
+    r.ground = true;
+    r.tick(&hold(&["jump"])); // -> jump_select
+    assert_eq!(r.state(), "jump_select");
+    r.tick(&hold(&["jump"])); // -> jump1 (still holding)
+    assert_eq!(r.state(), "jump1");
+    r.ground = false; // airborne
+    r.tick(&release()); // release -> jump1_cut (SLICE-CUT)
+    assert_eq!(r.state(), "jump1_cut", "release during ascent -> jump1_cut");
+    // Hit a wall while in the cut state -> must wall_slide.
+    r.wall = true;
+    r.wall_normal = [-1.0, 0.0, 0.0];
+    r.tick(&release());
+    assert_eq!(
+        r.state(),
+        "wall_slide",
+        "cut jump + wall contact -> wall_slide (was: fell through)"
+    );
+    r.wall = false;
+}
+
 #[test]
 fn wall_slide_ends_without_wall() {
     let mut r = Rig::new();
@@ -1164,8 +1206,39 @@ fn cap_bounce_height() {
 }
 
 #[test]
-fn jump_cap_return_height() {
+fn cap_bounce_dive_variant() {
     let mut r = Rig::new();
+    to_fall(&mut r);
+    r.ground_dist = 1000.0;
+    r.tick(&hold(&["crouch"]));
+    for _ in 0..12 {
+        r.tick(&release());
+    }
+    assert_eq!(r.state(), "gp_fall");
+    // Cap press -> dive (AR-11).
+    r.tick(&hold(&["cap"]));
+    assert_eq!(r.state(), "dive");
+    // Extended cap, button held, touching -> dive bounce 231u (CP-02).
+    r.rt
+        .set_param("cap.state", ParamValue::Str("hover".to_string()));
+    r.rt.set_param("cap.touch", ParamValue::Bool(true));
+    r.tick(&hold(&["cap"]));
+    assert_eq!(r.state(), "cap_bounce_dive", "CP-02: dive bounce");
+    r.ground = false;
+    let mut apex = r.pos.y;
+    for _ in 0..200 {
+        r.tick(&release());
+        apex = apex.max(r.pos.y);
+        if r.pos.y <= 0.5001 {
+            break;
+        }
+    }
+    let h = apex - 0.5;
+    assert!((h - 231.0).abs() < 8.0, "dive bounce 231, got {}", h);
+}
+
+#[test]
+fn jump_cap_return_height() {    let mut r = Rig::new();
     // Arm the catch window (as if the cap just returned).
     r.rt.set_param("cap.catch_window", ParamValue::Int(10));
     r.tick(&hold(&["jump"]));
@@ -1477,9 +1550,17 @@ fn spindrill_dive() {
     }
     v = r.rt.track_velocity("Nerves").y;
     assert!((-46.0..=-44.0).contains(&v), "terminal 45, got {}", v);
-    // Release crouch after 6 steps -> back to jump_spin (AR-06).
+    // Release crouch after 6 steps -> jump_spin_drill (AR-06: reverts to a
+    // spin jump with downward speed 35 u/fr; dedicated entry because the
+    // engine applies enter_vy unconditionally).
     r.tick(&release());
-    assert_eq!(r.state(), "jump_spin", "AR-06: release -> spin");
+    assert_eq!(r.state(), "jump_spin_drill", "AR-06: release -> spin");
+    let v = r.rt.track_velocity("Nerves").y;
+    assert!(
+        (v + 35.0).abs() < 1.0,
+        "drill cancel falls at 35 u/fr, got {}",
+        v
+    );
 }
 
 // ============================================================================
@@ -1603,16 +1684,27 @@ fn wall_push_pose() {
     let mut r = Rig::new();
     r.tick(&release());
     assert_eq!(r.state(), "idle");
-    // Wall contact -> wall_push (GR-10).
+    // Press into the wall -> wall_push (GR-10 via run/GR-11: idle's GR-06
+    // takes the first tick since the stick is moved).
     r.wall = true;
     r.wall_normal = [-1.0, 0.0, 0.0];
-    r.tick(&release());
-    assert_eq!(r.state(), "wall_push", "GR-10: wall -> push");
-    // Wall gone, stick moved -> run (GR-20).
-    r.wall = false;
     r.stick = [0.0, 1.0];
     r.tick(&release());
-    assert_eq!(r.state(), "run", "GR-20: push -> run");
+    r.tick(&release());
+    assert_eq!(r.state(), "wall_push", "GR-10/11: wall -> push");
+    // Release the stick -> idle (PLAYGROUND-FIX: Joey's wall_push redesign,
+    // 2026-11-03: only in wall_push while pressing into the wall).
+    r.stick = [0.0, 0.0];
+    r.tick(&release());
+    assert_eq!(r.state(), "idle", "redesign: release -> idle");
+    // Press into the wall again, then pull back -> run.
+    r.stick = [0.0, 1.0];
+    r.tick(&release());
+    r.tick(&release());
+    assert_eq!(r.state(), "wall_push");
+    r.stick = [0.0, -1.0];
+    r.tick(&release());
+    assert_eq!(r.state(), "run", "redesign: pull back -> run");
 }
 #[test]
 fn c2_jump_delayed_on_run_start() {
