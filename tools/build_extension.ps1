@@ -45,6 +45,19 @@ function Get-RepoRoot {
     return $root
 }
 
+function Update-SessionPath {
+    # This shell may predate the Rust install, so its inherited PATH can be
+    # stale. Rebuild it from the registry, where the installer registered
+    # .cargo\bin.
+    $machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+    $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+    $env:Path = "$machinePath;$userPath"
+    $cargoBin = Join-Path $HOME ".cargo\bin"
+    if ($env:Path -notlike "*$cargoBin*") {
+        $env:Path = "$cargoBin;$env:Path"
+    }
+}
+
 function Test-MsvcLinker {
     if (Get-Command cl.exe -ErrorAction SilentlyContinue) { return $true }
     $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
@@ -91,6 +104,8 @@ function Add-WindowsGdextensionEntries([string]$GdextPath) {
 $repoRoot = Get-RepoRoot
 $profile = if ($Release) { "release" } else { "debug" }
 Write-Step "Repo root: $repoRoot"
+
+Update-SessionPath
 
 if (-not (Get-Command cargo -ErrorAction SilentlyContinue)) {
     throw "cargo not found on PATH. Run tools\install_rust.ps1 first."
