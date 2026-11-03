@@ -116,3 +116,13 @@ as complete.
   Verified headless: release->idle (stable), press-in->wall_push,
   pull-back->run (immediate), escape to (-969, 238). All Rust tests
   pass.
+- 2026-11-03: Ground pound + roll fixes (Joey: neither worked).
+  Ground pound: two root causes — (1) `ground.dist` probe was never
+  set by the playground (defaults to 0, but the transition needs
+  >=40), fixed by adding a downward raycast in playground.gd before
+  tick(); (2) the gp_stall transition was missing from jump1_cut/
+  jump2_cut/jump3_cut (short hops), added. Verified: B in air ->
+  gp_stall -> gp_fall -> gp_land. Roll: the behavior only had roll
+  on X (cap) from crouch states; added run -> roll on B pressed +
+  hspeed>=7 (units/tick; max run is 14). Verified: B while running
+  -> roll. All 153 Rust tests pass.

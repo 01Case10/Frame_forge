@@ -268,6 +268,19 @@ func _physics_process(delta: float) -> void:
 	# Stick-up = away from camera: core maps set_stick(0,1) to
 	# (sin(yaw), cos(yaw)); camera forward is (-sin(phi), -cos(phi)).
 	_player.camera_yaw_deg = rad_to_deg(_phi) + 180.0
+	# Probe: distance to ground below (for ground-pound entry, etc.).
+	# The behavior expects ground.dist in native units (cm for SMO).
+	var space := get_world_3d().direct_space_state
+	var q := PhysicsRayQueryParameters3D.create(
+		_player.position + Vector3(0, 0.5 * _unit, 0),
+		_player.position + Vector3(0, -200.0 * _unit, 0))
+	q.exclude = [_player.get_rid()]
+	var hit := space.intersect_ray(q)
+	if hit.is_empty():
+		_player.set_param("ground.dist", 99999.0)
+	else:
+		var dist: float = _player.position.y - (hit["position"] as Vector3).y
+		_player.set_param("ground.dist", dist)
 	var d: Vector3 = _player.tick()
 	# move.json has no fall state: add gravity when airborne and the
 	# behavior isn't driving vertical itself (jump arcs unaffected).

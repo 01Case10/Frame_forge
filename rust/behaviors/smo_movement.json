@@ -409,6 +409,34 @@
      "transitions": [
       {
        "condition": {
+        "type": "on_complete",
+        "all_of": [
+         {
+          "type": "on_input",
+          "input_actions": [
+           "crouch"
+          ],
+          "input_mode": "any_pressed"
+         },
+         {
+          "type": "on_variable",
+          "param_name": "motion.hspeed",
+          "param_op": "ge",
+          "param_value": 7.0
+         }
+        ]
+       },
+       "target_state_name": "roll",
+       "target_behavior_name": "",
+       "momentum": "preserve",
+       "blend_frames": 0,
+       "fire_event": "",
+       "silent": false,
+       "on_fire_params": [],
+       "source_tag": "PLAYGROUND-FIX: B while running = roll (SMO)"
+      },
+      {
+       "condition": {
         "type": "on_variable",
         "param_name": "life.zero",
         "param_op": "eq",
@@ -2285,6 +2313,45 @@
      "transitions": [
       {
        "condition": {
+        "type": "on_complete",
+        "all_of": [
+         {
+          "type": "on_input",
+          "input_actions": [
+           "crouch"
+          ],
+          "input_mode": "any_pressed"
+         },
+         {
+          "type": "on_complete",
+          "any_of": [
+           {
+            "type": "on_variable",
+            "param_name": "ground.dist",
+            "param_op": "ge",
+            "param_value": 40.0
+           },
+           {
+            "type": "on_variable",
+            "param_name": "ground.dist",
+            "param_op": "lt",
+            "param_value": 0.0
+           }
+          ]
+         }
+        ]
+       },
+       "target_state_name": "gp_stall",
+       "target_behavior_name": "",
+       "momentum": "cut",
+       "blend_frames": 0,
+       "fire_event": "",
+       "silent": false,
+       "on_fire_params": [],
+       "source_tag": "PLAYGROUND-FIX: ground pound from cut states"
+      },
+      {
+       "condition": {
         "type": "on_variable",
         "param_name": "contact.ground",
         "param_op": "eq",
@@ -2740,6 +2807,45 @@
      "transitions": [
       {
        "condition": {
+        "type": "on_complete",
+        "all_of": [
+         {
+          "type": "on_input",
+          "input_actions": [
+           "crouch"
+          ],
+          "input_mode": "any_pressed"
+         },
+         {
+          "type": "on_complete",
+          "any_of": [
+           {
+            "type": "on_variable",
+            "param_name": "ground.dist",
+            "param_op": "ge",
+            "param_value": 40.0
+           },
+           {
+            "type": "on_variable",
+            "param_name": "ground.dist",
+            "param_op": "lt",
+            "param_value": 0.0
+           }
+          ]
+         }
+        ]
+       },
+       "target_state_name": "gp_stall",
+       "target_behavior_name": "",
+       "momentum": "cut",
+       "blend_frames": 0,
+       "fire_event": "",
+       "silent": false,
+       "on_fire_params": [],
+       "source_tag": "PLAYGROUND-FIX: ground pound from cut states"
+      },
+      {
+       "condition": {
         "type": "on_variable",
         "param_name": "contact.ground",
         "param_op": "eq",
@@ -3193,6 +3299,45 @@
      "restitution": 1.0,
      "events": [],
      "transitions": [
+      {
+       "condition": {
+        "type": "on_complete",
+        "all_of": [
+         {
+          "type": "on_input",
+          "input_actions": [
+           "crouch"
+          ],
+          "input_mode": "any_pressed"
+         },
+         {
+          "type": "on_complete",
+          "any_of": [
+           {
+            "type": "on_variable",
+            "param_name": "ground.dist",
+            "param_op": "ge",
+            "param_value": 40.0
+           },
+           {
+            "type": "on_variable",
+            "param_name": "ground.dist",
+            "param_op": "lt",
+            "param_value": 0.0
+           }
+          ]
+         }
+        ]
+       },
+       "target_state_name": "gp_stall",
+       "target_behavior_name": "",
+       "momentum": "cut",
+       "blend_frames": 0,
+       "fire_event": "",
+       "silent": false,
+       "on_fire_params": [],
+       "source_tag": "PLAYGROUND-FIX: ground pound from cut states"
+      },
       {
        "condition": {
         "type": "on_variable",
