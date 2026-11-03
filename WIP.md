@@ -106,3 +106,13 @@ as complete.
   facing exits wall_push to run even while in contact. Verified
   headless: Mario escapes the stair on pull-back (distance 1622cm).
   All 157 Rust core tests pass.
+- 2026-11-03: wall_push redesign per Joey's spec ("only in wall_push
+  while pressing into the wall; exit the second you stop"). Rewrote
+  wall_push transitions: stick released -> idle, stick not pressing in
+  (angle >=90 deg vs facing) -> run, jump preserved; staying is
+  implicit (stick held <90 deg). Also fixed both ENTRIES (run-> and
+  idle->wall_push) to require pressing in — the idle->wall_push on
+  contact alone was causing idle<->wall_push ping-pong on release.
+  Verified headless: release->idle (stable), press-in->wall_push,
+  pull-back->run (immediate), escape to (-969, 238). All Rust tests
+  pass.

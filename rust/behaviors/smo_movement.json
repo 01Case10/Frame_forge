@@ -359,6 +359,14 @@
           "param_name": "contact.ground",
           "param_op": "eq",
           "param_value": true
+         },
+         {
+          "type": "on_stick",
+          "stick_radius_min": 0.1,
+          "stick_radius_max": 1000000000.0,
+          "stick_angle_vs": "facing",
+          "stick_angle_min_deg": 0.0,
+          "stick_angle_max_deg": 90.0
          }
         ]
        },
@@ -676,6 +684,14 @@
           "param_name": "contact.ground",
           "param_op": "eq",
           "param_value": true
+         },
+         {
+          "type": "on_stick",
+          "stick_radius_min": 0.1,
+          "stick_radius_max": 1000000000.0,
+          "stick_angle_vs": "facing",
+          "stick_angle_min_deg": 0.0,
+          "stick_angle_max_deg": 90.0
          }
         ]
        },
@@ -12034,6 +12050,42 @@
      "transitions": [
       {
        "condition": {
+        "type": "on_input",
+        "input_actions": [
+         "jump"
+        ],
+        "input_mode": "any_pressed",
+        "buffer_ticks": 4
+       },
+       "target_state_name": "jump_select",
+       "target_behavior_name": "",
+       "momentum": "cut",
+       "blend_frames": 0,
+       "fire_event": "",
+       "silent": false,
+       "on_fire_params": [],
+       "source_tag": "PLAYGROUND-FIX: jump from wall_push (preserve user ability)"
+      },
+      {
+       "condition": {
+        "type": "on_stick",
+        "stick_radius_min": 0.0,
+        "stick_radius_max": 0.1,
+        "stick_angle_vs": "facing",
+        "stick_angle_min_deg": 0.0,
+        "stick_angle_max_deg": 180.0
+       },
+       "target_state_name": "idle",
+       "target_behavior_name": "",
+       "momentum": "cut",
+       "blend_frames": 0,
+       "fire_event": "",
+       "silent": false,
+       "on_fire_params": [],
+       "source_tag": "PLAYGROUND-FIX: exit wall_push on stick release (Joey spec)"
+      },
+      {
+       "condition": {
         "type": "on_stick",
         "stick_radius_min": 0.1,
         "stick_radius_max": 1000000000.0,
@@ -12048,65 +12100,7 @@
        "fire_event": "",
        "silent": false,
        "on_fire_params": [],
-       "source_tag": "PLAYGROUND-FIX: escape wall_push soft-lock on stick-away"
-      },
-      {
-       "condition": {
-        "type": "on_complete",
-        "all_of": [
-         {
-          "type": "on_variable",
-          "param_name": "contact.wall",
-          "param_op": "eq",
-          "param_value": false
-         },
-         {
-          "type": "on_stick",
-          "stick_radius_min": 0.1,
-          "stick_radius_max": 1000000000.0,
-          "stick_angle_vs": "facing",
-          "stick_angle_min_deg": 0.0,
-          "stick_angle_max_deg": 180.0
-         }
-        ]
-       },
-       "target_state_name": "run",
-       "target_behavior_name": "",
-       "momentum": "cut",
-       "blend_frames": 0,
-       "fire_event": "",
-       "silent": false,
-       "on_fire_params": [],
-       "source_tag": "GR-20 [pri 45] [D-rule]"
-      },
-      {
-       "condition": {
-        "type": "on_complete",
-        "all_of": [
-         {
-          "type": "on_variable",
-          "param_name": "contact.wall",
-          "param_op": "eq",
-          "param_value": false
-         },
-         {
-          "type": "on_stick",
-          "stick_radius_min": 0.0,
-          "stick_radius_max": 0.1,
-          "stick_angle_vs": "facing",
-          "stick_angle_min_deg": 0.0,
-          "stick_angle_max_deg": 180.0
-         }
-        ]
-       },
-       "target_state_name": "idle",
-       "target_behavior_name": "",
-       "momentum": "cut",
-       "blend_frames": 0,
-       "fire_event": "",
-       "silent": false,
-       "on_fire_params": [],
-       "source_tag": "GR-21 [pri 46] [D-rule]"
+       "source_tag": "PLAYGROUND-FIX: exit wall_push when not pressing in (Joey spec)"
       }
      ],
      "enter_params": []
