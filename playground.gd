@@ -182,8 +182,12 @@ func _on_state(_behavior: String, _machine: String, state: String) -> void:
 	if debug_log_states and state != _prev_state:
 		var gd: float = _player.get_param("ground.dist")
 		var hs: float = _player.get_param("motion.hspeed")
-		print("[STATE] %s -> %s | pos=%s hspeed=%.1f ground.dist=%.1f" % [
-			_prev_state, state, str(_player.position).replace("\n", ""), hs, gd])
+		var wall: bool = _player.get_param("contact.wall")
+		# Stick input (what the player is actually pressing)
+		var sx: float = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+		var sy: float = Input.get_action_strength("ui_up") - Input.get_action_strength("ui_down")
+		print("[STATE] %s -> %s | pos=%s hspeed=%.1f ground.dist=%.1f wall=%s stick=(%.2f, %.2f)" % [
+			_prev_state, state, str(_player.position).replace("\n", ""), hs, gd, str(wall), sx, sy])
 	_prev_state = state
 
 
