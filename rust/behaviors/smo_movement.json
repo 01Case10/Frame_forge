@@ -12065,7 +12065,8 @@
             "gravity": 0.5,
             "terminal_velocity": 4.0,
             "face_mode": "keep",
-            "enter_keep_horizontal": false
+            "enter_keep_horizontal": false,
+            "enter_wall_press_speed": 3.0
           }
         },
         {

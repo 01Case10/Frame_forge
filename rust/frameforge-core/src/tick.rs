@@ -914,6 +914,25 @@ impl Runtime {
             Some(s) => s.clone(),
             None => return,
         };
+        // Wall press (computed before the mutable track borrow): velocity
+        // into the wall to maintain Godot contact on entry.
+        let wall_press: Option<(f32, f32)> = if steer.enter_wall_press_speed > 0.0
+            && self.last_contact.wall
+        {
+            let n = self.last_contact.wall_normal;
+            let hn = Vec3::new(n.x, 0.0, n.z);
+            if hn.length() > 1e-6 {
+                let hn = hn.normalized();
+                Some((
+                    -hn.x * steer.enter_wall_press_speed,
+                    -hn.z * steer.enter_wall_press_speed,
+                ))
+            } else {
+                None
+            }
+        } else {
+            None
+        };
         let t = &mut self.tracks[t_idx];
         if steer.enter_keep_horizontal {
             t.velocity.x = t.entry_motion.x;
@@ -961,6 +980,12 @@ impl Runtime {
                 t.velocity.x = dx / l * steer.enter_min_horizontal_speed;
                 t.velocity.z = dz / l * steer.enter_min_horizontal_speed;
             }
+        }
+        // Wall press: maintain into-wall velocity so Godot keeps wall
+        // contact (zeroing horizontal kills is_on_wall() on entry).
+        if let Some((px, pz)) = wall_press {
+            t.velocity.x = px;
+            t.velocity.z = pz;
         }
         // Launch along the last impact normal (e.g. away from the wall).
         if steer.enter_impact_speed > 0.0 && t.has_impact {

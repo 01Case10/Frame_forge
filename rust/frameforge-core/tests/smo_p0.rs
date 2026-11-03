@@ -392,18 +392,20 @@ fn wall_slide_kills_horizontal_velocity() {
     r.wall_normal = [-1.0, 0.0, 0.0];
     r.tick(&release());
     assert_eq!(r.state(), "wall_slide", "setup: enter wall_slide");
-    // Tick in wall_slide and measure horizontal displacement.
-    // With enter_keep_horizontal=false, it should be ~0 (slide straight down).
-    let mut horiz: f32 = 0.0;
+    // Tick in wall_slide and measure SIDEWAYS (along-wall) displacement.
+    // The into-wall press (enter_wall_press_speed) is intentional and
+    // necessary to maintain Godot wall contact; what must NOT happen is
+    // preserving the old sideways velocity (the original bug).
+    let mut sideways: f32 = 0.0;
     for _ in 0..10 {
         let d = r.tick(&release());
-        horiz += (d.x * d.x + d.z * d.z).sqrt();
+        sideways += d.z.abs();
         assert_eq!(r.state(), "wall_slide");
     }
     assert!(
-        horiz < 1.0,
-        "wall_slide must slide down, not sideways: horizontal displacement = {} (was: preserved velocity)",
-        horiz
+        sideways < 1.0,
+        "wall_slide must slide down, not sideways: sideways displacement = {} (was: preserved velocity)",
+        sideways
     );
 }
 
@@ -2024,5 +2026,39 @@ fn crouch_slide_brake_snap_d12() {
         hs < 0.1,
         "brake must SNAP to 0 at <=3.5 (not just decay), got {}",
         hs
+    );
+}
+
+/// Regression 2026-11-03 (Joey: wall slide flickers then falls, can't wall
+/// jump). wall_slide's enter_keep_horizontal=false zeroes velocity, which
+/// kills Godot's is_on_wall() on the entry tick, so the slide instantly
+/// exits to fall. The fix: enter_wall_press_speed maintains into-wall
+/// velocity to keep contact alive.
+#[test]
+fn wall_slide_presses_into_wall() {
+    let mut r = Rig::new();
+    to_fall(&mut r);
+    // West wall (normal -x); give it incoming +x motion like a real jump.
+    r.wall = true;
+    r.wall_normal = [-1.0, 0.0, 0.0];
+    r.tick(&release());
+    assert_eq!(r.state(), "wall_slide", "wall contact -> wall_slide");
+    let v = r.rt.track_velocity("Nerves");
+    // Press into the wall: +x at 3.0 (normal is -x, press is -normal).
+    // Must NOT be zeroed (that kills Godot wall contact).
+    assert!(
+        (v.x - 3.0).abs() < 0.3,
+        "wall press +x 3.0, got vx={}",
+        v.x
+    );
+    assert!(v.z.abs() < 0.3, "no sideways drift, got vz={}", v.z);
+    // Must persist while the wall is held (not instantly exit to fall).
+    for _ in 0..10 {
+        r.tick(&release());
+    }
+    assert_eq!(
+        r.state(),
+        "wall_slide",
+        "wall_slide must persist while wall held"
     );
 }

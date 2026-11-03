@@ -474,6 +474,12 @@ pub struct SteerConfig {
     /// WallJumpInvalidateInputFrame ticks.)
     #[serde(default)]
     pub input_invalidate_frames: u32,
+    /// On entry, set horizontal velocity to press into the wall at this
+    /// speed (u/tick), using the last wall contact normal. 0 = disabled.
+    /// (Wall slide must maintain Godot wall contact; zeroing horizontal
+    /// kills is_on_wall() on the entry tick and the slide instantly exits.)
+    #[serde(default)]
+    pub enter_wall_press_speed: f32,
 }
 
 fn default_true() -> bool {
@@ -508,6 +514,7 @@ impl Default for SteerConfig {
             enter_kill_backward: false,
             brake_end_speed: 0.0,
             input_invalidate_frames: 0,
+            enter_wall_press_speed: 0.0,
         }
     }
 }
