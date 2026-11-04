@@ -1222,9 +1222,8 @@ impl Runtime {
         self.logic_ctx(t_idx, delta, |ctx| {
             logic.on_tick(ctx);
         });
-        // Clear the just_transitioned flag after on_tick has seen it.
-        // The flag is set in enter_state() when a transition fires.
-        self.tracks[t_idx].just_transitioned = false;
+        // Note: just_transitioned is cleared in compute_delta (not here)
+        // to ensure no re-entry even if logic is None.
         self.tracks[t_idx].logic = Some(logic);
     }
 
@@ -1274,6 +1273,7 @@ impl Runtime {
             // in on_tick to skip physics on the transition tick, matching the
             // decomp's ordering (e.g., SMG tryJump before mainMoveGround).
             t.just_transitioned = true;
+
             // Preserve last impact info across row transitions (only a new
             // collision overwrites it); wall jumps read the wall normal here.
             if has_impact {
@@ -1727,6 +1727,10 @@ impl Runtime {
         };
         // G-6: active state logic may rewrite the delta before blending.
         self.run_logic_tick(t_idx, &mut delta);
+        // Clear just_transitioned after the logic has seen it.
+        // Set in enter_state() before compute_delta; cleared here after.
+        // No re-entry: cleared even if run_logic_tick returned early.
+        self.tracks[t_idx].just_transitioned = false;
         let t = &self.tracks[t_idx];
         if t.blend_left > 0 && t.blend_total > 0 {
             let elapsed = t.blend_total - t.blend_left;
