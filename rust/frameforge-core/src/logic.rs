@@ -28,7 +28,7 @@ use std::collections::HashMap;
 
 /// Names of the built-in logics, pre-registered by `Runtime::new`.
 /// `validate.rs` and the editor mirror this list.
-pub const BUILTIN_LOGIC_NAMES: &[&str] = &["wallrun", "ledgegrab", "poleclimb"];
+pub const BUILTIN_LOGIC_NAMES: &[&str] = &["wallrun", "ledgegrab", "poleclimb", "smg_physics"];
 
 /// Capability window handed to [`StateLogic`] implementations. This is the
 /// only part of the engine a logic can touch.
@@ -47,6 +47,10 @@ pub struct StateCtx<'a> {
     pub contact: &'a ContactState,
     /// Current frame of the active state (0 = just entered).
     pub frame: u32,
+    /// True if a state transition fired this tick (before on_tick ran).
+    /// Logics can check this to skip physics on the transition tick,
+    /// matching the decomp's "transition before physics" ordering.
+    pub just_transitioned: bool,
     /// Track facing yaw in degrees. Logics may reface (e.g. face the wall).
     pub facing_yaw: &'a mut f32,
     /// This tick's delta. Starts as the authored/steered delta; the logic

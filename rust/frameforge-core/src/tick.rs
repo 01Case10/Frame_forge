@@ -189,6 +189,10 @@ struct Track {
     blend_total: u32,
     blend_left: u32,
     just_entered: bool,
+    /// True if a state transition fired this tick (set in enter_state, cleared after on_tick).
+    /// Logics can check this to skip physics on the transition tick, matching the
+    /// decomp's "transition before physics" ordering (e.g., SMG tryJump skips mainMoveGround).
+    just_transitioned: bool,
     contact_prev: [bool; 3],
     rearm: [u32; 3],
     last_input_dir: Vec3,
@@ -222,6 +226,7 @@ impl Track {
             blend_left: 0,
             blend_total: 0,
             just_entered: false,
+            just_transitioned: false,
             contact_prev: [false; 3],
             rearm: [99; 3],
             last_input_dir: ZERO,
@@ -770,6 +775,15 @@ impl Runtime {
             self.precompute(ti);
             // G-5: seed steering velocity for steered entry states.
             self.init_steer_velocity(ti);
+            // Apply the entry state's enter_params (was missing: enter_state
+            // does this for transitions, but rebuild() is the entry path for
+            // initial states).
+            let entry_params = self.resolved.machines[mi].states[entry]
+                .enter_params
+                .clone();
+            for a in &entry_params {
+                self.apply_param_assign(a);
+            }
             if let Some((n, rate)) = self.switch_impact {
                 let t = &mut self.tracks[ti];
                 t.has_impact = true;
@@ -933,7 +947,22 @@ impl Runtime {
         } else {
             None
         };
+        // SM64 entry pattern: face the stick before the entry-speed rules
+        // run, so the launch velocity goes toward the stick.
+        let face_stick: Option<f32> = if steer.enter_face_stick {
+            let (sx, sy) = (self.stick[0], self.stick[1]);
+            if sx * sx + sy * sy > 1e-6 {
+                Some(angle_of(self.stick_world_dir()))
+            } else {
+                None
+            }
+        } else {
+            None
+        };
         let t = &mut self.tracks[t_idx];
+        if let Some(yaw) = face_stick {
+            t.facing_yaw = yaw;
+        }
         if steer.enter_keep_horizontal {
             t.velocity.x = t.entry_motion.x;
             t.velocity.z = t.entry_motion.z;
@@ -986,6 +1015,11 @@ impl Runtime {
         if let Some((px, pz)) = wall_press {
             t.velocity.x = px;
             t.velocity.z = pz;
+        }
+        // SM64: scale horizontal velocity on entry (e.g. jump does v *= 0.8).
+        if steer.enter_horizontal_mul != 1.0 && steer.enter_horizontal_mul > 0.0 {
+            t.velocity.x *= steer.enter_horizontal_mul;
+            t.velocity.z *= steer.enter_horizontal_mul;
         }
         // Launch along the last impact normal (e.g. away from the wall).
         if steer.enter_impact_speed > 0.0 && t.has_impact {
@@ -1131,6 +1165,7 @@ impl Runtime {
             params,
             contact,
             frame,
+            just_transitioned: t.just_transitioned,
             facing_yaw,
             delta,
             fire: &mut fire,
@@ -1187,6 +1222,9 @@ impl Runtime {
         self.logic_ctx(t_idx, delta, |ctx| {
             logic.on_tick(ctx);
         });
+        // Clear the just_transitioned flag after on_tick has seen it.
+        // The flag is set in enter_state() when a transition fires.
+        self.tracks[t_idx].just_transitioned = false;
         self.tracks[t_idx].logic = Some(logic);
     }
 
@@ -1232,6 +1270,10 @@ impl Runtime {
             t.current = target.state;
             t.frame = 0;
             t.just_entered = self.delta_phase_done;
+            // Mark that a transition fired this tick. Logics can check this
+            // in on_tick to skip physics on the transition tick, matching the
+            // decomp's ordering (e.g., SMG tryJump before mainMoveGround).
+            t.just_transitioned = true;
             // Preserve last impact info across row transitions (only a new
             // collision overwrites it); wall jumps read the wall normal here.
             if has_impact {
@@ -1738,16 +1780,20 @@ impl Runtime {
         // Track at-cap so the facing turn can reorient velocity below
         // (steering at max speed must still change direction).
         let at_cap = cap > 0.0 && hspeed >= cap;
+        let mut decel_applied = false;
         if at_cap {
             if steer.decel_above_cap > 0.0 && hspeed > cap {
-                let ns = (hspeed - steer.decel_above_cap).max(cap);
+                let ns = hspeed - steer.decel_above_cap;
+                let ns = if steer.decel_below_cap { ns } else { ns.max(cap) };
                 vh = vh * (ns / hspeed);
                 hspeed = ns;
+                decel_applied = true;
             }
         } else {
             let mut vf = vh.dot(fwd);
             let mut vs = vh.dot(rightv);
             vf += steer.accel_forward * sf.max(0.0);
+            vf += steer.accel_constant;
             vs += steer.accel_side * ss;
             if sf < 0.0 && (!steer.backward_until_zero || vf > 0.0) {
                 vf += steer.accel_backward * sf; // sf < 0 reduces vf
@@ -1766,7 +1812,9 @@ impl Runtime {
         }
 
         // --- multiplicative decay, then hard clamp ---
-        if steer.decay > 0.0 && steer.decay < 1.0 {
+        // (SM64: mutually exclusive with decel_above_cap when
+        // no_decay_on_decel is set.)
+        if steer.decay > 0.0 && steer.decay < 1.0 && !(steer.no_decay_on_decel && decel_applied) {
             vh = vh * (1.0 - steer.decay);
             hspeed = vh.length();
         }
@@ -1792,7 +1840,14 @@ impl Runtime {
         }
 
         // --- vertical ---
-        if steer.gravity != 0.0 {
+        // (SM64: with gravity_post_move, the delta uses pre-gravity vy,
+        // matching the decomp's y += vy then vy update order. post_vy_mul
+        // REPLACES gravity (decomp if/else): the jump cut vy/=4 applies
+        // instead of gravity on the cut tick.)
+        let vy_pre = vy;
+        if steer.post_vy_mul != 1.0 && steer.post_vy_mul > 0.0 {
+            vy *= steer.post_vy_mul;
+        } else if steer.gravity != 0.0 {
             vy -= steer.gravity;
             if steer.terminal_velocity > 0.0 {
                 vy = vy.max(-steer.terminal_velocity);
@@ -1837,7 +1892,11 @@ impl Runtime {
         t.velocity = Vec3::new(vh.x, vy, vh.z);
         t.facing_yaw = new_facing;
         t.turn_vel = new_turn_vel;
-        t.velocity
+        if steer.gravity_post_move {
+            Vec3::new(vh.x, vy_pre, vh.z)
+        } else {
+            t.velocity
+        }
     }
 
     fn resolve_direction(&mut self, t_idx: usize, mi: usize, si: usize) -> Vec3 {
