@@ -72,6 +72,8 @@ pub struct SmgPhysics {
     jump_type: u32,  // 0=single, 1=double, 2=triple (for chaining)
     pound_active: bool,  // Ground pound (hip-drop) active
     wall_sliding: bool,  // Wall slide active
+    chain_pending: bool, // In-place chain armed: next tick outputs zero delta
+                        // (decomp tryJump frame applies no movement)
     // tunables (loaded on enter)
     walk_table_speed: f32,
     inertia_stop: f32,
@@ -107,6 +109,7 @@ impl SmgPhysics {
             jump_type: 0,
             pound_active: false,
             wall_sliding: false,
+            chain_pending: false,
             walk_table_speed: 13.0,
             inertia_stop: 0.94,
             inertia_max: 0.9,
@@ -332,6 +335,19 @@ impl StateLogic for SmgPhysics {
             self.walk_speed = w * inertia + target * (1.0 - inertia);
             write_f32(ctx.params, &self.walk_speed_param, self.walk_speed);
         } else {
+            // In-place chain (approved redesign 2026-11-04): the chained jump
+            // was armed on the landing tick. The decomp's tryJump frame applies
+            // NO movement, so output zero here; physics starts next tick.
+            if self.chain_pending {
+                self.chain_pending = false;
+                *ctx.delta = Vec3::new(0.0, 0.0, 0.0);
+                // landTimer still ticks (harness increments unconditionally).
+                let lt = param_f32(ctx.params, "smg_land_timer", 999.0);
+                if lt < 10000.0 {
+                    write_f32(ctx.params, "smg_land_timer", lt + 1.0);
+                }
+                return;
+            }
             // Jump mode: check for spin jump (B button in air)
             // Mario::trySpinJump: if vy < 12.0, set vy = 12.0
             if ctx.input.just_pressed.contains("ff_attack") && !self.pound_active && !self.wall_sliding {
@@ -506,7 +522,6 @@ impl StateLogic for SmgPhysics {
                 self.jump_y = 0.0;
                 self.jump_vec.y = 0.0;
                 self.jump_airborne = false;
-                write_f32(ctx.params, "smg_landed", 1.0);
                 // Reset spin flags on landing
                 write_f32(ctx.params, "smg_spin_done", 0.0);
                 write_f32(ctx.params, "smg_spin_active", 0.0);
@@ -515,6 +530,57 @@ impl StateLogic for SmgPhysics {
                 // Harness resets landTimer=0 on landing (doLanding). Do the same
                 // for one-to-one chaining (land_t <= 7 chains to next type).
                 write_f32(ctx.params, "smg_land_timer", 0.0);
+                // In-place triple chaining (approved redesign 2026-11-04): if
+                // jump is pressed on the landing tick, chain directly to the
+                // next jump type WITHOUT transitioning through Ground. The
+                // instance stays alive, so jump_type persists (no blackboard
+                // sync issue). The test runner shifts the oracle's N+1 press
+                // to tick N for FF. Output is the LANDING delta above; the new
+                // jumpVec takes effect from tick N+2 (tick N+1 outputs zero via
+                // chain_pending, matching the decomp's no-movement tryJump
+                // frame).
+                if ctx.input.just_pressed.contains("ff_jump") {
+                    let land_t = param_f32(ctx.params, "smg_land_timer", 999.0) as u32;
+                    let prev_type = self.jump_type;
+                    let chained = if land_t > JUMP_CONNECT_TIME {
+                        0
+                    } else {
+                        (prev_type + 1) % 3
+                    };
+                    // Triple requires walkSpeed >= 0.6 (mJumpConnectSpeed).
+                    // walk_speed here is the handoff value (set above).
+                    let chained = if chained == 2 && self.walk_speed < JUMP_CONNECT_SPEED {
+                        0
+                    } else {
+                        chained
+                    };
+                    // Respect the test override, like on_enter.
+                    let override_type =
+                        param_f32(ctx.params, "smg_jump_type_override", -1.0) as i32;
+                    let final_type = if override_type >= 0 {
+                        override_type as u32
+                    } else {
+                        chained
+                    };
+                    self.jump_type = final_type;
+                    write_f32(ctx.params, "smg_jump_type", final_type as f32);
+                    let v0 = JUMP_HEIGHTS[final_type as usize];
+                    self.jump_gravity = JUMP_GRAVITIES[final_type as usize];
+                    // jumpVec = facing * (walkSpeed * frontSpeed) + up * v0
+                    // (decomp tryJump). Facing override honored like on_enter.
+                    let yaw_deg = param_f32(ctx.params, "smg_facing_yaw", *ctx.facing_yaw);
+                    let yr = yaw_deg.to_radians();
+                    let facing = Vec3::new(yr.sin(), 0.0, yr.cos());
+                    self.jump_vec = facing * (self.walk_speed * self.jump_front_speed);
+                    self.jump_vec.y = v0;
+                    self.jump_y = 0.0;
+                    self.chain_pending = true;
+                    smg_dbg!("SMG_DBG: in-place chain frame={} prev={} new={} v0={:.1} ws={:.4}",
+                        ctx.frame, prev_type, final_type, v0, self.walk_speed);
+                    // Do NOT set smg_landed — stay in Jump.
+                } else {
+                    write_f32(ctx.params, "smg_landed", 1.0);
+                }
             } else {
                 let dx = self.jump_vec.x * UNIT_TO_M;
                 let dy = self.jump_vec.y * UNIT_TO_M;
