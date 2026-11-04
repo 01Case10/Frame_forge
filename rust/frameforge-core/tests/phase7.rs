@@ -34,6 +34,7 @@ fn press(actions: &[&str]) -> TickInput {
     TickInput {
         held,
         strengths: HashMap::new(),
+        just_pressed: std::collections::HashSet::new(),
     }
 }
 

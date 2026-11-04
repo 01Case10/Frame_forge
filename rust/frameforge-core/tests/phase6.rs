@@ -25,10 +25,9 @@ fn press(actions: &[&str]) -> TickInput {
     for a in actions {
         held.insert(a.to_string());
     }
-    TickInput {
-        held,
+    TickInput { held: held.clone(),
         strengths: HashMap::new(),
-    }
+        just_pressed: held }
 }
 
 fn release() -> TickInput {

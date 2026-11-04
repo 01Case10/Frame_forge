@@ -265,15 +265,41 @@ impl StateLogic for SmgPhysics {
     fn on_tick(&mut self, ctx: &mut StateCtx) {
 
         if self.mode_walk {
-            // If jump is pressed, a transition to Jump will fire in Phase B.
-            // The harness does NOT apply walk movement on the transition tick
-            // (decomp changeStatus: state changes, no mainMove called).
-            // Skip the delta to match one-to-one.
-            let jump_will_fire = ctx.input.just_pressed.contains("ff_jump");
             // decideWalkSpeed: stick magnitude -> target index.
+            // (Decomp: decideWalkSpeed runs before mainMoveGround.)
             let stick_mag = (ctx.stick[0] * ctx.stick[0] + ctx.stick[1] * ctx.stick[1]).sqrt().min(1.0);
             let idx = Self::decide_target_index(stick_mag);
             let target = WALK_TARGET_TABLE[idx];
+
+            // jump_will_fire: when ff_jump is pressed this tick, the
+            // Ground->Jump transition fires and the decomp runs NEITHER
+            // mainMoveGround NOR updateWalkSpeed (tryJump preempts both).
+            // landTimer still ticks (the harness increments it unconditionally
+            // at the end of every tick()).
+            let jump_will_fire = ctx.input.just_pressed.contains("ff_jump");
+
+            // mainMove core FIRST (decomp order: mainMoveGround runs BEFORE
+            // updateWalkSpeed, using the current walkSpeed; walkSpeed starts
+            // at 0 so tick 0 naturally moves 0).
+            if jump_will_fire {
+                *ctx.delta = Vec3::new(0.0, 0.0, 0.0);
+            } else {
+                let yaw_deg = param_f32(ctx.params, "smg_facing_yaw", *ctx.facing_yaw);
+                let yr = yaw_deg.to_radians();
+                let facing = Vec3::new(yr.sin(), 0.0, yr.cos());
+                *ctx.delta = facing * (self.walk_table_speed * self.walk_speed * UNIT_TO_M);
+            }
+
+            // Harness increments landTimer every tick in tick(), unconditionally.
+            // Do the same for one-to-one matching (capped at 10000).
+            let lt = param_f32(ctx.params, "smg_land_timer", 999.0);
+            if lt < 10000.0 {
+                write_f32(ctx.params, "smg_land_timer", lt + 1.0);
+            }
+
+            if jump_will_fire {
+                return;
+            }
 
             // decideInertia (MarioMove.cpp), verbatim.
             // Ice: blend uses TARGET speed (not current), per decideInertiaOnIce.
@@ -302,27 +328,9 @@ impl StateLogic for SmgPhysics {
             } else {
                 (1.0 - w) * self.inertia_stop + w * self.inertia_max
             };
-            // Harness increments landTimer every tick in tick(), unconditionally.
-            // Do the same for one-to-one matching (capped at 10000).
-            let lt = param_f32(ctx.params, "smg_land_timer", 999.0);
-            if lt < 10000.0 {
-                write_f32(ctx.params, "smg_land_timer", lt + 1.0);
-            }
-
-            // updateWalkSpeed core.
+            // updateWalkSpeed core (decomp: after mainMoveGround).
             self.walk_speed = w * inertia + target * (1.0 - inertia);
             write_f32(ctx.params, &self.walk_speed_param, self.walk_speed);
-
-            // mainMove core: delta = facing * (table_speed * walk_speed).
-            // Skip movement on transition tick (jump will fire in Phase B).
-            if jump_will_fire {
-                *ctx.delta = Vec3::new(0.0, 0.0, 0.0);
-            } else {
-                let yaw_deg = param_f32(ctx.params, "smg_facing_yaw", *ctx.facing_yaw);
-                let yr = yaw_deg.to_radians();
-                let facing = Vec3::new(yr.sin(), 0.0, yr.cos());
-                *ctx.delta = facing * (self.walk_table_speed * self.walk_speed * UNIT_TO_M);
-            }
         } else {
             // Jump mode: check for spin jump (B button in air)
             // Mario::trySpinJump: if vy < 12.0, set vy = 12.0
@@ -416,6 +424,15 @@ impl StateLogic for SmgPhysics {
                     let y_before = self.jump_y - self.jump_vec.y;
                     let clamped_dy = -y_before;
                     *ctx.delta = Vec3::new(0.0, clamped_dy * UNIT_TO_M, 0.0);
+                    // doLanding handoff (also runs on pound landings in the
+                    // decomp): walkSpeed = hSpeed / mWalkSpeed (0 here — the
+                    // pound kills horizontal velocity at activation).
+                    let hspeed = (self.jump_vec.x * self.jump_vec.x
+                        + self.jump_vec.z * self.jump_vec.z)
+                        .sqrt()
+                        / self.walk_table_speed;
+                    self.walk_speed = hspeed;
+                    write_f32(ctx.params, &self.walk_speed_param, hspeed);
                     self.jump_y = 0.0;
                     self.jump_vec.y = 0.0;
                     self.pound_active = false;
@@ -456,7 +473,10 @@ impl StateLogic for SmgPhysics {
             // This matches the decomp where tryJump() changes state before
             // mainMoveGround() runs (no physics on transition tick).
             // Using the explicit flag is more reliable than frame==0.
-            if ctx.just_transitioned {
+            // TEST CONFIG (user 2026-11-04): just_transitioned skip DISABLED
+            // via `if false` to isolate whether the 5.06cm comes from the
+            // transition tick or the jump trajectory itself.
+            if false && ctx.just_transitioned {
                 smg_dbg!("SMG_DBG: just_transitioned, skipping physics");
                 *ctx.delta = Vec3::new(0.0, 0.0, 0.0);
             } else {
@@ -468,6 +488,16 @@ impl StateLogic for SmgPhysics {
                 // Output delta that brings y to exactly 0.
                 let y_before = self.jump_y - self.jump_vec.y;
                 let clamped_dy = -y_before; // brings y to 0
+                // doLanding handoff (MarioJump.cpp, verbatim): the landing
+                // preserves horizontal velocity into walkSpeed, so the first
+                // walk tick after landing moves at the jump's horizontal
+                // speed — NOT the pre-jump walkSpeed.
+                let hspeed = (self.jump_vec.x * self.jump_vec.x
+                    + self.jump_vec.z * self.jump_vec.z)
+                    .sqrt()
+                    / self.walk_table_speed;
+                self.walk_speed = hspeed;
+                write_f32(ctx.params, &self.walk_speed_param, hspeed);
                 *ctx.delta = Vec3::new(
                     self.jump_vec.x * UNIT_TO_M,
                     clamped_dy * UNIT_TO_M,
