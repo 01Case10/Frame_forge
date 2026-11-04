@@ -656,10 +656,8 @@ pub struct Transition {
     /// Kept through resolve; used by fidelity lints.
     #[serde(default)]
     pub source_tag: String,
-    /// If true, this transition fires in Phase B (tick_contact) instead of
-    /// Phase A (evaluate_rows). Use for decomp-accurate ordering where the
-    /// new state's physics should not run until the next tick (e.g., SMG
-    /// changeStatus: state changes, no movement on transition tick).
+    /// If true, fire in Phase B (tick_contact) instead of Phase A.
+    /// The new state's on_tick does not run until the next tick.
     #[serde(default)]
     pub phase_b: bool,
 }
