@@ -448,6 +448,10 @@ impl ICharacterBody3D for BehaviorPlayer {
 /// plus per-state input_* actions (for strengths).
 fn collect_actions(bh: &FrameBehavior) -> Vec<String> {
     let mut seen = HashSet::new();
+    // Behavior-declared extra actions (for logics that read inputs directly).
+    for a in &bh.tracked_actions {
+        seen.insert(a.clone());
+    }
     for row in &bh.behavior_transitions {
         if row.condition.cond_type == ConditionType::OnInput {
             for a in &row.condition.input_actions {

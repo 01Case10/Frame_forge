@@ -2,18 +2,21 @@ extends Node3D
 ## Free-play playground: a small platforming level (floor, walls, stairs,
 ## floating platforms, pillars) with a BehaviorPlayer you drive by gamepad.
 ## Moveset comes from the menu via the SceneTree meta "ff_moveset":
-## "sm64" (Mario 64, res://rust/behaviors/move.json) or "smo" (Odyssey,
-## res://rust/behaviors/smo_movement.json).
+## "sm64" (Mario 64, res://rust/behaviors/move.json),
+## "smo" (Odyssey, res://rust/behaviors/smo_movement.json) or
+## "smg" (Galaxy, res://rust/behaviors/smg_movement.json).
 ##
 ## Controls: left stick move (camera-relative), right stick orbits camera,
 ## A/jump, B/crouch, X/cap (Odyssey). Keyboard: WASD/arrows + Space, C, E.
 ## Esc or Start returns to the menu.
 ##
-## Unit note: the two movesets are authored in different native units
-## (sm64 = meters, smo = SMO decomp centimeters, verified empirically:
-## smo run cap 14 u/tick = 8.4 m/s, jump peak ~328 u = 3.3 m). The level,
-## player capsule and camera are all built in the moveset's native units
-## (UNIT), so each moveset plays at its authored scale.
+## Unit note: the movesets are authored in different native units
+## (sm64 = meters, smo = SMO decomp centimeters, smg = meters — the G-7
+## logic converts its internal SMG units via UNIT_TO_M; verified empirically:
+## smo run cap 14 u/tick = 8.4 m/s, jump peak ~328 u = 3.3 m; smg walk cap
+## 13 u/tick = 7.8 m/s, jump peak ~280 u = 2.8 m). The level, player capsule
+## and camera are all built in the moveset's native units (UNIT), so each
+## moveset plays at its authored scale.
 
 const MOVESETS := {
 	"sm64": {
@@ -29,6 +32,13 @@ const MOVESETS := {
 		"color": Color(0.3, 0.5, 0.95),
 		"unit": 100.0,
 		"hint": "A: jump   B: crouch   X/Y: cap throw   Y in air: dive",
+	},
+	"smg": {
+		"label": "Galaxy",
+		"behavior": "res://rust/behaviors/smg_movement.json",
+		"color": Color(0.55, 0.35, 0.95),
+		"unit": 1.0,
+		"hint": "A: jump (mash on landing = double/triple)   X: spin   B: ground pound (air)",
 	},
 }
 
@@ -70,13 +80,16 @@ var _ms_label := "Mario 64"
 var _phi := 0.0
 var _pad := -1
 var _animator: PlaygroundAnimator
-# Supplemental gravity for movesets without authored falling (sm64):
-# applied only while airborne and the behavior commanded ~no vertical.
+# Supplemental gravity for movesets without authored falling (sm64), and
+# for Galaxy's Walk (its Jump runs its own ballistics; Hang must NOT get
+# gravity or Mario slides down the wall while hanging).
 var _grav_v := 0.0
+## Current behavior state (via state_entered); used to gate the gravity hack.
+var _cur_state := ""
 
 
 func _ready() -> void:
-	for a in ["jump", "crouch", "cap", "cap_throw_up", "cap_throw_down", "ff_jump", "ff_left", "ff_right", "ff_fwd", "ff_back"]:
+	for a in ["jump", "crouch", "cap", "cap_throw_up", "cap_throw_down", "ff_jump", "ff_attack", "ff_pound", "ff_left", "ff_right", "ff_fwd", "ff_back"]:
 		if not InputMap.has_action(a):
 			InputMap.add_action(a)
 	var tree := get_tree()
@@ -178,6 +191,7 @@ var _f3_held := false
 
 func _on_state(_behavior: String, _machine: String, state: String) -> void:
 	_state_label.text = "%s - %s" % [_ms_label, state]
+	_cur_state = state
 	_animator.set_state(state)
 	if debug_log_states and state != _prev_state:
 		var gd: float = _player.get_param("ground.dist")
@@ -268,6 +282,49 @@ func _apply_actions(mx: float, my: float, jump: bool, crouch: bool, capb: bool) 
 	_set_btn(&"ff_jump", jump)
 	_set_btn(&"crouch", crouch)
 	_set_btn(&"cap", capb)
+	if _moveset == "smg":
+		# Galaxy: X = spin (ff_attack, in air), B = ground pound (ff_pound,
+		# in air). No other moveset reads these actions.
+		_set_btn(&"ff_attack", capb)
+		_set_btn(&"ff_pound", crouch)
+
+
+## Ledge-grab probe for the Galaxy moveset (embedder contract in
+## smg_movement.json): true while Mario is airborne, falling, against a wall,
+## with a ledge top at hand height (~1.4u above the feet) and clearance above
+## (an edge, not a flat wall). The grab-height window keeps Mario at the
+## ledge so the Hang state needs no repositioning; below it he wall-slides
+## (internal to Jump) instead.
+func _probe_ledge() -> bool:
+	if _player.is_on_floor():
+		return false
+	if _player.velocity.y > -1.0 * _unit:
+		return false
+	if not _player.is_on_wall():
+		return false
+	var n := _player.get_wall_normal()
+	var fwd := Vector3(-n.x, 0.0, -n.z).normalized()
+	if fwd.length() < 0.5:
+		return false
+	var p := _player.position
+	var space := get_world_3d().direct_space_state
+	# Head clearance: no wall above head height -> it is an edge.
+	var q1 := PhysicsRayQueryParameters3D.create(
+		p + Vector3(0, 1.8 * _unit, 0),
+		p + Vector3(0, 1.8 * _unit, 0) + fwd * 0.9 * _unit)
+	q1.exclude = [_player.get_rid()]
+	if not space.intersect_ray(q1).is_empty():
+		return false
+	# Ledge top within hand reach.
+	var top_from := p + Vector3(0, 2.1 * _unit, 0) + fwd * 0.55 * _unit
+	var q2 := PhysicsRayQueryParameters3D.create(
+		top_from, top_from + Vector3(0, -2.5 * _unit, 0))
+	q2.exclude = [_player.get_rid()]
+	var hit := space.intersect_ray(q2)
+	if hit.is_empty():
+		return false
+	var top_y: float = (hit["position"] as Vector3).y
+	return absf(top_y - (p.y + 1.4 * _unit)) <= 0.35 * _unit
 
 
 func _physics_process(delta: float) -> void:
@@ -307,10 +364,16 @@ func _physics_process(delta: float) -> void:
 	else:
 		var dist: float = _player.position.y - (hit["position"] as Vector3).y
 		_player.set_param("ground.dist", dist)
+	# Galaxy ledge-grab probe (see _probe_ledge).
+	if _moveset == "smg":
+		_player.set_param("smg.ledge_available", _probe_ledge())
 	var d: Vector3 = _player.tick()
-	# move.json has no fall state: add gravity when airborne and the
-	# behavior isn't driving vertical itself (jump arcs unaffected).
-	if _moveset == "sm64" and not _player.is_on_floor() and absf(d.y) < 0.0001:
+	# move.json has no fall state, and Galaxy's Walk has no authored falling:
+	# add gravity when airborne and the behavior isn't driving vertical
+	# itself (jump arcs unaffected). Never in Hang (Mario would slide down
+	# the wall while hanging).
+	var _need_grav := (_moveset == "sm64" or _moveset == "smg") and _cur_state != "Hang"
+	if _need_grav and not _player.is_on_floor() and absf(d.y) < 0.0001:
 		_grav_v = maxf(_grav_v - 28.0 * _unit * delta, -50.0 * _unit)
 		_player.velocity = Vector3(0, _grav_v, 0)
 		_player.move_and_slide()

@@ -54,6 +54,8 @@ const STATE_POSE := {
 	"WalkAccel": "run", "WalkCruise": "run", "WalkBrake": "brake",
 	"JumpRise": "jump", "JumpRiseCut": "tuck",
 	"JumpFallCut": "fall", "JumpFall": "fall",
+	# SMG Galaxy (smg_movement.json)
+	"Walk": "run", "Jump": "jump", "Hang": "ledge_hang",
 }
 
 # States that throw / recall the cap prop (exact names, not prefixes).

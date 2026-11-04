@@ -84,6 +84,12 @@ pub struct SmgHang {
     phase: u32, // 0 = hang, 1 = climb-out commit, 2 = climb-out finishing
     climb_armed: bool,
     climb_ticks: u32, // phase-2 counter
+    /// Upward climb rate during phase 2 (SMG units/tick). Default 0.0 =
+    /// decomp-verbatim: in the game the lift comes from the climb animation
+    /// ("崖つかまり終了"), which a headless/procedural embedder has no
+    /// access to. Playable 3D embedders (e.g. the FrameForge playground)
+    /// set e.g. 14.0 so Mario actually mounts the ledge.
+    climb_lift: f32,
 }
 
 impl SmgHang {
@@ -93,6 +99,7 @@ impl SmgHang {
             phase: 0,
             climb_armed: false,
             climb_ticks: 0,
+            climb_lift: 0.0,
         }
     }
 
@@ -119,6 +126,7 @@ impl StateLogic for SmgHang {
         self.phase = 0;
         self.climb_armed = false;
         self.climb_ticks = 0;
+        self.climb_lift = param_f32(ctx.params, "smg_hang_climb_lift", 0.0);
         // Clear any stale completion flag so a previous hang's done signal
         // cannot instantly re-trigger the exit transition.
         write_f32(ctx.params, "smg_hang_done", 0.0);
@@ -182,6 +190,10 @@ impl StateLogic for SmgHang {
                 // scripted duration here (documented above).
                 self.climb_ticks += 1;
                 *ctx.delta = self.facing(ctx) * (SMG_HANG_CLIMB_SPEED * UNIT_TO_M);
+                // Procedural-embedder lift (see `climb_lift` field docs):
+                // the decomp's animation carries Mario up; without it,
+                // add the authored upward rate so the climb mounts the ledge.
+                ctx.delta.y += self.climb_lift * UNIT_TO_M;
                 smg_dbg!(
                     "SMG_DBG hang frame={}: phase 2 tick {}/{} delta=({:.4},{:.4},{:.4})",
                     ctx.frame,

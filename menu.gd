@@ -11,6 +11,7 @@ const PLAYGROUND_SCENE := "res://playground.tscn"
 const MOVESETS := [
 	{ "label": "Playground: Mario 64", "key": "sm64" },
 	{ "label": "Playground: Odyssey", "key": "smo" },
+	{ "label": "Playground: Galaxy", "key": "smg" },
 ]
 
 ## label: button text; scenario: exit_gate/scenarios/<id>.json;

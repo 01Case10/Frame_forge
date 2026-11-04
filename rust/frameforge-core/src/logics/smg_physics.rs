@@ -33,6 +33,7 @@
 use crate::logic::{param_bool, param_f32, LogicFactory, StateCtx, StateLogic};
 use crate::vec3::{Vec3, ZERO};
 use std::collections::HashMap;
+use std::f32::consts::PI;
 
 /// Debug logging for SMG physics. Enabled via FF_DEBUG=1 env var.
 fn dbg_enabled() -> bool {
@@ -77,6 +78,15 @@ pub struct SmgPhysics {
                             // wall since the press tick had zero delta).
     chain_pending: bool, // In-place chain armed: next tick outputs zero delta
                         // (decomp tryJump frame applies no movement)
+    // Playable-moveset opt-ins (default false = harness-verbatim; the
+    // differential oracles come from the harness, whose walkTick never turns
+    // and whose jumpTick never calls doAirWalk):
+    // - `smg_turn_to_stick`: turn facing toward the stick's world direction
+    //   (MarioMove.cpp turn block).
+    // - `smg_air_control`: drift jumpVec toward the stick in air
+    //   (MarioJump.cpp doAirWalk, harness simplified form).
+    turn_to_stick: bool,
+    air_control: bool,
     // tunables (loaded on enter)
     walk_table_speed: f32,
     inertia_stop: f32,
@@ -114,6 +124,8 @@ impl SmgPhysics {
             wall_sliding: false,
             just_wall_jumped: false,
             chain_pending: false,
+            turn_to_stick: false,
+            air_control: false,
             walk_table_speed: 13.0,
             inertia_stop: 0.94,
             inertia_max: 0.9,
@@ -165,6 +177,8 @@ impl SmgPhysics {
         self.jump_hold_scale = param_f32(params, "smg_jump_hold_scale", 0.5);
         self.terminal_velocity = param_f32(params, "smg_terminal_velocity", 35.0);
         self.jump_front_speed = param_f32(params, "smg_jump_front_speed", 12.5);
+        self.turn_to_stick = param_bool(params, "smg_turn_to_stick", false);
+        self.air_control = param_bool(params, "smg_air_control", false);
         match params.get("smg_walk_speed_param") {
             Some(ParamValue::Str(s)) => self.walk_speed_param = s.clone(),
             _ => self.walk_speed_param = "walk.speed".to_string(),
@@ -277,6 +291,39 @@ impl StateLogic for SmgPhysics {
             let stick_mag = (ctx.stick[0] * ctx.stick[0] + ctx.stick[1] * ctx.stick[1]).sqrt().min(1.0);
             let idx = Self::decide_target_index(stick_mag);
             let target = WALK_TARGET_TABLE[idx];
+
+            // Turn toward the stick (MarioMove.cpp turn block, transcribed).
+            // Gated by `smg_turn_to_stick` (default false): the differential
+            // fixtures encode the harness's turn-less walkTick (e.g.
+            // wall_jump presets facing=90 while holding stick +Z), so the
+            // turn is opt-in for playable movesets. The decomp rotates
+            // mFrontVec toward the stick's world direction by at most
+            // turnAngleSpeed rad/tick
+            // (vecBlendSphere(mFrontVec, target, clamp01(turnAngleSpeed/diff))).
+            // Rate selection: mTurnAngleSpeed (0.9) below mFastTurnSpeed (0.1),
+            // mTurnAngleSpeed2 (0.15) above it, mTurnAngleSpeedSlowWalk (0.04)
+            // when the stick target index < 5.
+            // SIMPLIFICATIONS: no weak-turn ramp (_3D4), no spin-turn
+            // (_10._C) path, no tornado/bee variants.
+            if self.turn_to_stick && stick_mag > 1e-3 {
+                let cur_deg = param_f32(ctx.params, "smg_facing_yaw", *ctx.facing_yaw);
+                let tgt_rad = ctx.stick_world.x.atan2(ctx.stick_world.z);
+                let rate = if self.walk_speed > 0.1 {
+                    if idx < 5 { 0.04 } else { 0.15 }
+                } else {
+                    0.9
+                };
+                let mut diff = tgt_rad - cur_deg.to_radians();
+                while diff > PI { diff -= 2.0 * PI; }
+                while diff < -PI { diff += 2.0 * PI; }
+                let new_deg = (cur_deg.to_radians() + diff.clamp(-rate, rate)).to_degrees();
+                *ctx.facing_yaw = new_deg;
+                // Keep a behavior-set facing override in sync, else it would
+                // shadow the turn every tick.
+                if ctx.params.contains_key("smg_facing_yaw") {
+                    write_f32(ctx.params, "smg_facing_yaw", new_deg);
+                }
+            }
 
             // jump_will_fire: when ff_jump is pressed this tick, the
             // Ground->Jump transition fires and the decomp runs NEITHER
@@ -493,6 +540,27 @@ impl StateLogic for SmgPhysics {
                 // Skip normal jump physics
             } else {
             // Normal jump physics (procJump core).
+            // Air control (MarioJump.cpp doAirWalk; the harness's simplified
+            // form). Gated by `smg_air_control` (default false): the
+            // differential oracles come from the harness, whose jumpTick
+            // never calls doAirWalk, so air control is opt-in for playable
+            // movesets. Drift the horizontal jumpVec toward the stick's world
+            // direction: want = cur + mAirWalkBonus*0.1 (3.0*0.1), capped at
+            // mMaxJumpSpeed (32.0); h' = moveDir*want*0.1 + h*0.9.
+            // SIMPLIFICATION: no front-reduction curve when pulling back
+            // (mJumpFrontReduction), no animation/state guards.
+            if self.air_control && !ctx.contact.floor {
+                let (swx, swz) = (ctx.stick_world.x, ctx.stick_world.z);
+                let smag = (swx * swx + swz * swz).sqrt();
+                if smag > 1e-3 {
+                    let (mx, mz) = (swx / smag, swz / smag);
+                    let (hx, hz) = (self.jump_vec.x, self.jump_vec.z);
+                    let cur = (hx * hx + hz * hz).sqrt();
+                    let want = (cur + 3.0 * 0.1).min(32.0);
+                    self.jump_vec.x = mx * want * 0.1 + hx * 0.9;
+                    self.jump_vec.z = mz * want * 0.1 + hz * 0.9;
+                }
+            }
             // Variable height: holding jump while rising halves gravity.
             let rising = self.jump_vec.y > 0.0;
             let jump_held = param_bool(ctx.params, "smg_jump_held", false)

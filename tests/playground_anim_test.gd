@@ -17,6 +17,10 @@ var _min_y := 999999.0
 var _states_seen := {}
 var _unit := 1.0
 var _integration := false
+## Generation guard: queue_free() is deferred, so the previous playground's
+## player can still emit state_entered for a frame after the switch. The
+## lambda only records for the current generation.
+var _gen := 0
 
 
 func _check(cond: bool, name: String) -> void:
@@ -39,7 +43,8 @@ func _ready() -> void:
 
 func _all_states() -> Array:
 	var out := []
-	for path in ["res://rust/behaviors/smo_movement.json", "res://rust/behaviors/move.json"]:
+	for path in ["res://rust/behaviors/smo_movement.json", "res://rust/behaviors/move.json",
+			"res://rust/behaviors/smg_movement.json"]:
 		var bh = JSON.parse_string(FileAccess.get_file_as_string(path))
 		for sm in bh["sub_machines"]:
 			for s in sm["states"]:
@@ -131,7 +136,9 @@ func _start_integration(moveset: String) -> void:
 	_min_y = 999999.0
 	_states_seen = {}
 	_unit = _pg._unit
-	_pg._player.state_entered.connect(func(_b, _m, s): _states_seen[s] = true)
+	_gen += 1
+	var g := _gen
+	_pg._player.state_entered.connect(func(_b, _m, s): if g == _gen: _states_seen[s] = true)
 
 
 func _drive_input() -> Dictionary:
@@ -171,15 +178,21 @@ func _physics_process(_delta: float) -> void:
 	_min_y = minf(_min_y, _pg._animator.body_min_y())
 	if _frame >= 360:
 		var n := _states_seen.size()
+		# SMG's machine is intentionally tiny (Walk/Jump/Hang; chaining,
+		# wall slide, spin and pound are internal to Jump).
+		var min_states := {"smo": 6, "sm64": 6, "smg": 2}
 		_check(_min_y >= -0.05 * _unit,
 			"integration[%s]: no ground clip over %d states (min y %.3f)" % [_pg._moveset, n, _min_y])
-		_check(n >= 6, "integration[%s]: exercised >=6 states (saw %d: %s)" % [_pg._moveset, n, str(_states_seen.keys()).left(120)])
+		_check(n >= int(min_states.get(_pg._moveset, 6)),
+			"integration[%s]: exercised >=%d states (saw %d: %s)" % [_pg._moveset, int(min_states.get(_pg._moveset, 6)), n, str(_states_seen.keys()).left(120)])
 		_check(_pg._animator.unmapped_states.is_empty(),
 			"integration[%s]: no unmapped states" % _pg._moveset)
 		var done_moveset: String = _pg._moveset
 		_pg.queue_free()
 		if done_moveset == "smo":
 			_start_integration("sm64")
+		elif done_moveset == "sm64":
+			_start_integration("smg")
 		else:
 			_finish()
 

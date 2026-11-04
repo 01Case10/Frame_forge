@@ -828,6 +828,12 @@ pub struct FrameBehavior {
     /// G-4: optional stick spin-gesture detector for the whole behavior.
     #[serde(default)]
     pub spin_detect: Option<SpinDetectConfig>,
+    /// Extra input actions the embedder must sample into held/just_pressed,
+    /// beyond those referenced by OnInput transitions. Needed when a
+    /// state logic (G-6/G-7) reads actions directly instead of via
+    /// authored transitions (e.g. SMG's ff_attack/ff_pound).
+    #[serde(default)]
+    pub tracked_actions: Vec<String>,
 }
 
 fn default_behavior_name() -> String {
@@ -928,6 +934,7 @@ impl Default for FrameBehavior {
             on_enter_event: String::new(),
             on_exit_event: String::new(),
             spin_detect: None,
+            tracked_actions: Vec::new(),
         }
     }
 }
