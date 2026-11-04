@@ -392,6 +392,11 @@ pub struct SteerConfig {
     /// Forward accel per unit of forward stick (facing frame), u/tick^2.
     #[serde(default)]
     pub accel_forward: f32,
+    /// Constant horizontal accel along facing, u/tick^2, independent of
+    /// stick. (SM64 swim strokes: breaststroke/flutter kick accelerate on
+    /// a timer, not from stick.)
+    #[serde(default)]
+    pub accel_constant: f32,
     /// Sideways accel per unit of sideways stick (signed), u/tick^2.
     #[serde(default)]
     pub accel_side: f32,
@@ -422,15 +427,35 @@ pub struct SteerConfig {
     /// Linear decel toward the cap when above it, u/tick^2. 0 = none.
     #[serde(default)]
     pub decel_above_cap: f32,
+    /// When true, decel_above_cap is not clamped to speed_cap (may go
+    /// below). (SM64 decomp: walk does forwardVel -= 1.0 when over target,
+    /// unclamped, creating the characteristic limit cycle.)
+    #[serde(default)]
+    pub decel_below_cap: bool,
     /// Hard clamp on horizontal speed. 0 = none.
     #[serde(default)]
     pub max_speed: f32,
     /// Fractional horizontal-speed decay per tick (0.002 = 0.2%). 0 = none.
     #[serde(default)]
     pub decay: f32,
+    /// When true, skip the decay step on ticks where decel_above_cap was
+    /// applied. (SM64 decomp: walk's accel/decel are mutually exclusive
+    /// branches; the -v/43 decay is part of the accel branch only.)
+    #[serde(default)]
+    pub no_decay_on_decel: bool,
     /// Downward accel per tick, u/tick^2. 0 = none.
     #[serde(default)]
     pub gravity: f32,
+    /// When true, the vertical delta uses pre-gravity vy (decomp order:
+    /// position updates before gravity). When false (default), gravity
+    /// applies before the delta. (SM64 jumps: y += vy, then vy -= g.)
+    #[serde(default)]
+    pub gravity_post_move: bool,
+    /// After the delta, multiply vy by this (1.0 = none). Applied after
+    /// gravity. (SM64 jump cut: vy /= 4 when A released; the y delta uses
+    /// pre-cut vy, so the scale must apply post-delta.)
+    #[serde(default)]
+    pub post_vy_mul: f32,
     /// Max fall-speed magnitude; vy is clamped to >= -terminal_velocity.
     /// 0 = none.
     #[serde(default)]
@@ -459,6 +484,11 @@ pub struct SteerConfig {
     /// horizontal to HeadSlidingSpeed instead of keeping entry momentum.)
     #[serde(default)]
     pub enter_horizontal_speed: f32,
+    /// On entry, multiply horizontal velocity by this (1.0 = none).
+    /// Applied after enter_horizontal_speed/enter_min_horizontal_speed.
+    /// (SM64 decomp: jump does forwardVel *= 0.8 on entry.)
+    #[serde(default)]
+    pub enter_horizontal_mul: f32,
     /// On entry, if horizontal speed is below this, scale it up to this
     /// (along the current direction, or facing if ~zero). 0 = disabled.
     /// (Decomp D9: slope slide guarantees a 5.0 minimum on entry.)
@@ -483,6 +513,13 @@ pub struct SteerConfig {
     /// kills is_on_wall() on the entry tick and the slide instantly exits.)
     #[serde(default)]
     pub enter_wall_press_speed: f32,
+    /// On entry, snap facing_yaw to the stick's world direction (when the
+    /// stick is held). Applied before the enter_* velocity rules, so e.g.
+    /// enter_min_horizontal_speed launches along the stick. (SM64 decomp:
+    /// check_common_idle_cancels sets faceAngle = intendedYaw before
+    /// set_mario_action, so WALKING's entry speed goes toward the stick.)
+    #[serde(default)]
+    pub enter_face_stick: bool,
 }
 
 fn default_true() -> bool {
@@ -493,6 +530,7 @@ impl Default for SteerConfig {
     fn default() -> Self {
         Self {
             accel_forward: 0.0,
+            accel_constant: 0.0,
             accel_side: 0.0,
             accel_backward: 0.0,
             backward_until_zero: false,
@@ -502,9 +540,13 @@ impl Default for SteerConfig {
             speed_min: 0.0,
             enter_impact_speed: 0.0,
             decel_above_cap: 0.0,
+            decel_below_cap: false,
             max_speed: 0.0,
             decay: 0.0,
+            no_decay_on_decel: false,
             gravity: 0.0,
+            gravity_post_move: false,
+            post_vy_mul: 1.0,
             terminal_velocity: 0.0,
             face_mode: FaceMode::Keep,
             turn: TurnModel::default(),
@@ -513,11 +555,13 @@ impl Default for SteerConfig {
             enter_keep_horizontal: true,
             enter_vy: EnterVy::Keep,
             enter_horizontal_speed: 0.0,
+            enter_horizontal_mul: 1.0,
             enter_min_horizontal_speed: 0.0,
             enter_kill_backward: false,
             brake_end_speed: 0.0,
             input_invalidate_frames: 0,
             enter_wall_press_speed: 0.0,
+            enter_face_stick: false,
         }
     }
 }
@@ -612,6 +656,12 @@ pub struct Transition {
     /// Kept through resolve; used by fidelity lints.
     #[serde(default)]
     pub source_tag: String,
+    /// If true, this transition fires in Phase B (tick_contact) instead of
+    /// Phase A (evaluate_rows). Use for decomp-accurate ordering where the
+    /// new state's physics should not run until the next tick (e.g., SMG
+    /// changeStatus: state changes, no movement on transition tick).
+    #[serde(default)]
+    pub phase_b: bool,
 }
 
 fn default_blend() -> u32 {
@@ -851,6 +901,7 @@ impl Default for Transition {
             silent: false,
             on_fire_params: Vec::new(),
             source_tag: String::new(),
+            phase_b: false,
         }
     }
 }

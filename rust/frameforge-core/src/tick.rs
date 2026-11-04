@@ -137,6 +137,8 @@ struct ResolvedRow {
     silent: bool,
     /// G-4: blackboard writes applied when the row fires.
     on_fire_params: Vec<ParamAssign>,
+    /// If true, fire in Phase B (tick_contact) instead of Phase A.
+    phase_b: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -208,6 +210,12 @@ struct Track {
     /// G-6: one-shot delta written by the logic's `on_enter`; consumed as
     /// the base delta by the next `compute_delta` (on_tick may overwrite).
     pending_enter_delta: Option<Vec3>,
+    /// Deferred state transition for Phase B. If a transition has phase_b=true,
+    /// evaluate_rows stores the target here instead of calling enter_state
+    /// immediately. tick_contact drains it and calls enter_state in Phase B.
+    /// This matches decomp ordering where the new state's physics does not
+    /// run until the next tick (e.g., SMG changeStatus).
+    deferred_transition: Option<(StateRef, RowData)>,
 }
 
 impl Track {
@@ -235,6 +243,7 @@ impl Track {
             turn_vel: 0.0,
             logic: None,
             pending_enter_delta: None,
+            deferred_transition: None,
         }
     }
 }
@@ -376,8 +385,8 @@ fn collect_buffered_actions(cond: &ResolvedCond, out: &mut Vec<String>) {
         ResolvedCond::OnInput {
             actions,
             mode: InputMode::AnyPressed,
-            buffer_ticks: _,
-        } => out.extend(actions.iter().cloned()),
+            buffer_ticks,
+        } if *buffer_ticks > 0 => out.extend(actions.iter().cloned()),
         ResolvedCond::AllOf(subs) | ResolvedCond::AnyOf(subs) => {
             for s in subs {
                 collect_buffered_actions(s, out);
@@ -406,6 +415,7 @@ fn resolve_row(
         fire_event: r.fire_event.clone(),
         silent: r.silent,
         on_fire_params: r.on_fire_params.clone(),
+        phase_b: r.phase_b,
     }
 }
 
@@ -852,6 +862,16 @@ impl Runtime {
             self.track_collision(t_idx, contact);
         }
 
+        // 4b. Deferred state transitions (phase_b=true). Fire in Phase B
+        // so the new state's on_tick does not run until next tick's Phase A.
+        // This matches decomp ordering (e.g., SMG changeStatus: no movement
+        // on the transition tick).
+        for t_idx in 0..self.tracks.len() {
+            if let Some((tgt, rd)) = self.tracks[t_idx].deferred_transition.take() {
+                self.enter_state(t_idx, tgt, Some(rd), UP, 0.0, false);
+            }
+        }
+
         // 5. Behavior transitions.
         self.behavior_transitions();
 
@@ -1114,7 +1134,18 @@ impl Runtime {
                         blend_frames,
                         silent,
                     };
-                    self.enter_state(t_idx, tgt, Some(rd), UP, 0.0, false);
+                    // Check if this transition should fire in Phase B.
+                    let phase_b = {
+                        let row = &self.resolved.machines[mi].rows[si][ri];
+                        row.phase_b
+                    };
+                    if phase_b {
+                        // Defer to Phase B: store target, don't call enter_state yet.
+                        // The new state's on_tick will not run until next tick's Phase A.
+                        self.tracks[t_idx].deferred_transition = Some((tgt, rd));
+                    } else {
+                        self.enter_state(t_idx, tgt, Some(rd), UP, 0.0, false);
+                    }
                 }
                 // Unresolved target: hold (mirrors null resolved_state).
                 return;
@@ -1755,6 +1786,8 @@ impl Runtime {
         // Clear just_transitioned after the logic has seen it.
         // Set in enter_state() before compute_delta; cleared here after.
         // No re-entry: cleared even if run_logic_tick returned early.
+        if self.tracks[t_idx].just_transitioned {
+        }
         self.tracks[t_idx].just_transitioned = false;
         let t = &self.tracks[t_idx];
         if t.blend_left > 0 && t.blend_total > 0 {
