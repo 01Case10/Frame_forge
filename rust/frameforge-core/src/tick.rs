@@ -137,7 +137,7 @@ struct ResolvedRow {
     silent: bool,
     /// G-4: blackboard writes applied when the row fires.
     on_fire_params: Vec<ParamAssign>,
-    /// If true, fire in Phase B (tick_contact) instead of Phase A.
+    /// If true, fire in Phase B instead of Phase A.
     phase_b: bool,
 }
 
@@ -210,11 +210,8 @@ struct Track {
     /// G-6: one-shot delta written by the logic's `on_enter`; consumed as
     /// the base delta by the next `compute_delta` (on_tick may overwrite).
     pending_enter_delta: Option<Vec3>,
-    /// Deferred state transition for Phase B. If a transition has phase_b=true,
-    /// evaluate_rows stores the target here instead of calling enter_state
-    /// immediately. tick_contact drains it and calls enter_state in Phase B.
-    /// This matches decomp ordering where the new state's physics does not
-    /// run until the next tick (e.g., SMG changeStatus).
+    /// Deferred transition for phase_b. Set in evaluate_rows (Phase A),
+    /// drained in tick_contact (Phase B).
     deferred_transition: Option<(StateRef, RowData)>,
 }
 
@@ -862,12 +859,12 @@ impl Runtime {
             self.track_collision(t_idx, contact);
         }
 
-        // 4b. Deferred state transitions (phase_b=true). Fire in Phase B
-        // so the new state's on_tick does not run until next tick's Phase A.
-        // This matches decomp ordering (e.g., SMG changeStatus: no movement
-        // on the transition tick).
+        // 4b. Deferred phase_b transitions.
         for t_idx in 0..self.tracks.len() {
             if let Some((tgt, rd)) = self.tracks[t_idx].deferred_transition.take() {
+                if std::env::var("FF_DEBUG").is_ok() {
+                    eprintln!("PHASEB_DRAIN: firing deferred transition t={} tick_count={}", t_idx, self.tick_count);
+                }
                 self.enter_state(t_idx, tgt, Some(rd), UP, 0.0, false);
             }
         }
@@ -1134,14 +1131,8 @@ impl Runtime {
                         blend_frames,
                         silent,
                     };
-                    // Check if this transition should fire in Phase B.
-                    let phase_b = {
-                        let row = &self.resolved.machines[mi].rows[si][ri];
-                        row.phase_b
-                    };
+                    let phase_b = self.resolved.machines[mi].rows[si][ri].phase_b;
                     if phase_b {
-                        // Defer to Phase B: store target, don't call enter_state yet.
-                        // The new state's on_tick will not run until next tick's Phase A.
                         self.tracks[t_idx].deferred_transition = Some((tgt, rd));
                     } else {
                         self.enter_state(t_idx, tgt, Some(rd), UP, 0.0, false);
@@ -1230,25 +1221,13 @@ impl Runtime {
             }
         };
         // Reuse existing logic instance if present, to ensure on_enter and
-        // on_tick run on the same instance (fixes instance handoff bug where
-        // on_tick ran on a stale instance with uninitialized state).
-        // The logic's on_enter reconfigures it for the new state (e.g.,
-        // SmgPhysics switches mode_walk based on smg_mode param).
+        // on_tick run on the same instance (fixes instance handoff bug).
         let mut logic = match self.tracks[t_idx].logic.take() {
-            Some(existing) => {
-                // Reuse existing instance. Verify it's the right type by
-                // checking if the factory would create the same type.
-                // For now, we assume on_enter handles reconfiguration.
-                // TODO: Store logic name with instance for type checking.
-                existing
-            }
-            None => {
-                // No existing instance, create new via factory.
-                match self.logic_registry.get(&name) {
-                    Some(f) => f(),
-                    None => return,
-                }
-            }
+            Some(existing) => existing,
+            None => match self.logic_registry.get(&name) {
+                Some(f) => f(),
+                None => return,
+            },
         };
         let mut delta = ZERO;
         self.logic_ctx(t_idx, &mut delta, |ctx| {
@@ -1270,8 +1249,9 @@ impl Runtime {
         self.logic_ctx(t_idx, delta, |ctx| {
             logic.on_tick(ctx);
         });
-        // Note: just_transitioned is cleared in compute_delta (not here)
-        // to ensure no re-entry even if logic is None.
+        // Clear the just_transitioned flag after on_tick has seen it.
+        // The flag is set in enter_state() when a transition fires.
+        self.tracks[t_idx].just_transitioned = false;
         self.tracks[t_idx].logic = Some(logic);
     }
 
@@ -1284,14 +1264,6 @@ impl Runtime {
         impact_rate: f32,
         has_impact: bool,
     ) {
-        if std::env::var("FF_DEBUG").is_ok() {
-            let target_name = self.resolved.machines[target.machine].states[target.state].state_name.clone();
-            let curr_name = {
-                let tr = &self.tracks[t_idx];
-                self.resolved.machines[tr.machine].states[tr.current].state_name.clone()
-            };
-            eprintln!("ENTER_DBG: t={} {} -> {} (tick_count={})", t_idx, curr_name, target_name, self.tick_count);
-        }
         let (old_mi, old_si) = {
             let t = &self.tracks[t_idx];
             (t.machine, t.current)
@@ -1329,7 +1301,6 @@ impl Runtime {
             // in on_tick to skip physics on the transition tick, matching the
             // decomp's ordering (e.g., SMG tryJump before mainMoveGround).
             t.just_transitioned = true;
-
             // Preserve last impact info across row transitions (only a new
             // collision overwrites it); wall jumps read the wall normal here.
             if has_impact {
@@ -1783,12 +1754,6 @@ impl Runtime {
         };
         // G-6: active state logic may rewrite the delta before blending.
         self.run_logic_tick(t_idx, &mut delta);
-        // Clear just_transitioned after the logic has seen it.
-        // Set in enter_state() before compute_delta; cleared here after.
-        // No re-entry: cleared even if run_logic_tick returned early.
-        if self.tracks[t_idx].just_transitioned {
-        }
-        self.tracks[t_idx].just_transitioned = false;
         let t = &self.tracks[t_idx];
         if t.blend_left > 0 && t.blend_total > 0 {
             let elapsed = t.blend_total - t.blend_left;
