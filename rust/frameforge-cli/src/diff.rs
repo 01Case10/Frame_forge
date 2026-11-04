@@ -157,19 +157,32 @@ pub fn run(
         rt.set_stick(sx / 80.0, sy / 80.0);
         // Flat-ground contact model with wall support for wall_jump test.
         // Wall at x=700 units = 7.0 meters (from harness scenario).
-        let at_wall = pos.x >= 7.0 - 1e-4;
-        let contact = ContactState {
+        // NOTE: contact is computed POST-move below (see tick_contact); the
+        // pre-move contact is no longer needed.
+        let d = rt.tick_delta(&input);
+        pos = pos + d;
+        // Clamp to wall (harness clamps pos to wall plane in procJump only —
+        // the wall does NOT block ground movement, so only clamp airborne).
+        let airborne = pos.y > 1e-4;
+        if airborne && pos.x > 7.0 {
+            pos.x = 7.0;
+        }
+        // Post-move contact feedback (mirrors the Godot embedder and the
+        // decomp's detect-during-procJump timing): the NEXT tick's logic must
+        // see THIS tick's post-move contact. Passing the pre-move contact to
+        // tick() leaves G-7 reading a 1-tick-stale contact, which re-latches
+        // the wall slide after the wall jump and activates the slide a tick
+        // late (wall_jump RC1 + RC3).
+        // The wall only exists for airborne contact (harness checks it in
+        // procJump, not in ground movement).
+        let at_wall = airborne && pos.x >= 7.0 - 1e-4;
+        let post_contact = ContactState {
             floor: pos.y <= 1e-4,
             wall: at_wall,
             wall_normal: if at_wall { Vec3::new(-1.0, 0.0, 0.0) } else { ZERO },
             ..Default::default()
         };
-        let d = rt.tick(&input, &contact);
-        pos = pos + d;
-        // Clamp to wall (harness clamps pos to wall plane)
-        if pos.x > 7.0 {
-            pos.x = 7.0;
-        }
+        rt.tick_contact(&post_contact);
         if (tick_idx + 1) % tpf == 0 {
             samples.push(pos);
         }

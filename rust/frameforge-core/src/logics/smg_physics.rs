@@ -72,6 +72,9 @@ pub struct SmgPhysics {
     jump_type: u32,  // 0=single, 1=double, 2=triple (for chaining)
     pound_active: bool,  // Ground pound (hip-drop) active
     wall_sliding: bool,  // Wall slide active
+    just_wall_jumped: bool, // Set on the wall-jump press tick; blocks slide
+                            // re-activation for one tick (we're still at the
+                            // wall since the press tick had zero delta).
     chain_pending: bool, // In-place chain armed: next tick outputs zero delta
                         // (decomp tryJump frame applies no movement)
     // tunables (loaded on enter)
@@ -109,6 +112,7 @@ impl SmgPhysics {
             jump_type: 0,
             pound_active: false,
             wall_sliding: false,
+            just_wall_jumped: false,
             chain_pending: false,
             walk_table_speed: 13.0,
             inertia_stop: 0.94,
@@ -349,15 +353,22 @@ impl StateLogic for SmgPhysics {
                 return;
             }
             // Jump mode: check for spin jump (B button in air)
-            // Mario::trySpinJump: if vy < 12.0, set vy = 12.0
+            // Mario::trySpinJump: if vy < 12.0, set vy = 12.0.
+            // Decomp (states.cpp): the trigger frame sets spin/vy but SKIPS
+            // procJump() entirely — no position update, no gravity. Mirror
+            // with zero delta + early return.
             if ctx.input.just_pressed.contains("ff_attack") && !self.pound_active && !self.wall_sliding {
-                // Spin jump boost - edge triggered, matches harness trgB
-                // Harness does NOT call procJump() on spin trigger (no position update)
                 if self.jump_vec.y < 12.0 {
                     self.jump_vec.y = 12.0;  // mSpinJumpHeight
-                    // Spin uses low gravity (0.25) - set a flag
-                    write_f32(ctx.params, "smg_spin_active", 1.0);
                 }
+                write_f32(ctx.params, "smg_spin_active", 1.0);
+                *ctx.delta = Vec3::new(0.0, 0.0, 0.0);
+                // landTimer still ticks (harness increments unconditionally).
+                let lt = param_f32(ctx.params, "smg_land_timer", 999.0);
+                if lt < 10000.0 {
+                    write_f32(ctx.params, "smg_land_timer", lt + 1.0);
+                }
+                return;
             }
             // Reset spin flag on landing (handled via smg_landed)
             
@@ -365,16 +376,22 @@ impl StateLogic for SmgPhysics {
             // If in air and touching wall, enter wall slide
             smg_dbg!("SMG_DBG wall check: floor={} wall={} pound={} sliding={}",
                 ctx.contact.floor, ctx.contact.wall, self.pound_active, self.wall_sliding);
-            // Latch wall slide: once true, stays true until landing or wall jump.
-            // (Prevents flickering from contact noise.)
-            if !ctx.contact.floor && ctx.contact.wall && !self.pound_active {
-                if !self.wall_sliding {
-                    smg_dbg!("SMG_DBG wall: ACTIVATED sliding");
-                }
-                self.wall_sliding = true;
+            // Wall slide: recomputed every tick like the decomp (physics.cpp:
+            // wallSlide is true only while the wall condition holds, else
+            // false). NOT a sticky latch — a latch wedges on after the wall
+            // jump if contact goes stale (wall_jump RC1).
+            let should_slide = !ctx.contact.floor
+                && ctx.contact.wall
+                && !self.pound_active
+                && !self.just_wall_jumped;
+            if should_slide && !self.wall_sliding {
+                smg_dbg!("SMG_DBG wall: ACTIVATED sliding");
             }
-            // Clear on landing (handled in landing block below via smg_landed)
-            // Clear on wall jump (in the wall jump block)
+            self.wall_sliding = should_slide;
+            // The wall-jump guard lasts one tick (we're still at the wall on
+            // the tick after the press since the press tick had zero delta;
+            // by the tick after that we've moved away).
+            self.just_wall_jumped = false;
             
             // Wall slide physics: slide down at 14 u/f (mWallDropSpeedNormal)
             // Skip on transition tick (just_transitioned handled below, but wall
@@ -382,7 +399,11 @@ impl StateLogic for SmgPhysics {
             if self.wall_sliding {
                 smg_dbg!("SMG_DBG wall: check jump, just_pressed={:?} just_trans={}",
                     ctx.input.just_pressed, ctx.just_transitioned);
-                // Wall jump: decomp sets jumpVec = wallNormal*13 + up*30
+                // Wall jump: decomp sets jumpVec = wallNormal*13 + up*30 but
+                // applies NO movement on the trigger tick (tryWallJump sets
+                // jumpVec only; movement happens next frame via procJump).
+                // Mirror with zero delta; the impulse applies next tick via
+                // normal jump physics.
                 if ctx.input.just_pressed.contains("ff_jump") && !ctx.just_transitioned {
                     smg_dbg!("SMG_DBG wall: JUMP TRIGGERED!");
                     self.jump_vec = Vec3::new(
@@ -390,13 +411,21 @@ impl StateLogic for SmgPhysics {
                         30.0,  // mWallJumpPowerY
                         ctx.contact.wall_normal.z * 13.0,
                     );
+                    // Decomp tryWallJump sets jumpType=JT_Wall, so gravity is
+                    // mGravityJumping[JT_Wall]=0.95 (not 1.8). Oracle vy falls
+                    // 0.475/tick = 0.95*0.5 (rising+held).
+                    self.jump_gravity = 0.95;
                     self.wall_sliding = false;
-                    // Apply the impulse immediately (don't run slide, don't wait for next tick)
-                    *ctx.delta = self.jump_vec * UNIT_TO_M;
-                    self.jump_y += self.jump_vec.y;
-                    smg_dbg!("SMG_DBG wall: jump delta=({:.4},{:.4},{:.4}) jump_vec=({:.1},{:.1},{:.1}) jump_y={:.1}",
-                        ctx.delta.x, ctx.delta.y, ctx.delta.z,
-                        self.jump_vec.x, self.jump_vec.y, self.jump_vec.z, self.jump_y);
+                    // Block slide re-activation next tick (we're still at the
+                    // wall; the decomp is in "jump" state, not "wallslide").
+                    self.just_wall_jumped = true;
+                    *ctx.delta = Vec3::new(0.0, 0.0, 0.0);
+                    smg_dbg!("SMG_DBG wall: jump triggered, zero delta (impulse next tick)");
+                    // landTimer still ticks (harness increments unconditionally).
+                    let lt = param_f32(ctx.params, "smg_land_timer", 999.0);
+                    if lt < 10000.0 {
+                        write_f32(ctx.params, "smg_land_timer", lt + 1.0);
+                    }
                     return;
                 } else {
                     *ctx.delta = Vec3::new(0.0, -14.0 * UNIT_TO_M, 0.0);
@@ -474,13 +503,12 @@ impl StateLogic for SmgPhysics {
             } else {
                 1.0
             };
-            // Spin jump uses low gravity (0.25) for floaty effect
-            let spin_active = param_bool(ctx.params, "smg_spin_active", false);
-            let gravity = if spin_active {
-                0.25  // mSpinJumpGravity
-            } else {
-                self.jump_gravity * scale
-            };
+            // Gravity: the decomp NEVER changes gravity for a spin. procJump()
+            // uses mGravityJumping[jumpType], and the spin handler does not
+            // touch jumpType — mSpinJumpGravity (0.25) is dead in the decomp
+            // (trySpinJump has zero call sites). Verified by oracle: vy falls
+            // 0.90/tick while rising+held, not 0.25.
+            let gravity = self.jump_gravity * scale;
             // procJump order: pos += jumpVec THEN jumpVec += gravity.
             // (Matches the harness: delta uses current v, then v is updated.)
             // NOTE: Do NOT skip the entry tick. The ff diff aligns FF tick k
