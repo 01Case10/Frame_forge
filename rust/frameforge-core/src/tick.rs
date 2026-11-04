@@ -376,8 +376,8 @@ fn collect_buffered_actions(cond: &ResolvedCond, out: &mut Vec<String>) {
         ResolvedCond::OnInput {
             actions,
             mode: InputMode::AnyPressed,
-            buffer_ticks,
-        } if *buffer_ticks > 0 => out.extend(actions.iter().cloned()),
+            buffer_ticks: _,
+        } => out.extend(actions.iter().cloned()),
         ResolvedCond::AllOf(subs) | ResolvedCond::AnyOf(subs) => {
             for s in subs {
                 collect_buffered_actions(s, out);
