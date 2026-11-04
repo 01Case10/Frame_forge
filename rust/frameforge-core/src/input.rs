@@ -11,6 +11,10 @@ use std::collections::{HashMap, HashSet};
 pub struct TickInput {
     pub held: HashSet<String>,
     pub strengths: HashMap<String, f32>,
+    /// Explicit edge signals for this tick. When non-empty, begin_tick()
+    /// uses these directly instead of deriving from held deltas. This allows
+    /// test harnesses to drive just_pressed deterministically.
+    pub just_pressed: HashSet<String>,
 }
 
 /// Per-tick edge tracker fed by a recorded input script.
@@ -31,7 +35,26 @@ impl InputState {
     /// Begin-tick: compute edges against last tick's held set.
     pub fn begin_tick(&mut self, tick: &TickInput) {
         self.tick = self.tick.wrapping_add(1);
-        self.just_pressed = tick.held.difference(&self.prev_held).cloned().collect();
+        // Use explicit just_pressed when available.
+        // On tick 1, never compute from delta (prev_held is empty, spurious).
+        // After tick 1, if explicit set is non-empty use it; if empty, fall back
+        // to delta for embedders that don't do edge detection (e.g. Godot).
+        // diff.rs always populates just_pressed explicitly (empty = no press).
+        if self.tick == 1 {
+            self.just_pressed = tick.just_pressed.clone();
+        } else if !tick.just_pressed.is_empty() {
+            self.just_pressed = tick.just_pressed.clone();
+        } else {
+            // Backward compat: compute from delta for embedders without edge detection.
+            // Note: diff.rs sets empty correctly, so this branch is for Godot/tests.
+            // To avoid spurious presses, only compute if held is non-empty.
+            // (If held is empty, just_pressed is definitely empty.)
+            if tick.held.is_empty() {
+                self.just_pressed = std::collections::HashSet::new();
+            } else {
+                self.just_pressed = tick.held.difference(&self.prev_held).cloned().collect();
+            }
+        }
         self.just_released = self.prev_held.difference(&tick.held).cloned().collect();
         self.held = tick.held.clone();
         self.strengths = tick.strengths.clone();
