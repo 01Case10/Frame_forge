@@ -28,7 +28,7 @@ use std::collections::HashMap;
 
 /// Names of the built-in logics, pre-registered by `Runtime::new`.
 /// `validate.rs` and the editor mirror this list.
-pub const BUILTIN_LOGIC_NAMES: &[&str] = &["wallrun", "ledgegrab", "poleclimb", "smg_physics"];
+pub const BUILTIN_LOGIC_NAMES: &[&str] = &["wallrun", "ledgegrab", "poleclimb", "smg_physics", "smg_hang", "smg_crawl"];
 
 /// Capability window handed to [`StateLogic`] implementations. This is the
 /// only part of the engine a logic can touch.

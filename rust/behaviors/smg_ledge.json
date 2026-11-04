@@ -1,0 +1,194 @@
+{
+  "behavior_name": "smg_ledge",
+  "behavior_transitions": [],
+  "on_enter_event": "",
+  "on_exit_event": "",
+  "parameters": [
+    {
+      "name": "walk.speed",
+      "value": 0.0
+    },
+    {
+      "name": "smg_hang_done",
+      "value": 0.0
+    }
+  ],
+  "sub_machines": [
+    {
+      "machine_name": "Locomotion",
+      "entry_state_name": "Hang",
+      "states": [
+        {
+          "state_name": "Hang",
+          "logic": "smg_hang",
+          "enter_params": [
+            {
+              "op": "set",
+              "name": "smg_facing_yaw",
+              "value": 90.0
+            }
+          ],
+          "transitions": [
+            {
+              "blend_frames": 0,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "smg_hang_done",
+                "param_op": "eq",
+                "param_value": 1.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_variable"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "Ground"
+            },
+            {
+              "blend_frames": 0,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 1.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "Hang"
+            }
+          ],
+          "duration_frames": 1000,
+          "displacement": 0.0,
+          "displacement_source": "author",
+          "direction": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "direction_source": "author",
+          "camera_relative": false,
+          "easing": {
+            "points": []
+          },
+          "events": [],
+          "input_deadzone": 0.0,
+          "input_forward": "",
+          "input_back": "",
+          "input_left": "",
+          "input_right": "",
+          "input_plane": "xz",
+          "input_turn_rate_deg": 0.0,
+          "resp_floor": null,
+          "resp_ceiling": null,
+          "resp_wall": null,
+          "restitution": 0.0
+        },
+        {
+          "state_name": "Ground",
+          "logic": "smg_physics",
+          "enter_params": [
+            {
+              "op": "set",
+              "name": "smg_mode",
+              "value": "walk"
+            },
+            {
+              "op": "set",
+              "name": "smg_walk_table_speed",
+              "value": 13.0
+            },
+            {
+              "op": "set",
+              "name": "smg_inertia_stop",
+              "value": 0.94
+            },
+            {
+              "op": "set",
+              "name": "smg_inertia_max",
+              "value": 0.9
+            },
+            {
+              "op": "set",
+              "name": "smg_inertia_rest_stop",
+              "value": 0.85
+            },
+            {
+              "op": "set",
+              "name": "smg_inertia_jump_finish",
+              "value": 0.8
+            },
+            {
+              "op": "set",
+              "name": "smg_walk_speed_param",
+              "value": "walk.speed"
+            }
+          ],
+          "transitions": [
+            {
+              "blend_frames": 0,
+              "condition": {
+                "custom_name": "",
+                "event_name": "",
+                "input_actions": [],
+                "input_mode": "any_pressed",
+                "param_name": "",
+                "param_op": "eq",
+                "param_value": 1.0,
+                "target_machine_name": "",
+                "target_state_name": "",
+                "type": "on_complete"
+              },
+              "fire_event": "",
+              "momentum": "cut",
+              "silent": false,
+              "target_behavior_name": "",
+              "target_state_name": "Ground"
+            }
+          ],
+          "duration_frames": 1000,
+          "displacement": 0.0,
+          "displacement_source": "author",
+          "direction": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "direction_source": "author",
+          "camera_relative": false,
+          "easing": {
+            "points": []
+          },
+          "events": [],
+          "input_deadzone": 0.0,
+          "input_forward": "",
+          "input_back": "",
+          "input_left": "",
+          "input_right": "",
+          "input_plane": "xz",
+          "input_turn_rate_deg": 0.0,
+          "resp_floor": null,
+          "resp_ceiling": null,
+          "resp_wall": null,
+          "restitution": 0.0
+        }
+      ],
+      "default_resp_floor": null,
+      "default_resp_ceiling": null,
+      "default_resp_wall": null,
+      "editor_comments": []
+    }
+  ]
+}

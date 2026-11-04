@@ -2,6 +2,9 @@
 
 pub mod ledgegrab;
 pub mod poleclimb;
+pub mod smg_crawl;
+pub mod smg_hang;
+pub mod smg_physics;
 pub mod wallrun;
 
 use crate::logic::LogicFactory;
@@ -14,6 +17,9 @@ pub fn builtin_factories() -> Vec<(&'static str, LogicFactory)> {
         ("wallrun", wallrun::Wallrun::factory()),
         ("ledgegrab", ledgegrab::LedgeGrab::factory()),
         ("poleclimb", poleclimb::PoleClimb::factory()),
+        ("smg_crawl", smg_crawl::SmgCrawl::factory()),
+        ("smg_hang", smg_hang::SmgHang::factory()),
+        ("smg_physics", smg_physics::SmgPhysics::factory()),
     ]
 }
 
