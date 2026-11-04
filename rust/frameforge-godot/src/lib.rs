@@ -314,7 +314,7 @@ impl BehaviorPlayer {
                 strengths.insert(a.clone(), input.get_action_strength(&an));
             }
         }
-        TickInput { held, strengths }
+        TickInput { held, strengths , just_pressed: std::collections::HashSet::new() }
     }
 
     fn read_contact(&self) -> ContactState {

@@ -6,7 +6,7 @@
 
 use frameforge_core::input::TickInput;
 use frameforge_core::tick::{ContactState, Runtime};
-use frameforge_core::vec3::Vec3;
+use frameforge_core::vec3::{Vec3, ZERO};
 use frameforge_core::FrameBehavior;
 use std::collections::{HashMap, HashSet};
 use std::fs;
@@ -77,15 +77,39 @@ fn set_axis(
 pub fn tick_input(sx: f32, sy: f32, buttons: i32) -> TickInput {
     let mut held = HashSet::new();
     let mut strengths = HashMap::new();
+    let mut just_pressed = HashSet::new();
     set_axis(&mut held, &mut strengths, "ff_right", "ff_left", sx / 80.0);
     set_axis(&mut held, &mut strengths, "ff_fwd", "ff_back", sy / 80.0);
-    for (bit, name) in [(0x1, "ff_jump"), (0x2, "ff_attack"), (0x4, "ff_crouch")] {
+    // Bit 0x1 = lvlA (held), Bit 0x8 = trgA (press edge)
+    // Map lvlA to ff_jump_held for variable jump height
+    // Map trgA to ff_jump for press detection (creates edge)
+    if buttons & 0x1 != 0 {
+        held.insert("ff_jump_held".to_string());
+        strengths.insert("ff_jump_held".to_string(), 1.0);
+    }
+    if buttons & 0x8 != 0 {
+        held.insert("ff_jump".to_string());
+        strengths.insert("ff_jump".to_string(), 1.0);
+        just_pressed.insert("ff_jump".to_string());
+    }
+    for (bit, name) in [(0x2, "ff_attack")] {
         if buttons & bit != 0 {
             held.insert(name.to_string());
             strengths.insert(name.to_string(), 1.0);
+            just_pressed.insert(name.to_string());
         }
     }
-    TickInput { held, strengths }
+    // Bit 0x4 = Z (ground pound for SMG, crouch for others)
+    // Map to both ff_crouch and ff_pound; G-7 uses ff_pound
+    if buttons & 0x4 != 0 {
+        held.insert("ff_crouch".to_string());
+        strengths.insert("ff_crouch".to_string(), 1.0);
+        held.insert("ff_pound".to_string());
+        strengths.insert("ff_pound".to_string(), 1.0);
+        just_pressed.insert("ff_pound".to_string());
+        just_pressed.insert("ff_crouch".to_string());
+    }
+    TickInput { held, strengths, just_pressed }
 }
 
 pub struct DiffResult {
@@ -100,42 +124,69 @@ pub fn run(
     behavior_path: &str,
     oracle: &Oracle,
     ticks_per_frame: u32,
+    start_state: Option<&str>,
+    debug: bool,
 ) -> Result<DiffResult, String> {
     let behavior = FrameBehavior::load_json(behavior_path)?;
     let mut rt = Runtime::new(behavior);
+    if let Some(ss) = start_state {
+        let parts: Vec<&str> = ss.split('/').collect();
+        if parts.len() == 2 {
+            if !rt.force_state(parts[0], parts[1]) {
+                return Err(format!("ff diff: unknown start state '{}'", ss));
+            }
+        } else {
+            return Err(format!("ff diff: start_state must be Machine/State, got '{}'", ss));
+        }
+    }
     let tpf = ticks_per_frame.max(1) as usize;
 
     let mut pos = oracle.positions[0];
     let mut samples = vec![pos];
-    let total_ticks = (oracle.positions.len() - 1) * tpf;
+    let total_ticks = oracle.positions.len() * tpf;
     for tick_idx in 0..total_ticks {
         let fi = (tick_idx / tpf).min(oracle.inputs.len() - 1);
         let (sx, sy, buttons) = oracle.inputs[fi];
         let input = tick_input(sx, sy, buttons);
-        // Flat-ground contact model (the 14 differentials need no walls;
-        // no behavior reads contact edges).
+        if debug {
+            eprintln!("DBG tick={} buttons={} held={:?} just_pressed={:?} pos=({:.2},{:.2},{:.2})",
+                tick_idx, buttons, input.held, input.just_pressed, pos.x, pos.y, pos.z);
+        }
+        // Feed the analog stick to the Runtime (G-2/G-5/G-7): the oracle
+        // stores -80..80; Runtime expects -1..1.
+        rt.set_stick(sx / 80.0, sy / 80.0);
+        // Flat-ground contact model with wall support for wall_jump test.
+        // Wall at x=700 units = 7.0 meters (from harness scenario).
+        let at_wall = pos.x >= 7.0 - 1e-4;
         let contact = ContactState {
             floor: pos.y <= 1e-4,
+            wall: at_wall,
+            wall_normal: if at_wall { Vec3::new(-1.0, 0.0, 0.0) } else { ZERO },
             ..Default::default()
         };
         let d = rt.tick(&input, &contact);
         pos = pos + d;
+        // Clamp to wall (harness clamps pos to wall plane)
+        if pos.x > 7.0 {
+            pos.x = 7.0;
+        }
         if (tick_idx + 1) % tpf == 0 {
             samples.push(pos);
         }
     }
 
-    let n = samples.len().min(oracle.positions.len());
+    let n = (samples.len() - 1).min(oracle.positions.len());
     let mut mean = 0.0f32;
     let mut mx = 0.0f32;
-    for (k, s) in samples.iter().enumerate().take(n) {
+    for k in 0..n {
+        let s = &samples[k + 1];
         let e = (*s - oracle.positions[k]).length() * 100.0;
         mean += e;
         mx = mx.max(e);
     }
     mean /= n.max(1) as f32;
     let final_err = if n > 0 {
-        (samples[n - 1] - oracle.positions[n - 1]).length() * 100.0
+        (samples[n] - oracle.positions[n - 1]).length() * 100.0
     } else {
         999.0
     };

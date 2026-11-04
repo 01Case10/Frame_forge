@@ -33,6 +33,12 @@ enum Cmd {
         ticks_per_frame: u32,
         #[arg(long, default_value = "gate")]
         name: String,
+        /// Start from this state (format: Machine/State). Default: behavior entry.
+        #[arg(long)]
+        start_state: Option<String>,
+        /// Enable per-tick debug logging (transitions, inputs, physics decisions).
+        #[arg(long, default_value_t = false)]
+        debug: bool,
     },
     /// Validate a behavior JSON file.
     Check { file: String },
@@ -65,7 +71,9 @@ fn main() {
             oracle,
             ticks_per_frame,
             name,
-        } => cmd_diff(&behavior, &oracle, ticks_per_frame, &name),
+            start_state,
+            debug,
+        } => cmd_diff(&behavior, &oracle, ticks_per_frame, &name, start_state.as_deref(), debug),
         Cmd::Check { file } => match check::run(&file) {
             Ok(code) => code,
             Err(e) => {
@@ -100,7 +108,7 @@ fn main() {
     std::process::exit(code);
 }
 
-fn cmd_diff(behavior: &str, oracle_path: &str, ticks_per_frame: u32, name: &str) -> i32 {
+fn cmd_diff(behavior: &str, oracle_path: &str, ticks_per_frame: u32, name: &str, start_state: Option<&str>, debug: bool) -> i32 {
     let oracle = match diff::load_oracle(oracle_path) {
         Ok(o) => o,
         Err(e) => {
@@ -108,7 +116,7 @@ fn cmd_diff(behavior: &str, oracle_path: &str, ticks_per_frame: u32, name: &str)
             return 2;
         }
     };
-    match diff::run(behavior, &oracle, ticks_per_frame) {
+    match diff::run(behavior, &oracle, ticks_per_frame, start_state, debug) {
         Ok(r) => {
             println!(
                 "==== {}: frames={} mean={:.4}cm max={:.4}cm final={:.4}cm -> {} ====",

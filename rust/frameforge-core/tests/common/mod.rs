@@ -170,6 +170,7 @@ pub fn held(actions: &[&str]) -> TickInput {
     TickInput {
         held: h,
         strengths: s,
+        just_pressed: HashSet::new(),
     }
 }
 
