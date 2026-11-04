@@ -1198,9 +1198,26 @@ impl Runtime {
                 None => return,
             }
         };
-        let mut logic = match self.logic_registry.get(&name) {
-            Some(f) => f(),
-            None => return,
+        // Reuse existing logic instance if present, to ensure on_enter and
+        // on_tick run on the same instance (fixes instance handoff bug where
+        // on_tick ran on a stale instance with uninitialized state).
+        // The logic's on_enter reconfigures it for the new state (e.g.,
+        // SmgPhysics switches mode_walk based on smg_mode param).
+        let mut logic = match self.tracks[t_idx].logic.take() {
+            Some(existing) => {
+                // Reuse existing instance. Verify it's the right type by
+                // checking if the factory would create the same type.
+                // For now, we assume on_enter handles reconfiguration.
+                // TODO: Store logic name with instance for type checking.
+                existing
+            }
+            None => {
+                // No existing instance, create new via factory.
+                match self.logic_registry.get(&name) {
+                    Some(f) => f(),
+                    None => return,
+                }
+            }
         };
         let mut delta = ZERO;
         self.logic_ctx(t_idx, &mut delta, |ctx| {
@@ -1236,6 +1253,14 @@ impl Runtime {
         impact_rate: f32,
         has_impact: bool,
     ) {
+        if std::env::var("FF_DEBUG").is_ok() {
+            let target_name = self.resolved.machines[target.machine].states[target.state].state_name.clone();
+            let curr_name = {
+                let tr = &self.tracks[t_idx];
+                self.resolved.machines[tr.machine].states[tr.current].state_name.clone()
+            };
+            eprintln!("ENTER_DBG: t={} {} -> {} (tick_count={})", t_idx, curr_name, target_name, self.tick_count);
+        }
         let (old_mi, old_si) = {
             let t = &self.tracks[t_idx];
             (t.machine, t.current)
