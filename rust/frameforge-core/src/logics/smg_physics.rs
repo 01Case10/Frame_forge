@@ -34,6 +34,18 @@ use crate::logic::{param_bool, param_f32, LogicFactory, StateCtx, StateLogic};
 use crate::vec3::{Vec3, ZERO};
 use std::collections::HashMap;
 
+/// Debug logging for SMG physics. Enabled via FF_DEBUG=1 env var.
+fn dbg_enabled() -> bool {
+    std::env::var("FF_DEBUG").map(|v| v == "1").unwrap_or(false)
+}
+macro_rules! smg_dbg {
+    ($($arg:tt)*) => {
+        if dbg_enabled() {
+            eprintln!($($arg)*);
+        }
+    };
+}
+
 /// SMG units to meters (ff diff compares in meters; 1 SMG unit ≈ 1 cm).
 const UNIT_TO_M: f32 = 0.01;
 
@@ -231,10 +243,15 @@ impl StateLogic for SmgPhysics {
             };
             
             // JumpVec = facing * (walkSpeed * frontSpeed) + up * v0.
-            let yr = (*ctx.facing_yaw).to_radians();
+            // Allow behavior to override facing via smg_facing_yaw param (for tests).
+            let yaw_deg = param_f32(ctx.params, "smg_facing_yaw", *ctx.facing_yaw);
+            let yr = yaw_deg.to_radians();
             let facing = Vec3::new(yr.sin(), 0.0, yr.cos());
             self.jump_vec = facing * (ws * hspeed);
             self.jump_vec.y = v0;
+            smg_dbg!("SMG_DBG on_enter frame={}: ws={:.4} hspeed={:.2} v0={:.2} facing=({:.3},{:.3},{:.3}) jump_vec=({:.2},{:.2},{:.2})",
+                ctx.frame, ws, hspeed, v0, facing.x, facing.y, facing.z,
+                self.jump_vec.x, self.jump_vec.y, self.jump_vec.z);
             self.jump_airborne = false;
             self.jump_entered = true;
             self.jump_y = 0.0;
@@ -248,10 +265,12 @@ impl StateLogic for SmgPhysics {
     fn on_tick(&mut self, ctx: &mut StateCtx) {
 
         if self.mode_walk {
+            // If jump is pressed, a transition to Jump will fire in Phase B.
+            // The harness does NOT apply walk movement on the transition tick
+            // (decomp changeStatus: state changes, no mainMove called).
+            // Skip the delta to match one-to-one.
+            let jump_will_fire = ctx.input.just_pressed.contains("ff_jump");
             // decideWalkSpeed: stick magnitude -> target index.
-            // Note: The core tick.rs now skips on_tick physics when a behavior
-            // transition will fire (via would_behavior_transition check in Phase A).
-            // This matches the decomp's transition-before-physics ordering.
             let stick_mag = (ctx.stick[0] * ctx.stick[0] + ctx.stick[1] * ctx.stick[1]).sqrt().min(1.0);
             let idx = Self::decide_target_index(stick_mag);
             let target = WALK_TARGET_TABLE[idx];
@@ -295,21 +314,23 @@ impl StateLogic for SmgPhysics {
             write_f32(ctx.params, &self.walk_speed_param, self.walk_speed);
 
             // mainMove core: delta = facing * (table_speed * walk_speed).
-            let yr = (*ctx.facing_yaw).to_radians();
-            let facing = Vec3::new(yr.sin(), 0.0, yr.cos());
-            *ctx.delta = facing * (self.walk_table_speed * self.walk_speed * UNIT_TO_M);
+            // Skip movement on transition tick (jump will fire in Phase B).
+            if jump_will_fire {
+                *ctx.delta = Vec3::new(0.0, 0.0, 0.0);
+            } else {
+                let yaw_deg = param_f32(ctx.params, "smg_facing_yaw", *ctx.facing_yaw);
+                let yr = yaw_deg.to_radians();
+                let facing = Vec3::new(yr.sin(), 0.0, yr.cos());
+                *ctx.delta = facing * (self.walk_table_speed * self.walk_speed * UNIT_TO_M);
+            }
         } else {
             // Jump mode: check for spin jump (B button in air)
             // Mario::trySpinJump: if vy < 12.0, set vy = 12.0
-            if ctx.input.held.contains("ff_attack") && !self.pound_active && !self.wall_sliding {
-                // Spin jump boost - only apply once per press (check via a flag)
-                // For simplicity, apply if current vy < 12.0
-                // Note: proper implementation needs just_pressed detection
-                // We'll use a param to track if spin was already applied
-                let spin_done = param_bool(ctx.params, "smg_spin_done", false);
-                if !spin_done && self.jump_vec.y < 12.0 {
+            if ctx.input.just_pressed.contains("ff_attack") && !self.pound_active && !self.wall_sliding {
+                // Spin jump boost - edge triggered, matches harness trgB
+                // Harness does NOT call procJump() on spin trigger (no position update)
+                if self.jump_vec.y < 12.0 {
                     self.jump_vec.y = 12.0;  // mSpinJumpHeight
-                    write_f32(ctx.params, "smg_spin_done", 1.0);
                     // Spin uses low gravity (0.25) - set a flag
                     write_f32(ctx.params, "smg_spin_active", 1.0);
                 }
@@ -318,20 +339,48 @@ impl StateLogic for SmgPhysics {
             
             // Jump mode: check for wall slide
             // If in air and touching wall, enter wall slide
+            smg_dbg!("SMG_DBG wall check: floor={} wall={} pound={} sliding={}",
+                ctx.contact.floor, ctx.contact.wall, self.pound_active, self.wall_sliding);
+            // Latch wall slide: once true, stays true until landing or wall jump.
+            // (Prevents flickering from contact noise.)
             if !ctx.contact.floor && ctx.contact.wall && !self.pound_active {
+                if !self.wall_sliding {
+                    smg_dbg!("SMG_DBG wall: ACTIVATED sliding");
+                }
                 self.wall_sliding = true;
-            } else if !ctx.contact.wall {
-                self.wall_sliding = false;
             }
+            // Clear on landing (handled in landing block below via smg_landed)
+            // Clear on wall jump (in the wall jump block)
             
             // Wall slide physics: slide down at 14 u/f (mWallDropSpeedNormal)
+            // Skip on transition tick (just_transitioned handled below, but wall
+            // code runs before that check - guard here to avoid corrupting jump_vec)
             if self.wall_sliding {
-                // Wall jump requires just_pressed detection which StateCtx doesn't have.
-                // TODO: Implement proper wall jump velocity on press via behavior transition.
-                // For now, slide only.
-                *ctx.delta = Vec3::new(0.0, -14.0 * UNIT_TO_M, 0.0);
-                self.jump_y += -14.0;
-                // Skip normal physics while sliding
+                smg_dbg!("SMG_DBG wall: check jump, just_pressed={:?} just_trans={}",
+                    ctx.input.just_pressed, ctx.just_transitioned);
+                // Wall jump: decomp sets jumpVec = wallNormal*13 + up*30
+                if ctx.input.just_pressed.contains("ff_jump") && !ctx.just_transitioned {
+                    smg_dbg!("SMG_DBG wall: JUMP TRIGGERED!");
+                    self.jump_vec = Vec3::new(
+                        ctx.contact.wall_normal.x * 13.0,  // mWallJumpPowerXZ
+                        30.0,  // mWallJumpPowerY
+                        ctx.contact.wall_normal.z * 13.0,
+                    );
+                    self.wall_sliding = false;
+                    // Apply the impulse immediately (don't run slide, don't wait for next tick)
+                    *ctx.delta = self.jump_vec * UNIT_TO_M;
+                    self.jump_y += self.jump_vec.y;
+                    smg_dbg!("SMG_DBG wall: jump delta=({:.4},{:.4},{:.4}) jump_vec=({:.1},{:.1},{:.1}) jump_y={:.1}",
+                        ctx.delta.x, ctx.delta.y, ctx.delta.z,
+                        self.jump_vec.x, self.jump_vec.y, self.jump_vec.z, self.jump_y);
+                    return;
+                } else {
+                    *ctx.delta = Vec3::new(0.0, -14.0 * UNIT_TO_M, 0.0);
+                    self.jump_y += -14.0;
+                    smg_dbg!("SMG_DBG wall: slide delta=({:.4},{:.4},{:.4}) jump_y={:.1}",
+                        ctx.delta.x, ctx.delta.y, ctx.delta.z, self.jump_y);
+                    // Skip normal physics while sliding
+                }
             } else {
             // Jump mode: check for ground pound activation
             // StateCtx only has held. We detect pound via ff_pound in held
@@ -350,7 +399,7 @@ impl StateLogic for SmgPhysics {
             // For the differential test, the Z press is a single frame.
             // We'll detect it via the blackboard or a flag.
             // Simplest: if ff_pound in held and jump_y > 10 (in air), activate.
-            if !self.pound_active && ctx.input.held.contains("ff_pound") && self.jump_y > 10.0 {
+            if !self.pound_active && ctx.input.just_pressed.contains("ff_pound") && self.jump_y > 10.0 {
                 self.pound_active = true;
                 // Kill horizontal velocity (harness: zero horizontal)
                 self.jump_vec.x = 0.0;
@@ -408,6 +457,7 @@ impl StateLogic for SmgPhysics {
             // mainMoveGround() runs (no physics on transition tick).
             // Using the explicit flag is more reliable than frame==0.
             if ctx.just_transitioned {
+                smg_dbg!("SMG_DBG: just_transitioned, skipping physics");
                 *ctx.delta = Vec3::new(0.0, 0.0, 0.0);
             } else {
             // Track Y in SMG units to detect landing without relying on
@@ -430,10 +480,17 @@ impl StateLogic for SmgPhysics {
                 // Reset spin flags on landing
                 write_f32(ctx.params, "smg_spin_done", 0.0);
                 write_f32(ctx.params, "smg_spin_active", 0.0);
+                // Clear wall slide on landing
+                self.wall_sliding = false;
                 // Harness resets landTimer=0 on landing (doLanding). Do the same
                 // for one-to-one chaining (land_t <= 7 chains to next type).
                 write_f32(ctx.params, "smg_land_timer", 0.0);
             } else {
+                let dx = self.jump_vec.x * UNIT_TO_M;
+                let dy = self.jump_vec.y * UNIT_TO_M;
+                let dz = self.jump_vec.z * UNIT_TO_M;
+                smg_dbg!("SMG_DBG: physics frame={} jump_vec=({:.2},{:.2},{:.2}) delta=({:.4},{:.4},{:.4}) jump_y={:.2}",
+                    ctx.frame, self.jump_vec.x, self.jump_vec.y, self.jump_vec.z, dx, dy, dz, self.jump_y);
                 *ctx.delta = self.jump_vec * UNIT_TO_M;
                 self.jump_vec.y -= gravity;
                 if self.jump_vec.y < -self.terminal_velocity {
